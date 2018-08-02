@@ -1,0 +1,9 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|9f4b3731-911b-46da-837e-7dc73dc51515
+C:\Users\Keith\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|8a5e07a3-f8c6-45fd-823e-376fb1b45f3a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|51b25fe3-f52f-41f7-b91c-bcedee03bdc3
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|75fb9418-2af1-40d6-bb05-17f4dc4f93f8
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|c79cee71-9ada-410f-a580-307a0cff2416
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|8da91f3c-1a17-4315-8315-1ec0ef0ffeef
+C:\Users\Keith\Downloads\FunWithLEDs\FunWithLEDs\WS281xLib.cylib\WS281xLib.cyprj|77c41986-aa71-4909-8e72-b7e41702739a
+C:\Users\Keith\Downloads\FunWithLEDs\Test1.cydsn\Test1.cyprj|2b3ec08e-7cf4-4f62-9a95-105fbba8356d
+C:\Users\Keith\Desktop\PSOC_Top.cydsn\PSOC_Top.cyprj|919b7966-1a00-4bc8-b98f-e384cd74f258

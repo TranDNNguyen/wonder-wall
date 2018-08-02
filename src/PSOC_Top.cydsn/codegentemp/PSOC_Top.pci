@@ -1,0 +1,14 @@
+# PSOC_Top
+# 2018-04-20 06:26:57Z
+
+# IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 2
+# IO_3@[IOP=(3)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 3
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "S0(0)" iocell 0 4
+set_io "SW1(0)" iocell 0 1
+set_io "\SPIS:ss_s(0)\" iocell 0 7
+set_io "\SPIS:miso_s(0)\" iocell 0 5
+set_io "\SPIS:sclk_s(0)\" iocell 0 6
+set_io "\SPIS:mosi_s(0)\" iocell 3 0

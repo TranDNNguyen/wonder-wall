@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="FunWithLEDs\EX2_1String">
+<ExpandedNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll\TopDesign</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Pins</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Analog</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Clocks</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Interrupts</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\System</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Directives</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.cydwr\Flash Security</v>
+<v>FunWithLEDs\EX1_Text Scroll\Header Files</v>
+<v>FunWithLEDs\EX1_Text Scroll\Header Files\cyapicallbacks.h</v>
+<v>FunWithLEDs\EX1_Text Scroll\Source Files</v>
+<v>FunWithLEDs\EX1_Text Scroll\Source Files\main.c</v>
+<v>FunWithLEDs\EX1_Text Scroll\Generated_Source</v>
+<v>FunWithLEDs\EX2_1String\TopDesign</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Pins</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Analog</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Clocks</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Interrupts</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\System</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Directives</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.cydwr\Flash Security</v>
+<v>FunWithLEDs\EX2_1String\Header Files</v>
+<v>FunWithLEDs\EX2_1String\Header Files\cyapicallbacks.h</v>
+<v>FunWithLEDs\EX2_1String\Source Files</v>
+<v>FunWithLEDs\EX2_1String\Source Files\main.c</v>
+<v>FunWithLEDs\EX2_1String\Generated_Source</v>
+<v>FunWithLEDs\EX3_Ring1\TopDesign</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Pins</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Analog</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Clocks</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Interrupts</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\System</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Directives</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.cydwr\Flash Security</v>
+<v>FunWithLEDs\EX3_Ring1\Header Files</v>
+<v>FunWithLEDs\EX3_Ring1\Header Files\cyapicallbacks.h</v>
+<v>FunWithLEDs\EX3_Ring1\Source Files</v>
+<v>FunWithLEDs\EX3_Ring1\Source Files\main.c</v>
+<v>FunWithLEDs\EX3_Ring1\Generated_Source</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\TopDesign</v>
+<v>FunWithLEDs\EX1_Text Scroll\TopDesign\TopDesign.cysch</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\TopDesign</v>
+<v>FunWithLEDs\EX2_1String\TopDesign\TopDesign.cysch</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\TopDesign</v>
+<v>FunWithLEDs\EX3_Ring1\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\TopDesign</v>
+<v>FunWithLEDs\EX1_Text Scroll\TopDesign\TopDesign.cysch</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\TopDesign</v>
+<v>FunWithLEDs\EX2_1String\TopDesign\TopDesign.cysch</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\TopDesign</v>
+<v>FunWithLEDs\EX3_Ring1\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.elf</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.hex</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.map</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.gpdsc</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.rpt</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll_timing.html</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\CortexM0</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.elf</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.hex</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.map</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.gpdsc</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.rpt</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String_timing.html</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.elf</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.hex</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.map</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.gpdsc</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.rpt</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.elf</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.hex</v>
+<v>FunWithLEDs\EX1_Text Scroll\CortexM0\ARM_GCC_541\Debug\EX1_Text Scroll.map</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.gpdsc</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll.rpt</v>
+<v>FunWithLEDs\EX1_Text Scroll\EX1_Text Scroll_timing.html</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\CortexM0</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.elf</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.hex</v>
+<v>FunWithLEDs\EX2_1String\CortexM0\ARM_GCC_541\Debug\EX2_1String.map</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.gpdsc</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String.rpt</v>
+<v>FunWithLEDs\EX2_1String\EX2_1String_timing.html</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.elf</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.hex</v>
+<v>FunWithLEDs\EX3_Ring1\CortexM0\ARM_GCC_541\Debug\EX3_Ring1.map</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.gpdsc</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1.rpt</v>
+<v>FunWithLEDs\EX3_Ring1\EX3_Ring1_timing.html</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX1_Text Scroll\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX1_Text Scroll\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX2_1String\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX2_1String\cy_pins_v2_20</v>
+<v>FunWithLEDs\EX2_1String\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX2_1String\Gnd_v1_0</v>
+<v>FunWithLEDs\EX2_1String\Gnd_v1_0\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\SwitchSPST_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX3_Ring1\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX3_Ring1\cy_pins_v2_20</v>
+<v>FunWithLEDs\EX3_Ring1\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\Gnd_v1_0</v>
+<v>FunWithLEDs\EX3_Ring1\Gnd_v1_0\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\SwitchSPST_v1_0.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>FunWithLEDs</v>
+<v>FunWithLEDs\EX1_Text Scroll</v>
+<v>FunWithLEDs\EX1_Text Scroll\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX1_Text Scroll\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX1_Text Scroll\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX1_Text Scroll\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX1_Text Scroll\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX2_1String</v>
+<v>FunWithLEDs\EX2_1String\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX2_1String\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX2_1String\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX2_1String\cy_pins_v2_20</v>
+<v>FunWithLEDs\EX2_1String\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX2_1String\Gnd_v1_0</v>
+<v>FunWithLEDs\EX2_1String\Gnd_v1_0\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX2_1String\SwitchSPST_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1</v>
+<v>FunWithLEDs\EX3_Ring1\PSoC 4 Architecture TRM</v>
+<v>FunWithLEDs\EX3_Ring1\PSoC 4200 Family Datasheet</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides\cy_boot_v5_60</v>
+<v>FunWithLEDs\EX3_Ring1\System Reference Guides\cy_lfclk_v1_20</v>
+<v>FunWithLEDs\EX3_Ring1\cy_pins_v2_20</v>
+<v>FunWithLEDs\EX3_Ring1\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\Gnd_v1_0</v>
+<v>FunWithLEDs\EX3_Ring1\Gnd_v1_0\Gnd_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\Power_v1_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\StripLights_v3_0.pdf</v>
+<v>FunWithLEDs\EX3_Ring1\SwitchSPST_v1_0.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+<dataGuid v="5f2be1a5-0687-4501-bb8c-cf21cb8211bf">
+<CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf type_name="CyDesigner.Common.ProjMgmt.GUI.CyBookmarkData" version="1">
+<indicators />
+</CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf>
+</dataGuid>
+<dataGuid v="6c335137-fa19-46ce-bc2d-2fbeb6d5f2a2">
+<CyGuid_70084457-cd6a-4593-9ed0-7f6eeb432dc2 type_name="CyDesigner.Common.ProjMgmt.GUI.CyDependenciesCustomData" version="1">
+<dictName v=".\Big_Tube1.cydsn\Big_Tube1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Signboard1\Signboard1\Signboard1.cydsn\Signboard1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4L_OneRing.cydsn\P4L_OneRing.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_ConcentricRings.cydsn\P4_ConcentricRings.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_Balls1.cydsn\P4_Balls1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_30Test1.cydsn\P4_30Test1.cyprj">
+<listName />
+</dictName>
+<dictName v="..\..\My Libs\Creator\LED_GridTest\GridTest\GridTest1.cydsn\GridTest1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Alexa1.cydsn\Alexa1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Alexa2.cydsn\Alexa2.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Floresent_Tube1.cydsn\Floresent_Tube1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\FreeRTOS_StripLEDs_Roses.cydsn\FreeRTOS_StripLEDs_Roses.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_MultiRings.cydsn\P4_MultiRings.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_OneRing.cydsn\P4_OneRing.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_SodaCooler.cydsn\P4_SodaCooler.cyprj">
+<listName />
+</dictName>
+<dictName v=".\P4_TopHat1.cydsn\P4_TopHat1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Proximity_PSoC4\Proximity_PSoC4\Proximity_PSoC4.cydsn\Proximity_PSoC4.cyprj">
+<listName />
+</dictName>
+<dictName v=".\Ring_Prototype1.cydsn\Ring_Prototype1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\SpiralTube.cydsn\SpiralTube.cyprj">
+<listName />
+</dictName>
+<dictName v=".\EX2_1String.cydsn\EX2_1String.cyprj">
+<listName />
+</dictName>
+<dictName v=".\ConRings1.cydsn\ConRings1.cyprj">
+<listName />
+</dictName>
+<dictName v=".\EX3_Ring1.cydsn\EX3_Ring1.cyprj">
+<listName />
+</dictName>
+</CyGuid_70084457-cd6a-4593-9ed0-7f6eeb432dc2>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v="..\..\My Libs\Creator\LED_GridTest\GridTest\GridTest1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\Big_Tube1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\Floresent_Tube1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\EX1_Text Scroll.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\EX1_Text Scroll.cydsn\EX1_Text Scroll.cydwr" />
+<name v=".\EX1_Text Scroll.cydsn\main.c" />
+<name v=".\P4_Balls1.cydsn\main.c" />
+<name v="..\..\My Libs\Creator\WS281xLib.cylib\StripLights_v3_0\API\SLights.c" />
+<name v="..\..\My Libs\Creator\WS281xLib.cylib\StripLights_v3_0\API\SLights.h" />
+<name v=".\EX2_1String.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\EX2_1String.cydsn\EX2_1String.cydwr" />
+<name v=".\EX2_1String.cydsn\main.c" />
+<name v=".\P4_Balls1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\ConRings1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\ConRings1.cydsn\main.c" />
+<name v=".\ConRings1.cydsn\ConRings1.cydwr" />
+<name v=".\ConRings1.cydsn\Generated_Source\PSoC4\StripLights.h" />
+<name v=".\ConRings1.cydsn\Generated_Source\PSoC4\StripLights.c" />
+<name v=".\EX3_Ring1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\EX3_Ring1.cydsn\main.c" />
+<name v=".\P4_OneRing.cydsn\main.c" />
+<name v=".\EX3_Ring1.cydsn\EX3_Ring1.cydwr" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1174, 838" SelectedTabbedMdiWindow="27e4c571-e7d2-4d1b-b414-f2f7e55060b2"><DocumentWindow Key="C:\Users\Mark Hastings\My Libs\Creator\LED_GridTest\GridTest\GridTest1.cydsn\TopDesign\TopDesign.cysch" Guid="da5e41a9-4ffe-4308-9ce3-c3075ce11151" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\Big_Tube1.cydsn\TopDesign\TopDesign.cysch" Guid="39d23380-5cb7-4fc3-9493-c5cf6c91bedf" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\Floresent_Tube1.cydsn\TopDesign\TopDesign.cysch" Guid="d8941e9d-b901-4370-8a32-39ea3162bd20" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX1_Text Scroll.cydsn\TopDesign\TopDesign.cysch" Guid="eef552d0-90ea-4a59-8cc0-656ee6b0c7c9" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX1_Text Scroll.cydsn\EX1_Text Scroll.cydwr" Guid="a3dd8b20-bb1f-4a73-9041-ee97badc1b34" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX1_Text Scroll.cydsn\main.c" Guid="488951d2-612c-4675-937d-6f7f09c31ed1" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\P4_Balls1.cydsn\main.c" Guid="df381dde-8582-4c08-adf2-f8fe26a1df1e" /><DocumentWindow Key="C:\Users\Mark Hastings\My Libs\Creator\WS281xLib.cylib\StripLights_v3_0\API\SLights.c" Guid="bfb40d31-275f-4471-a043-472934dba733" /><DocumentWindow Key="C:\Users\Mark Hastings\My Libs\Creator\WS281xLib.cylib\StripLights_v3_0\API\SLights.h" Guid="9e488437-fba0-41c3-bb7c-f8e6162e234d" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX2_1String.cydsn\TopDesign\TopDesign.cysch" Guid="619cf4c3-cb40-4662-b667-e524ddf1e31a" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX2_1String.cydsn\EX2_1String.cydwr" Guid="121ee4c7-af3f-45c9-972c-ed2166dea4cd" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX2_1String.cydsn\main.c" Guid="18f18a79-cadb-4d15-80e3-b7811780a9e1" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\P4_Balls1.cydsn\TopDesign\TopDesign.cysch" Guid="6882780b-7512-43f6-9d35-d60ef73f917f" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\ConRings1.cydsn\TopDesign\TopDesign.cysch" Guid="2238eaf7-e8cd-49b9-8679-89f6b4f96470" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\ConRings1.cydsn\main.c" Guid="211c4b6b-c489-40fc-a59c-6fc598e14a60" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\ConRings1.cydsn\ConRings1.cydwr" Guid="bc136fec-6394-4334-8e82-33a29fc899e0" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\ConRings1.cydsn\Generated_Source\PSoC4\StripLights.h" Guid="c974119d-f317-4795-8658-5d00a8d3ce32" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\ConRings1.cydsn\Generated_Source\PSoC4\StripLights.c" Guid="6ab5ceba-7754-4e11-b044-7d1a94820da7" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="e2626d99-541e-47f0-9bf8-071f192eff6f" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX3_Ring1.cydsn\TopDesign\TopDesign.cysch" Guid="27e4c571-e7d2-4d1b-b414-f2f7e55060b2" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX3_Ring1.cydsn\main.c" Guid="5527ca8d-ca81-44ad-a29c-5816e547274e" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\P4_OneRing.cydsn\main.c" Guid="f5a90dd2-bf0b-44f7-a1a4-05df538ce909" /><DocumentWindow Key="C:\Users\Mark Hastings\ActiveProjects\FunWithLEDs\EX3_Ring1.cydsn\EX3_Ring1.cydwr" Guid="e2458b74-347c-4815-a4c7-86f1f90b7876" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

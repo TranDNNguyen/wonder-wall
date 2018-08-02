@@ -1,0 +1,1222 @@
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.global	__aeabi_uidiv
+  20              		.global	__aeabi_uidivmod
+  21              		.section	.text.SlowColorBlend,"ax",%progbits
+  22              		.align	2
+  23              		.global	SlowColorBlend
+  24              		.code	16
+  25              		.thumb_func
+  26              		.type	SlowColorBlend, %function
+  27              	SlowColorBlend:
+  28              	.LFB33:
+  29              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * EX2_String
+   4:main.c        ****  *
+   5:main.c        ****  * A simple function to cycle the color table
+   6:main.c        ****  * through the string.
+   7:main.c        ****  *
+   8:main.c        ****  * ========================================
+   9:main.c        **** */
+  10:main.c        **** #include "project.h"
+  11:main.c        **** 
+  12:main.c        **** void SlowColorBlend(uint32 delay, uint32 time);
+  13:main.c        **** 
+  14:main.c        **** int main(void)
+  15:main.c        **** {
+  16:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  17:main.c        ****     StripLights_Start();
+  18:main.c        ****     
+  19:main.c        ****     
+  20:main.c        **** 
+  21:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  22:main.c        **** 
+  23:main.c        ****     for(;;)
+  24:main.c        ****     {
+  25:main.c        ****         SlowColorBlend(0, 10000);
+  26:main.c        ****        
+  27:main.c        ****     }
+  28:main.c        **** }
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 2
+
+
+  29:main.c        **** 
+  30:main.c        **** /************************************************
+  31:main.c        ****  *                    SlowColorBlend()
+  32:main.c        ****  *
+  33:main.c        ****  *  Slowly migate all the LEDs through the color
+  34:main.c        ****  *  table.
+  35:main.c        ****  *
+  36:main.c        ****  ************************************************/
+  37:main.c        **** void SlowColorBlend(uint32 delay, uint32 time)
+  38:main.c        **** {
+  30              		.loc 1 38 0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              	.LVL0:
+  35 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  36              		.cfi_def_cfa_offset 20
+  37              		.cfi_offset 4, -20
+  38              		.cfi_offset 5, -16
+  39              		.cfi_offset 6, -12
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  42 0002 4746     		mov	r7, r8
+  43 0004 80B4     		push	{r7}
+  44              		.cfi_def_cfa_offset 24
+  45              		.cfi_offset 8, -24
+  46 0006 82B0     		sub	sp, sp, #8
+  47              		.cfi_def_cfa_offset 32
+  48 0008 0190     		str	r0, [sp, #4]
+  49              	.LVL1:
+  39:main.c        ****     uint32 timeCnt = 0; 
+  40:main.c        ****     uint32 led = 0;
+  41:main.c        ****     uint32 x = 0;
+  42:main.c        ****     uint32 pct = 0;
+  43:main.c        ****     uint32 fromColor, toColor, color;
+  44:main.c        ****     extern const uint32 StripLights_CLUT[ ];
+  45:main.c        **** 
+  46:main.c        ****     StripLights_Dim(0); 
+  50              		.loc 1 46 0
+  51 000a 0020     		movs	r0, #0
+  52              	.LVL2:
+  53 000c FFF7FEFF 		bl	StripLights_Dim
+  54              	.LVL3:
+  41:main.c        ****     uint32 pct = 0;
+  55              		.loc 1 41 0
+  56 0010 0023     		movs	r3, #0
+  57 0012 9846     		mov	r8, r3
+  58              	.LVL4:
+  59              	.L6:
+  47:main.c        **** 
+  48:main.c        ****     for(;;)
+  49:main.c        ****     {   
+  50:main.c        ****         while(1)
+  51:main.c        ****         {
+  52:main.c        ****            
+  53:main.c        ****             for(pct = 0; pct < 100; pct += 4)
+  60              		.loc 1 53 0
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 3
+
+
+  61 0014 0023     		movs	r3, #0
+  62 0016 0093     		str	r3, [sp]
+  63 0018 31E0     		b	.L2
+  64              	.LVL5:
+  65              	.L3:
+  54:main.c        ****             {
+  55:main.c        ****                 for(led = 0; led <= StripLights_MAX_X; led++)
+  56:main.c        ****                 {
+  57:main.c        ****  
+  58:main.c        ****                     fromColor =  StripLights_CLUT[(x + 0 + ((led * StripLights_COLOR_WHEEL_SIZE)/St
+  66              		.loc 1 58 0 discriminator 3
+  67 001a 7B00     		lsls	r3, r7, #1
+  68 001c DB19     		adds	r3, r3, r7
+  69 001e D800     		lsls	r0, r3, #3
+  70 0020 0E21     		movs	r1, #14
+  71 0022 FFF7FEFF 		bl	__aeabi_uidiv
+  72              	.LVL6:
+  73 0026 4044     		add	r0, r0, r8
+  74 0028 0400     		movs	r4, r0
+  75 002a 1821     		movs	r1, #24
+  76 002c FFF7FEFF 		bl	__aeabi_uidivmod
+  77              	.LVL7:
+  78 0030 164E     		ldr	r6, .L8
+  79 0032 8900     		lsls	r1, r1, #2
+  80 0034 8D59     		ldr	r5, [r1, r6]
+  81              	.LVL8:
+  59:main.c        ****                     toColor =  StripLights_CLUT[(x + 1 + ((led * StripLights_COLOR_WHEEL_SIZE)/Stri
+  82              		.loc 1 59 0 discriminator 3
+  83 0036 601C     		adds	r0, r4, #1
+  84 0038 1821     		movs	r1, #24
+  85 003a FFF7FEFF 		bl	__aeabi_uidivmod
+  86              	.LVL9:
+  87 003e 8900     		lsls	r1, r1, #2
+  88 0040 8959     		ldr	r1, [r1, r6]
+  89              	.LVL10:
+  60:main.c        ****                     
+  61:main.c        ****                     color = StripLights_RgbBlend(fromColor, toColor, pct);                  
+  90              		.loc 1 61 0 discriminator 3
+  91 0042 009A     		ldr	r2, [sp]
+  92 0044 2800     		movs	r0, r5
+  93 0046 FFF7FEFF 		bl	StripLights_RgbBlend
+  94              	.LVL11:
+  95 004a 0200     		movs	r2, r0
+  96              	.LVL12:
+  62:main.c        ****                     StripLights_Pixel(led, 0, color );
+  97              		.loc 1 62 0 discriminator 3
+  98 004c 0021     		movs	r1, #0
+  99 004e 3800     		movs	r0, r7
+ 100              	.LVL13:
+ 101 0050 FFF7FEFF 		bl	StripLights_Pixel
+ 102              	.LVL14:
+  55:main.c        ****                 {
+ 103              		.loc 1 55 0 discriminator 3
+ 104 0054 0137     		adds	r7, r7, #1
+ 105              	.LVL15:
+ 106 0056 00E0     		b	.L5
+ 107              	.LVL16:
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 4
+
+
+ 108              	.L7:
+ 109 0058 0027     		movs	r7, #0
+ 110              	.LVL17:
+ 111              	.L5:
+  55:main.c        ****                 {
+ 112              		.loc 1 55 0 is_stmt 0 discriminator 1
+ 113 005a 0D2F     		cmp	r7, #13
+ 114 005c DDD9     		bls	.L3
+ 115              	.L4:
+  63:main.c        ****                 }
+  64:main.c        ****                 
+  65:main.c        ****                  while( StripLights_Ready() == 0);
+ 116              		.loc 1 65 0 is_stmt 1 discriminator 1
+ 117 005e FFF7FEFF 		bl	StripLights_Ready
+ 118              	.LVL18:
+ 119 0062 0028     		cmp	r0, #0
+ 120 0064 FBD0     		beq	.L4
+  66:main.c        **** 	
+  67:main.c        **** 	            StripLights_Dim(2);
+ 121              		.loc 1 67 0 discriminator 2
+ 122 0066 0220     		movs	r0, #2
+ 123 0068 FFF7FEFF 		bl	StripLights_Dim
+ 124              	.LVL19:
+  68:main.c        ****                 StripLights_Trigger(1);
+ 125              		.loc 1 68 0 discriminator 2
+ 126 006c 0120     		movs	r0, #1
+ 127 006e FFF7FEFF 		bl	StripLights_Trigger
+ 128              	.LVL20:
+  69:main.c        ****                 
+  70:main.c        ****                 CyDelay(delay);
+ 129              		.loc 1 70 0 discriminator 2
+ 130 0072 0198     		ldr	r0, [sp, #4]
+ 131 0074 FFF7FEFF 		bl	CyDelay
+ 132              	.LVL21:
+  53:main.c        ****             {
+ 133              		.loc 1 53 0 discriminator 2
+ 134 0078 009B     		ldr	r3, [sp]
+ 135 007a 0433     		adds	r3, r3, #4
+ 136 007c 0093     		str	r3, [sp]
+ 137              	.LVL22:
+ 138              	.L2:
+  53:main.c        ****             {
+ 139              		.loc 1 53 0 is_stmt 0 discriminator 1
+ 140 007e 009B     		ldr	r3, [sp]
+ 141 0080 632B     		cmp	r3, #99
+ 142 0082 E9D9     		bls	.L7
+  71:main.c        **** 
+  72:main.c        ****             }
+  73:main.c        ****             x++;  // Advance through color wheel
+ 143              		.loc 1 73 0 is_stmt 1
+ 144 0084 0123     		movs	r3, #1
+ 145 0086 9C46     		mov	ip, r3
+ 146 0088 E044     		add	r8, r8, ip
+ 147              	.LVL23:
+  74:main.c        ****         }
+ 148              		.loc 1 74 0
+ 149 008a C3E7     		b	.L6
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 5
+
+
+ 150              	.L9:
+ 151              		.align	2
+ 152              	.L8:
+ 153 008c 00000000 		.word	StripLights_CLUT
+ 154              		.cfi_endproc
+ 155              	.LFE33:
+ 156              		.size	SlowColorBlend, .-SlowColorBlend
+ 157              		.section	.text.main,"ax",%progbits
+ 158              		.align	2
+ 159              		.global	main
+ 160              		.code	16
+ 161              		.thumb_func
+ 162              		.type	main, %function
+ 163              	main:
+ 164              	.LFB32:
+  15:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+ 165              		.loc 1 15 0
+ 166              		.cfi_startproc
+ 167              		@ Volatile: function does not return.
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170 0000 10B5     		push	{r4, lr}
+ 171              		.cfi_def_cfa_offset 8
+ 172              		.cfi_offset 4, -8
+ 173              		.cfi_offset 14, -4
+  16:main.c        ****     StripLights_Start();
+ 174              		.loc 1 16 0
+ 175              		.syntax divided
+ 176              	@ 16 "main.c" 1
+ 177 0002 62B6     		CPSIE   i
+ 178              	@ 0 "" 2
+  17:main.c        ****     
+ 179              		.loc 1 17 0
+ 180              		.thumb
+ 181              		.syntax unified
+ 182 0004 FFF7FEFF 		bl	StripLights_Start
+ 183              	.LVL24:
+  25:main.c        ****        
+ 184              		.loc 1 25 0
+ 185 0008 0149     		ldr	r1, .L11
+ 186 000a 0020     		movs	r0, #0
+ 187 000c FFF7FEFF 		bl	SlowColorBlend
+ 188              	.LVL25:
+ 189              	.L12:
+ 190              		.align	2
+ 191              	.L11:
+ 192 0010 10270000 		.word	10000
+ 193              		.cfi_endproc
+ 194              	.LFE32:
+ 195              		.size	main, .-main
+ 196              		.text
+ 197              	.Letext0:
+ 198              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 199              		.file 3 "Generated_Source\\PSoC4/StripLights.h"
+ 200              		.file 4 "Generated_Source\\PSoC4/CyLib.h"
+ 201              		.section	.debug_info,"",%progbits
+ 202              	.Ldebug_info0:
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 6
+
+
+ 203 0000 78020000 		.4byte	0x278
+ 204 0004 0400     		.2byte	0x4
+ 205 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 206 000a 04       		.byte	0x4
+ 207 000b 01       		.uleb128 0x1
+ 208 000c DB000000 		.4byte	.LASF30
+ 209 0010 0C       		.byte	0xc
+ 210 0011 80010000 		.4byte	.LASF31
+ 211 0015 CF010000 		.4byte	.LASF32
+ 212 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 213 001d 00000000 		.4byte	0
+ 214 0021 00000000 		.4byte	.Ldebug_line0
+ 215 0025 02       		.uleb128 0x2
+ 216 0026 01       		.byte	0x1
+ 217 0027 06       		.byte	0x6
+ 218 0028 0D020000 		.4byte	.LASF0
+ 219 002c 02       		.uleb128 0x2
+ 220 002d 01       		.byte	0x1
+ 221 002e 08       		.byte	0x8
+ 222 002f 57000000 		.4byte	.LASF1
+ 223 0033 02       		.uleb128 0x2
+ 224 0034 02       		.byte	0x2
+ 225 0035 05       		.byte	0x5
+ 226 0036 8C000000 		.4byte	.LASF2
+ 227 003a 02       		.uleb128 0x2
+ 228 003b 02       		.byte	0x2
+ 229 003c 07       		.byte	0x7
+ 230 003d 29000000 		.4byte	.LASF3
+ 231 0041 02       		.uleb128 0x2
+ 232 0042 04       		.byte	0x4
+ 233 0043 05       		.byte	0x5
+ 234 0044 B6010000 		.4byte	.LASF4
+ 235 0048 02       		.uleb128 0x2
+ 236 0049 04       		.byte	0x4
+ 237 004a 07       		.byte	0x7
+ 238 004b 65000000 		.4byte	.LASF5
+ 239 004f 02       		.uleb128 0x2
+ 240 0050 08       		.byte	0x8
+ 241 0051 05       		.byte	0x5
+ 242 0052 72010000 		.4byte	.LASF6
+ 243 0056 02       		.uleb128 0x2
+ 244 0057 08       		.byte	0x8
+ 245 0058 07       		.byte	0x7
+ 246 0059 BF000000 		.4byte	.LASF7
+ 247 005d 03       		.uleb128 0x3
+ 248 005e 04       		.byte	0x4
+ 249 005f 05       		.byte	0x5
+ 250 0060 696E7400 		.ascii	"int\000"
+ 251 0064 02       		.uleb128 0x2
+ 252 0065 04       		.byte	0x4
+ 253 0066 07       		.byte	0x7
+ 254 0067 A8000000 		.4byte	.LASF8
+ 255 006b 04       		.uleb128 0x4
+ 256 006c 9C000000 		.4byte	.LASF9
+ 257 0070 02       		.byte	0x2
+ 258 0071 D401     		.2byte	0x1d4
+ 259 0073 48000000 		.4byte	0x48
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 7
+
+
+ 260 0077 04       		.uleb128 0x4
+ 261 0078 77000000 		.4byte	.LASF10
+ 262 007c 02       		.byte	0x2
+ 263 007d D701     		.2byte	0x1d7
+ 264 007f 41000000 		.4byte	0x41
+ 265 0083 02       		.uleb128 0x2
+ 266 0084 04       		.byte	0x4
+ 267 0085 04       		.byte	0x4
+ 268 0086 4B000000 		.4byte	.LASF11
+ 269 008a 02       		.uleb128 0x2
+ 270 008b 08       		.byte	0x8
+ 271 008c 04       		.byte	0x4
+ 272 008d 85000000 		.4byte	.LASF12
+ 273 0091 02       		.uleb128 0x2
+ 274 0092 01       		.byte	0x1
+ 275 0093 08       		.byte	0x8
+ 276 0094 00000000 		.4byte	.LASF13
+ 277 0098 02       		.uleb128 0x2
+ 278 0099 04       		.byte	0x4
+ 279 009a 07       		.byte	0x7
+ 280 009b 69010000 		.4byte	.LASF14
+ 281 009f 02       		.uleb128 0x2
+ 282 00a0 08       		.byte	0x8
+ 283 00a1 04       		.byte	0x4
+ 284 00a2 01020000 		.4byte	.LASF15
+ 285 00a6 05       		.uleb128 0x5
+ 286 00a7 3C000000 		.4byte	.LASF33
+ 287 00ab 01       		.byte	0x1
+ 288 00ac 25       		.byte	0x25
+ 289 00ad 00000000 		.4byte	.LFB33
+ 290 00b1 90000000 		.4byte	.LFE33-.LFB33
+ 291 00b5 01       		.uleb128 0x1
+ 292 00b6 9C       		.byte	0x9c
+ 293 00b7 D0010000 		.4byte	0x1d0
+ 294 00bb 06       		.uleb128 0x6
+ 295 00bc 51000000 		.4byte	.LASF16
+ 296 00c0 01       		.byte	0x1
+ 297 00c1 25       		.byte	0x25
+ 298 00c2 6B000000 		.4byte	0x6b
+ 299 00c6 00000000 		.4byte	.LLST0
+ 300 00ca 06       		.uleb128 0x6
+ 301 00cb D6000000 		.4byte	.LASF17
+ 302 00cf 01       		.byte	0x1
+ 303 00d0 25       		.byte	0x25
+ 304 00d1 6B000000 		.4byte	0x6b
+ 305 00d5 1F000000 		.4byte	.LLST1
+ 306 00d9 07       		.uleb128 0x7
+ 307 00da AE010000 		.4byte	.LASF18
+ 308 00de 01       		.byte	0x1
+ 309 00df 27       		.byte	0x27
+ 310 00e0 6B000000 		.4byte	0x6b
+ 311 00e4 00       		.byte	0
+ 312 00e5 08       		.uleb128 0x8
+ 313 00e6 6C656400 		.ascii	"led\000"
+ 314 00ea 01       		.byte	0x1
+ 315 00eb 28       		.byte	0x28
+ 316 00ec 6B000000 		.4byte	0x6b
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 8
+
+
+ 317 00f0 40000000 		.4byte	.LLST2
+ 318 00f4 08       		.uleb128 0x8
+ 319 00f5 7800     		.ascii	"x\000"
+ 320 00f7 01       		.byte	0x1
+ 321 00f8 29       		.byte	0x29
+ 322 00f9 6B000000 		.4byte	0x6b
+ 323 00fd 6A000000 		.4byte	.LLST3
+ 324 0101 08       		.uleb128 0x8
+ 325 0102 70637400 		.ascii	"pct\000"
+ 326 0106 01       		.byte	0x1
+ 327 0107 2A       		.byte	0x2a
+ 328 0108 6B000000 		.4byte	0x6b
+ 329 010c 89000000 		.4byte	.LLST4
+ 330 0110 09       		.uleb128 0x9
+ 331 0111 B5000000 		.4byte	.LASF19
+ 332 0115 01       		.byte	0x1
+ 333 0116 2B       		.byte	0x2b
+ 334 0117 6B000000 		.4byte	0x6b
+ 335 011b C0000000 		.4byte	.LLST5
+ 336 011f 09       		.uleb128 0x9
+ 337 0120 7D000000 		.4byte	.LASF20
+ 338 0124 01       		.byte	0x1
+ 339 0125 2B       		.byte	0x2b
+ 340 0126 6B000000 		.4byte	0x6b
+ 341 012a D3000000 		.4byte	.LLST6
+ 342 012e 09       		.uleb128 0x9
+ 343 012f 96000000 		.4byte	.LASF21
+ 344 0133 01       		.byte	0x1
+ 345 0134 2B       		.byte	0x2b
+ 346 0135 6B000000 		.4byte	0x6b
+ 347 0139 E6000000 		.4byte	.LLST7
+ 348 013d 0A       		.uleb128 0xa
+ 349 013e 19020000 		.4byte	.LASF22
+ 350 0142 01       		.byte	0x1
+ 351 0143 2C       		.byte	0x2c
+ 352 0144 E0010000 		.4byte	0x1e0
+ 353 0148 0B       		.uleb128 0xb
+ 354 0149 10000000 		.4byte	.LVL3
+ 355 014d 2E020000 		.4byte	0x22e
+ 356 0151 5B010000 		.4byte	0x15b
+ 357 0155 0C       		.uleb128 0xc
+ 358 0156 01       		.uleb128 0x1
+ 359 0157 50       		.byte	0x50
+ 360 0158 01       		.uleb128 0x1
+ 361 0159 30       		.byte	0x30
+ 362 015a 00       		.byte	0
+ 363 015b 0B       		.uleb128 0xb
+ 364 015c 4A000000 		.4byte	.LVL11
+ 365 0160 39020000 		.4byte	0x239
+ 366 0164 76010000 		.4byte	0x176
+ 367 0168 0C       		.uleb128 0xc
+ 368 0169 01       		.uleb128 0x1
+ 369 016a 50       		.byte	0x50
+ 370 016b 02       		.uleb128 0x2
+ 371 016c 75       		.byte	0x75
+ 372 016d 00       		.sleb128 0
+ 373 016e 0C       		.uleb128 0xc
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 9
+
+
+ 374 016f 01       		.uleb128 0x1
+ 375 0170 52       		.byte	0x52
+ 376 0171 03       		.uleb128 0x3
+ 377 0172 7D       		.byte	0x7d
+ 378 0173 00       		.sleb128 0
+ 379 0174 06       		.byte	0x6
+ 380 0175 00       		.byte	0
+ 381 0176 0B       		.uleb128 0xb
+ 382 0177 54000000 		.4byte	.LVL14
+ 383 017b 44020000 		.4byte	0x244
+ 384 017f 8F010000 		.4byte	0x18f
+ 385 0183 0C       		.uleb128 0xc
+ 386 0184 01       		.uleb128 0x1
+ 387 0185 50       		.byte	0x50
+ 388 0186 02       		.uleb128 0x2
+ 389 0187 77       		.byte	0x77
+ 390 0188 00       		.sleb128 0
+ 391 0189 0C       		.uleb128 0xc
+ 392 018a 01       		.uleb128 0x1
+ 393 018b 51       		.byte	0x51
+ 394 018c 01       		.uleb128 0x1
+ 395 018d 30       		.byte	0x30
+ 396 018e 00       		.byte	0
+ 397 018f 0D       		.uleb128 0xd
+ 398 0190 62000000 		.4byte	.LVL18
+ 399 0194 4F020000 		.4byte	0x24f
+ 400 0198 0B       		.uleb128 0xb
+ 401 0199 6C000000 		.4byte	.LVL19
+ 402 019d 2E020000 		.4byte	0x22e
+ 403 01a1 AB010000 		.4byte	0x1ab
+ 404 01a5 0C       		.uleb128 0xc
+ 405 01a6 01       		.uleb128 0x1
+ 406 01a7 50       		.byte	0x50
+ 407 01a8 01       		.uleb128 0x1
+ 408 01a9 32       		.byte	0x32
+ 409 01aa 00       		.byte	0
+ 410 01ab 0B       		.uleb128 0xb
+ 411 01ac 72000000 		.4byte	.LVL20
+ 412 01b0 5A020000 		.4byte	0x25a
+ 413 01b4 BE010000 		.4byte	0x1be
+ 414 01b8 0C       		.uleb128 0xc
+ 415 01b9 01       		.uleb128 0x1
+ 416 01ba 50       		.byte	0x50
+ 417 01bb 01       		.uleb128 0x1
+ 418 01bc 31       		.byte	0x31
+ 419 01bd 00       		.byte	0
+ 420 01be 0E       		.uleb128 0xe
+ 421 01bf 78000000 		.4byte	.LVL21
+ 422 01c3 65020000 		.4byte	0x265
+ 423 01c7 0C       		.uleb128 0xc
+ 424 01c8 01       		.uleb128 0x1
+ 425 01c9 50       		.byte	0x50
+ 426 01ca 03       		.uleb128 0x3
+ 427 01cb 91       		.byte	0x91
+ 428 01cc 64       		.sleb128 -28
+ 429 01cd 06       		.byte	0x6
+ 430 01ce 00       		.byte	0
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 10
+
+
+ 431 01cf 00       		.byte	0
+ 432 01d0 0F       		.uleb128 0xf
+ 433 01d1 DB010000 		.4byte	0x1db
+ 434 01d5 DB010000 		.4byte	0x1db
+ 435 01d9 10       		.uleb128 0x10
+ 436 01da 00       		.byte	0
+ 437 01db 11       		.uleb128 0x11
+ 438 01dc 6B000000 		.4byte	0x6b
+ 439 01e0 11       		.uleb128 0x11
+ 440 01e1 D0010000 		.4byte	0x1d0
+ 441 01e5 12       		.uleb128 0x12
+ 442 01e6 A3000000 		.4byte	.LASF34
+ 443 01ea 01       		.byte	0x1
+ 444 01eb 0E       		.byte	0xe
+ 445 01ec 5D000000 		.4byte	0x5d
+ 446 01f0 00000000 		.4byte	.LFB32
+ 447 01f4 14000000 		.4byte	.LFE32-.LFB32
+ 448 01f8 01       		.uleb128 0x1
+ 449 01f9 9C       		.byte	0x9c
+ 450 01fa 1E020000 		.4byte	0x21e
+ 451 01fe 0D       		.uleb128 0xd
+ 452 01ff 08000000 		.4byte	.LVL24
+ 453 0203 70020000 		.4byte	0x270
+ 454 0207 0E       		.uleb128 0xe
+ 455 0208 10000000 		.4byte	.LVL25
+ 456 020c A6000000 		.4byte	0xa6
+ 457 0210 0C       		.uleb128 0xc
+ 458 0211 01       		.uleb128 0x1
+ 459 0212 50       		.byte	0x50
+ 460 0213 01       		.uleb128 0x1
+ 461 0214 30       		.byte	0x30
+ 462 0215 0C       		.uleb128 0xc
+ 463 0216 01       		.uleb128 0x1
+ 464 0217 51       		.byte	0x51
+ 465 0218 03       		.uleb128 0x3
+ 466 0219 0A       		.byte	0xa
+ 467 021a 1027     		.2byte	0x2710
+ 468 021c 00       		.byte	0
+ 469 021d 00       		.byte	0
+ 470 021e 0A       		.uleb128 0xa
+ 471 021f 19020000 		.4byte	.LASF22
+ 472 0223 01       		.byte	0x1
+ 473 0224 2C       		.byte	0x2c
+ 474 0225 29020000 		.4byte	0x229
+ 475 0229 11       		.uleb128 0x11
+ 476 022a D0010000 		.4byte	0x1d0
+ 477 022e 13       		.uleb128 0x13
+ 478 022f BF010000 		.4byte	.LASF23
+ 479 0233 BF010000 		.4byte	.LASF23
+ 480 0237 03       		.byte	0x3
+ 481 0238 26       		.byte	0x26
+ 482 0239 13       		.uleb128 0x13
+ 483 023a 87010000 		.4byte	.LASF24
+ 484 023e 87010000 		.4byte	.LASF24
+ 485 0242 03       		.byte	0x3
+ 486 0243 2A       		.byte	0x2a
+ 487 0244 13       		.uleb128 0x13
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 11
+
+
+ 488 0245 05000000 		.4byte	.LASF25
+ 489 0249 05000000 		.4byte	.LASF25
+ 490 024d 03       		.byte	0x3
+ 491 024e 23       		.byte	0x23
+ 492 024f 13       		.uleb128 0x13
+ 493 0250 9C010000 		.4byte	.LASF26
+ 494 0254 9C010000 		.4byte	.LASF26
+ 495 0258 03       		.byte	0x3
+ 496 0259 1B       		.byte	0x1b
+ 497 025a 13       		.uleb128 0x13
+ 498 025b 2A020000 		.4byte	.LASF27
+ 499 025f 2A020000 		.4byte	.LASF27
+ 500 0263 03       		.byte	0x3
+ 501 0264 1A       		.byte	0x1a
+ 502 0265 13       		.uleb128 0x13
+ 503 0266 3E020000 		.4byte	.LASF28
+ 504 026a 3E020000 		.4byte	.LASF28
+ 505 026e 04       		.byte	0x4
+ 506 026f D9       		.byte	0xd9
+ 507 0270 13       		.uleb128 0x13
+ 508 0271 17000000 		.4byte	.LASF29
+ 509 0275 17000000 		.4byte	.LASF29
+ 510 0279 03       		.byte	0x3
+ 511 027a 15       		.byte	0x15
+ 512 027b 00       		.byte	0
+ 513              		.section	.debug_abbrev,"",%progbits
+ 514              	.Ldebug_abbrev0:
+ 515 0000 01       		.uleb128 0x1
+ 516 0001 11       		.uleb128 0x11
+ 517 0002 01       		.byte	0x1
+ 518 0003 25       		.uleb128 0x25
+ 519 0004 0E       		.uleb128 0xe
+ 520 0005 13       		.uleb128 0x13
+ 521 0006 0B       		.uleb128 0xb
+ 522 0007 03       		.uleb128 0x3
+ 523 0008 0E       		.uleb128 0xe
+ 524 0009 1B       		.uleb128 0x1b
+ 525 000a 0E       		.uleb128 0xe
+ 526 000b 55       		.uleb128 0x55
+ 527 000c 17       		.uleb128 0x17
+ 528 000d 11       		.uleb128 0x11
+ 529 000e 01       		.uleb128 0x1
+ 530 000f 10       		.uleb128 0x10
+ 531 0010 17       		.uleb128 0x17
+ 532 0011 00       		.byte	0
+ 533 0012 00       		.byte	0
+ 534 0013 02       		.uleb128 0x2
+ 535 0014 24       		.uleb128 0x24
+ 536 0015 00       		.byte	0
+ 537 0016 0B       		.uleb128 0xb
+ 538 0017 0B       		.uleb128 0xb
+ 539 0018 3E       		.uleb128 0x3e
+ 540 0019 0B       		.uleb128 0xb
+ 541 001a 03       		.uleb128 0x3
+ 542 001b 0E       		.uleb128 0xe
+ 543 001c 00       		.byte	0
+ 544 001d 00       		.byte	0
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 12
+
+
+ 545 001e 03       		.uleb128 0x3
+ 546 001f 24       		.uleb128 0x24
+ 547 0020 00       		.byte	0
+ 548 0021 0B       		.uleb128 0xb
+ 549 0022 0B       		.uleb128 0xb
+ 550 0023 3E       		.uleb128 0x3e
+ 551 0024 0B       		.uleb128 0xb
+ 552 0025 03       		.uleb128 0x3
+ 553 0026 08       		.uleb128 0x8
+ 554 0027 00       		.byte	0
+ 555 0028 00       		.byte	0
+ 556 0029 04       		.uleb128 0x4
+ 557 002a 16       		.uleb128 0x16
+ 558 002b 00       		.byte	0
+ 559 002c 03       		.uleb128 0x3
+ 560 002d 0E       		.uleb128 0xe
+ 561 002e 3A       		.uleb128 0x3a
+ 562 002f 0B       		.uleb128 0xb
+ 563 0030 3B       		.uleb128 0x3b
+ 564 0031 05       		.uleb128 0x5
+ 565 0032 49       		.uleb128 0x49
+ 566 0033 13       		.uleb128 0x13
+ 567 0034 00       		.byte	0
+ 568 0035 00       		.byte	0
+ 569 0036 05       		.uleb128 0x5
+ 570 0037 2E       		.uleb128 0x2e
+ 571 0038 01       		.byte	0x1
+ 572 0039 3F       		.uleb128 0x3f
+ 573 003a 19       		.uleb128 0x19
+ 574 003b 03       		.uleb128 0x3
+ 575 003c 0E       		.uleb128 0xe
+ 576 003d 3A       		.uleb128 0x3a
+ 577 003e 0B       		.uleb128 0xb
+ 578 003f 3B       		.uleb128 0x3b
+ 579 0040 0B       		.uleb128 0xb
+ 580 0041 27       		.uleb128 0x27
+ 581 0042 19       		.uleb128 0x19
+ 582 0043 8701     		.uleb128 0x87
+ 583 0045 19       		.uleb128 0x19
+ 584 0046 11       		.uleb128 0x11
+ 585 0047 01       		.uleb128 0x1
+ 586 0048 12       		.uleb128 0x12
+ 587 0049 06       		.uleb128 0x6
+ 588 004a 40       		.uleb128 0x40
+ 589 004b 18       		.uleb128 0x18
+ 590 004c 9642     		.uleb128 0x2116
+ 591 004e 19       		.uleb128 0x19
+ 592 004f 01       		.uleb128 0x1
+ 593 0050 13       		.uleb128 0x13
+ 594 0051 00       		.byte	0
+ 595 0052 00       		.byte	0
+ 596 0053 06       		.uleb128 0x6
+ 597 0054 05       		.uleb128 0x5
+ 598 0055 00       		.byte	0
+ 599 0056 03       		.uleb128 0x3
+ 600 0057 0E       		.uleb128 0xe
+ 601 0058 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 13
+
+
+ 602 0059 0B       		.uleb128 0xb
+ 603 005a 3B       		.uleb128 0x3b
+ 604 005b 0B       		.uleb128 0xb
+ 605 005c 49       		.uleb128 0x49
+ 606 005d 13       		.uleb128 0x13
+ 607 005e 02       		.uleb128 0x2
+ 608 005f 17       		.uleb128 0x17
+ 609 0060 00       		.byte	0
+ 610 0061 00       		.byte	0
+ 611 0062 07       		.uleb128 0x7
+ 612 0063 34       		.uleb128 0x34
+ 613 0064 00       		.byte	0
+ 614 0065 03       		.uleb128 0x3
+ 615 0066 0E       		.uleb128 0xe
+ 616 0067 3A       		.uleb128 0x3a
+ 617 0068 0B       		.uleb128 0xb
+ 618 0069 3B       		.uleb128 0x3b
+ 619 006a 0B       		.uleb128 0xb
+ 620 006b 49       		.uleb128 0x49
+ 621 006c 13       		.uleb128 0x13
+ 622 006d 1C       		.uleb128 0x1c
+ 623 006e 0B       		.uleb128 0xb
+ 624 006f 00       		.byte	0
+ 625 0070 00       		.byte	0
+ 626 0071 08       		.uleb128 0x8
+ 627 0072 34       		.uleb128 0x34
+ 628 0073 00       		.byte	0
+ 629 0074 03       		.uleb128 0x3
+ 630 0075 08       		.uleb128 0x8
+ 631 0076 3A       		.uleb128 0x3a
+ 632 0077 0B       		.uleb128 0xb
+ 633 0078 3B       		.uleb128 0x3b
+ 634 0079 0B       		.uleb128 0xb
+ 635 007a 49       		.uleb128 0x49
+ 636 007b 13       		.uleb128 0x13
+ 637 007c 02       		.uleb128 0x2
+ 638 007d 17       		.uleb128 0x17
+ 639 007e 00       		.byte	0
+ 640 007f 00       		.byte	0
+ 641 0080 09       		.uleb128 0x9
+ 642 0081 34       		.uleb128 0x34
+ 643 0082 00       		.byte	0
+ 644 0083 03       		.uleb128 0x3
+ 645 0084 0E       		.uleb128 0xe
+ 646 0085 3A       		.uleb128 0x3a
+ 647 0086 0B       		.uleb128 0xb
+ 648 0087 3B       		.uleb128 0x3b
+ 649 0088 0B       		.uleb128 0xb
+ 650 0089 49       		.uleb128 0x49
+ 651 008a 13       		.uleb128 0x13
+ 652 008b 02       		.uleb128 0x2
+ 653 008c 17       		.uleb128 0x17
+ 654 008d 00       		.byte	0
+ 655 008e 00       		.byte	0
+ 656 008f 0A       		.uleb128 0xa
+ 657 0090 34       		.uleb128 0x34
+ 658 0091 00       		.byte	0
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 14
+
+
+ 659 0092 03       		.uleb128 0x3
+ 660 0093 0E       		.uleb128 0xe
+ 661 0094 3A       		.uleb128 0x3a
+ 662 0095 0B       		.uleb128 0xb
+ 663 0096 3B       		.uleb128 0x3b
+ 664 0097 0B       		.uleb128 0xb
+ 665 0098 49       		.uleb128 0x49
+ 666 0099 13       		.uleb128 0x13
+ 667 009a 3F       		.uleb128 0x3f
+ 668 009b 19       		.uleb128 0x19
+ 669 009c 3C       		.uleb128 0x3c
+ 670 009d 19       		.uleb128 0x19
+ 671 009e 00       		.byte	0
+ 672 009f 00       		.byte	0
+ 673 00a0 0B       		.uleb128 0xb
+ 674 00a1 898201   		.uleb128 0x4109
+ 675 00a4 01       		.byte	0x1
+ 676 00a5 11       		.uleb128 0x11
+ 677 00a6 01       		.uleb128 0x1
+ 678 00a7 31       		.uleb128 0x31
+ 679 00a8 13       		.uleb128 0x13
+ 680 00a9 01       		.uleb128 0x1
+ 681 00aa 13       		.uleb128 0x13
+ 682 00ab 00       		.byte	0
+ 683 00ac 00       		.byte	0
+ 684 00ad 0C       		.uleb128 0xc
+ 685 00ae 8A8201   		.uleb128 0x410a
+ 686 00b1 00       		.byte	0
+ 687 00b2 02       		.uleb128 0x2
+ 688 00b3 18       		.uleb128 0x18
+ 689 00b4 9142     		.uleb128 0x2111
+ 690 00b6 18       		.uleb128 0x18
+ 691 00b7 00       		.byte	0
+ 692 00b8 00       		.byte	0
+ 693 00b9 0D       		.uleb128 0xd
+ 694 00ba 898201   		.uleb128 0x4109
+ 695 00bd 00       		.byte	0
+ 696 00be 11       		.uleb128 0x11
+ 697 00bf 01       		.uleb128 0x1
+ 698 00c0 31       		.uleb128 0x31
+ 699 00c1 13       		.uleb128 0x13
+ 700 00c2 00       		.byte	0
+ 701 00c3 00       		.byte	0
+ 702 00c4 0E       		.uleb128 0xe
+ 703 00c5 898201   		.uleb128 0x4109
+ 704 00c8 01       		.byte	0x1
+ 705 00c9 11       		.uleb128 0x11
+ 706 00ca 01       		.uleb128 0x1
+ 707 00cb 31       		.uleb128 0x31
+ 708 00cc 13       		.uleb128 0x13
+ 709 00cd 00       		.byte	0
+ 710 00ce 00       		.byte	0
+ 711 00cf 0F       		.uleb128 0xf
+ 712 00d0 01       		.uleb128 0x1
+ 713 00d1 01       		.byte	0x1
+ 714 00d2 49       		.uleb128 0x49
+ 715 00d3 13       		.uleb128 0x13
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 15
+
+
+ 716 00d4 01       		.uleb128 0x1
+ 717 00d5 13       		.uleb128 0x13
+ 718 00d6 00       		.byte	0
+ 719 00d7 00       		.byte	0
+ 720 00d8 10       		.uleb128 0x10
+ 721 00d9 21       		.uleb128 0x21
+ 722 00da 00       		.byte	0
+ 723 00db 00       		.byte	0
+ 724 00dc 00       		.byte	0
+ 725 00dd 11       		.uleb128 0x11
+ 726 00de 26       		.uleb128 0x26
+ 727 00df 00       		.byte	0
+ 728 00e0 49       		.uleb128 0x49
+ 729 00e1 13       		.uleb128 0x13
+ 730 00e2 00       		.byte	0
+ 731 00e3 00       		.byte	0
+ 732 00e4 12       		.uleb128 0x12
+ 733 00e5 2E       		.uleb128 0x2e
+ 734 00e6 01       		.byte	0x1
+ 735 00e7 3F       		.uleb128 0x3f
+ 736 00e8 19       		.uleb128 0x19
+ 737 00e9 03       		.uleb128 0x3
+ 738 00ea 0E       		.uleb128 0xe
+ 739 00eb 3A       		.uleb128 0x3a
+ 740 00ec 0B       		.uleb128 0xb
+ 741 00ed 3B       		.uleb128 0x3b
+ 742 00ee 0B       		.uleb128 0xb
+ 743 00ef 27       		.uleb128 0x27
+ 744 00f0 19       		.uleb128 0x19
+ 745 00f1 49       		.uleb128 0x49
+ 746 00f2 13       		.uleb128 0x13
+ 747 00f3 8701     		.uleb128 0x87
+ 748 00f5 19       		.uleb128 0x19
+ 749 00f6 11       		.uleb128 0x11
+ 750 00f7 01       		.uleb128 0x1
+ 751 00f8 12       		.uleb128 0x12
+ 752 00f9 06       		.uleb128 0x6
+ 753 00fa 40       		.uleb128 0x40
+ 754 00fb 18       		.uleb128 0x18
+ 755 00fc 9742     		.uleb128 0x2117
+ 756 00fe 19       		.uleb128 0x19
+ 757 00ff 01       		.uleb128 0x1
+ 758 0100 13       		.uleb128 0x13
+ 759 0101 00       		.byte	0
+ 760 0102 00       		.byte	0
+ 761 0103 13       		.uleb128 0x13
+ 762 0104 2E       		.uleb128 0x2e
+ 763 0105 00       		.byte	0
+ 764 0106 3F       		.uleb128 0x3f
+ 765 0107 19       		.uleb128 0x19
+ 766 0108 3C       		.uleb128 0x3c
+ 767 0109 19       		.uleb128 0x19
+ 768 010a 6E       		.uleb128 0x6e
+ 769 010b 0E       		.uleb128 0xe
+ 770 010c 03       		.uleb128 0x3
+ 771 010d 0E       		.uleb128 0xe
+ 772 010e 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 16
+
+
+ 773 010f 0B       		.uleb128 0xb
+ 774 0110 3B       		.uleb128 0x3b
+ 775 0111 0B       		.uleb128 0xb
+ 776 0112 00       		.byte	0
+ 777 0113 00       		.byte	0
+ 778 0114 00       		.byte	0
+ 779              		.section	.debug_loc,"",%progbits
+ 780              	.Ldebug_loc0:
+ 781              	.LLST0:
+ 782 0000 00000000 		.4byte	.LVL0
+ 783 0004 0C000000 		.4byte	.LVL2
+ 784 0008 0100     		.2byte	0x1
+ 785 000a 50       		.byte	0x50
+ 786 000b 0C000000 		.4byte	.LVL2
+ 787 000f 90000000 		.4byte	.LFE33
+ 788 0013 0200     		.2byte	0x2
+ 789 0015 91       		.byte	0x91
+ 790 0016 64       		.sleb128 -28
+ 791 0017 00000000 		.4byte	0
+ 792 001b 00000000 		.4byte	0
+ 793              	.LLST1:
+ 794 001f 00000000 		.4byte	.LVL0
+ 795 0023 0F000000 		.4byte	.LVL3-1
+ 796 0027 0100     		.2byte	0x1
+ 797 0029 51       		.byte	0x51
+ 798 002a 0F000000 		.4byte	.LVL3-1
+ 799 002e 90000000 		.4byte	.LFE33
+ 800 0032 0400     		.2byte	0x4
+ 801 0034 F3       		.byte	0xf3
+ 802 0035 01       		.uleb128 0x1
+ 803 0036 51       		.byte	0x51
+ 804 0037 9F       		.byte	0x9f
+ 805 0038 00000000 		.4byte	0
+ 806 003c 00000000 		.4byte	0
+ 807              	.LLST2:
+ 808 0040 0A000000 		.4byte	.LVL1
+ 809 0044 14000000 		.4byte	.LVL4
+ 810 0048 0200     		.2byte	0x2
+ 811 004a 30       		.byte	0x30
+ 812 004b 9F       		.byte	0x9f
+ 813 004c 1A000000 		.4byte	.LVL5
+ 814 0050 58000000 		.4byte	.LVL16
+ 815 0054 0100     		.2byte	0x1
+ 816 0056 57       		.byte	0x57
+ 817 0057 5A000000 		.4byte	.LVL17
+ 818 005b 7E000000 		.4byte	.LVL22
+ 819 005f 0100     		.2byte	0x1
+ 820 0061 57       		.byte	0x57
+ 821 0062 00000000 		.4byte	0
+ 822 0066 00000000 		.4byte	0
+ 823              	.LLST3:
+ 824 006a 0A000000 		.4byte	.LVL1
+ 825 006e 14000000 		.4byte	.LVL4
+ 826 0072 0200     		.2byte	0x2
+ 827 0074 30       		.byte	0x30
+ 828 0075 9F       		.byte	0x9f
+ 829 0076 14000000 		.4byte	.LVL4
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 17
+
+
+ 830 007a 90000000 		.4byte	.LFE33
+ 831 007e 0100     		.2byte	0x1
+ 832 0080 58       		.byte	0x58
+ 833 0081 00000000 		.4byte	0
+ 834 0085 00000000 		.4byte	0
+ 835              	.LLST4:
+ 836 0089 0A000000 		.4byte	.LVL1
+ 837 008d 1A000000 		.4byte	.LVL5
+ 838 0091 0200     		.2byte	0x2
+ 839 0093 30       		.byte	0x30
+ 840 0094 9F       		.byte	0x9f
+ 841 0095 1A000000 		.4byte	.LVL5
+ 842 0099 58000000 		.4byte	.LVL16
+ 843 009d 0200     		.2byte	0x2
+ 844 009f 7D       		.byte	0x7d
+ 845 00a0 00       		.sleb128 0
+ 846 00a1 58000000 		.4byte	.LVL16
+ 847 00a5 5A000000 		.4byte	.LVL17
+ 848 00a9 0100     		.2byte	0x1
+ 849 00ab 53       		.byte	0x53
+ 850 00ac 5A000000 		.4byte	.LVL17
+ 851 00b0 90000000 		.4byte	.LFE33
+ 852 00b4 0200     		.2byte	0x2
+ 853 00b6 7D       		.byte	0x7d
+ 854 00b7 00       		.sleb128 0
+ 855 00b8 00000000 		.4byte	0
+ 856 00bc 00000000 		.4byte	0
+ 857              	.LLST5:
+ 858 00c0 36000000 		.4byte	.LVL8
+ 859 00c4 58000000 		.4byte	.LVL16
+ 860 00c8 0100     		.2byte	0x1
+ 861 00ca 55       		.byte	0x55
+ 862 00cb 00000000 		.4byte	0
+ 863 00cf 00000000 		.4byte	0
+ 864              	.LLST6:
+ 865 00d3 42000000 		.4byte	.LVL10
+ 866 00d7 49000000 		.4byte	.LVL11-1
+ 867 00db 0100     		.2byte	0x1
+ 868 00dd 51       		.byte	0x51
+ 869 00de 00000000 		.4byte	0
+ 870 00e2 00000000 		.4byte	0
+ 871              	.LLST7:
+ 872 00e6 4C000000 		.4byte	.LVL12
+ 873 00ea 50000000 		.4byte	.LVL13
+ 874 00ee 0100     		.2byte	0x1
+ 875 00f0 50       		.byte	0x50
+ 876 00f1 50000000 		.4byte	.LVL13
+ 877 00f5 53000000 		.4byte	.LVL14-1
+ 878 00f9 0100     		.2byte	0x1
+ 879 00fb 52       		.byte	0x52
+ 880 00fc 00000000 		.4byte	0
+ 881 0100 00000000 		.4byte	0
+ 882              		.section	.debug_aranges,"",%progbits
+ 883 0000 24000000 		.4byte	0x24
+ 884 0004 0200     		.2byte	0x2
+ 885 0006 00000000 		.4byte	.Ldebug_info0
+ 886 000a 04       		.byte	0x4
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 18
+
+
+ 887 000b 00       		.byte	0
+ 888 000c 0000     		.2byte	0
+ 889 000e 0000     		.2byte	0
+ 890 0010 00000000 		.4byte	.LFB33
+ 891 0014 90000000 		.4byte	.LFE33-.LFB33
+ 892 0018 00000000 		.4byte	.LFB32
+ 893 001c 14000000 		.4byte	.LFE32-.LFB32
+ 894 0020 00000000 		.4byte	0
+ 895 0024 00000000 		.4byte	0
+ 896              		.section	.debug_ranges,"",%progbits
+ 897              	.Ldebug_ranges0:
+ 898 0000 00000000 		.4byte	.LFB33
+ 899 0004 90000000 		.4byte	.LFE33
+ 900 0008 00000000 		.4byte	.LFB32
+ 901 000c 14000000 		.4byte	.LFE32
+ 902 0010 00000000 		.4byte	0
+ 903 0014 00000000 		.4byte	0
+ 904              		.section	.debug_line,"",%progbits
+ 905              	.Ldebug_line0:
+ 906 0000 D3000000 		.section	.debug_str,"MS",%progbits,1
+ 906      02005D00 
+ 906      00000201 
+ 906      FB0E0D00 
+ 906      01010101 
+ 907              	.LASF13:
+ 908 0000 63686172 		.ascii	"char\000"
+ 908      00
+ 909              	.LASF25:
+ 910 0005 53747269 		.ascii	"StripLights_Pixel\000"
+ 910      704C6967 
+ 910      6874735F 
+ 910      50697865 
+ 910      6C00
+ 911              	.LASF29:
+ 912 0017 53747269 		.ascii	"StripLights_Start\000"
+ 912      704C6967 
+ 912      6874735F 
+ 912      53746172 
+ 912      7400
+ 913              	.LASF3:
+ 914 0029 73686F72 		.ascii	"short unsigned int\000"
+ 914      7420756E 
+ 914      7369676E 
+ 914      65642069 
+ 914      6E7400
+ 915              	.LASF33:
+ 916 003c 536C6F77 		.ascii	"SlowColorBlend\000"
+ 916      436F6C6F 
+ 916      72426C65 
+ 916      6E6400
+ 917              	.LASF11:
+ 918 004b 666C6F61 		.ascii	"float\000"
+ 918      7400
+ 919              	.LASF16:
+ 920 0051 64656C61 		.ascii	"delay\000"
+ 920      7900
+ 921              	.LASF1:
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 19
+
+
+ 922 0057 756E7369 		.ascii	"unsigned char\000"
+ 922      676E6564 
+ 922      20636861 
+ 922      7200
+ 923              	.LASF5:
+ 924 0065 6C6F6E67 		.ascii	"long unsigned int\000"
+ 924      20756E73 
+ 924      69676E65 
+ 924      6420696E 
+ 924      7400
+ 925              	.LASF10:
+ 926 0077 696E7433 		.ascii	"int32\000"
+ 926      3200
+ 927              	.LASF20:
+ 928 007d 746F436F 		.ascii	"toColor\000"
+ 928      6C6F7200 
+ 929              	.LASF12:
+ 930 0085 646F7562 		.ascii	"double\000"
+ 930      6C6500
+ 931              	.LASF2:
+ 932 008c 73686F72 		.ascii	"short int\000"
+ 932      7420696E 
+ 932      7400
+ 933              	.LASF21:
+ 934 0096 636F6C6F 		.ascii	"color\000"
+ 934      7200
+ 935              	.LASF9:
+ 936 009c 75696E74 		.ascii	"uint32\000"
+ 936      333200
+ 937              	.LASF34:
+ 938 00a3 6D61696E 		.ascii	"main\000"
+ 938      00
+ 939              	.LASF8:
+ 940 00a8 756E7369 		.ascii	"unsigned int\000"
+ 940      676E6564 
+ 940      20696E74 
+ 940      00
+ 941              	.LASF19:
+ 942 00b5 66726F6D 		.ascii	"fromColor\000"
+ 942      436F6C6F 
+ 942      7200
+ 943              	.LASF7:
+ 944 00bf 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 944      206C6F6E 
+ 944      6720756E 
+ 944      7369676E 
+ 944      65642069 
+ 945              	.LASF17:
+ 946 00d6 74696D65 		.ascii	"time\000"
+ 946      00
+ 947              	.LASF30:
+ 948 00db 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 948      43313120 
+ 948      352E342E 
+ 948      31203230 
+ 948      31363036 
+ 949 010e 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 20
+
+
+ 949      20726576 
+ 949      6973696F 
+ 949      6E203233 
+ 949      37373135 
+ 950 0141 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 950      66756E63 
+ 950      74696F6E 
+ 950      2D736563 
+ 950      74696F6E 
+ 951              	.LASF14:
+ 952 0169 73697A65 		.ascii	"sizetype\000"
+ 952      74797065 
+ 952      00
+ 953              	.LASF6:
+ 954 0172 6C6F6E67 		.ascii	"long long int\000"
+ 954      206C6F6E 
+ 954      6720696E 
+ 954      7400
+ 955              	.LASF31:
+ 956 0180 6D61696E 		.ascii	"main.c\000"
+ 956      2E6300
+ 957              	.LASF24:
+ 958 0187 53747269 		.ascii	"StripLights_RgbBlend\000"
+ 958      704C6967 
+ 958      6874735F 
+ 958      52676242 
+ 958      6C656E64 
+ 959              	.LASF26:
+ 960 019c 53747269 		.ascii	"StripLights_Ready\000"
+ 960      704C6967 
+ 960      6874735F 
+ 960      52656164 
+ 960      7900
+ 961              	.LASF18:
+ 962 01ae 74696D65 		.ascii	"timeCnt\000"
+ 962      436E7400 
+ 963              	.LASF4:
+ 964 01b6 6C6F6E67 		.ascii	"long int\000"
+ 964      20696E74 
+ 964      00
+ 965              	.LASF23:
+ 966 01bf 53747269 		.ascii	"StripLights_Dim\000"
+ 966      704C6967 
+ 966      6874735F 
+ 966      44696D00 
+ 967              	.LASF32:
+ 968 01cf 433A5C55 		.ascii	"C:\\Users\\Yu\\Desktop\\FunWithLEDs\\EX2_1String.cy"
+ 968      73657273 
+ 968      5C59755C 
+ 968      4465736B 
+ 968      746F705C 
+ 969 01fd 64736E00 		.ascii	"dsn\000"
+ 970              	.LASF15:
+ 971 0201 6C6F6E67 		.ascii	"long double\000"
+ 971      20646F75 
+ 971      626C6500 
+ 972              	.LASF0:
+ARM GAS  C:\Users\Yu\AppData\Local\Temp\ccbCRIzo.s 			page 21
+
+
+ 973 020d 7369676E 		.ascii	"signed char\000"
+ 973      65642063 
+ 973      68617200 
+ 974              	.LASF22:
+ 975 0219 53747269 		.ascii	"StripLights_CLUT\000"
+ 975      704C6967 
+ 975      6874735F 
+ 975      434C5554 
+ 975      00
+ 976              	.LASF27:
+ 977 022a 53747269 		.ascii	"StripLights_Trigger\000"
+ 977      704C6967 
+ 977      6874735F 
+ 977      54726967 
+ 977      67657200 
+ 978              	.LASF28:
+ 979 023e 43794465 		.ascii	"CyDelay\000"
+ 979      6C617900 
+ 980              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

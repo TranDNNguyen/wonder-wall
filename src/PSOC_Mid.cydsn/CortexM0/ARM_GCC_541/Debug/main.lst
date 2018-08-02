@@ -1,0 +1,3450 @@
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.setLED,"ax",%progbits
+  20              		.align	2
+  21              		.global	setLED
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	setLED, %function
+  25              	setLED:
+  26              	.LFB36:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * EX2_String
+   4:main.c        ****  *
+   5:main.c        ****  * A simple function to cycle the color table
+   6:main.c        ****  * through the string.
+   7:main.c        ****  *
+   8:main.c        ****  * ========================================
+   9:main.c        **** */
+  10:main.c        **** #include "project.h"
+  11:main.c        **** //#include <main.h>
+  12:main.c        **** 
+  13:main.c        **** static uint32 SPIS_WaitForCommand(void);
+  14:main.c        **** static void SPIS_CleanupAfterRead(void);
+  15:main.c        **** static uint8 ExecuteCommand(uint32 cmd, uint32 color);
+  16:main.c        **** void setLED(uint32 firstLED, uint32 onLED, uint32 color);
+  17:main.c        **** void determineColor(uint32 red, uint32 green, uint32 blue);
+  18:main.c        **** const uint8 dummyBuffer[3u] = {0xFFu, 0xFFu, 0xFFu};
+  19:main.c        **** void setBG(uint32 firstLED, uint32 lastLED);
+  20:main.c        **** void rainbowFade2White();
+  21:main.c        **** 
+  22:main.c        **** int main(void)
+  23:main.c        **** {
+  24:main.c        ****     uint32 cmd = 16;
+  25:main.c        ****     uint32 status;
+  26:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  27:main.c        ****     StripLights_Start();
+  28:main.c        ****     SPIS_Start();
+  29:main.c        **** 
+  30:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 2
+
+
+  31:main.c        ****     //
+  32:main.c        ****     setBG (0, 550);
+  33:main.c        ****     
+  34:main.c        ****     int i = 55;
+  35:main.c        ****     
+  36:main.c        ****     for(;;){
+  37:main.c        ****         
+  38:main.c        ****         
+  39:main.c        ****         //cmd = SPIS_WaitForCommand();
+  40:main.c        **** 
+  41:main.c        ****         
+  42:main.c        ****         
+  43:main.c        ****         ExecuteCommand(cmd, StripLights_getColor((i + StripLights_CWHEEL_SIZE)));
+  44:main.c        ****         
+  45:main.c        ****         
+  46:main.c        ****         cmd = cmd + 1u;
+  47:main.c        ****         if(cmd > 42u) {
+  48:main.c        ****             cmd = 16u;
+  49:main.c        ****         }
+  50:main.c        ****         
+  51:main.c        ****         i = i + 1;
+  52:main.c        ****         if(i >= 100) {
+  53:main.c        ****             i = 10;
+  54:main.c        ****         }
+  55:main.c        ****         
+  56:main.c        **** 
+  57:main.c        ****         
+  58:main.c        ****         //SPIS_CleanupAfterRead();
+  59:main.c        ****     }
+  60:main.c        ****     CyDelay(100);
+  61:main.c        **** }
+  62:main.c        **** 
+  63:main.c        **** 
+  64:main.c        **** static uint32 SPIS_WaitForCommand(void)
+  65:main.c        **** {
+  66:main.c        ****     uint8 tmpBuffer[3u];
+  67:main.c        ****     uint32 cmd;
+  68:main.c        ****     uint32 i;
+  69:main.c        **** 
+  70:main.c        ****     /* Wait for the end of the transfer */
+  71:main.c        ****     while (3u != SPIS_SpiUartGetRxBufferSize())
+  72:main.c        ****     {
+  73:main.c        ****     }
+  74:main.c        **** 
+  75:main.c        ****     /* Read packet from the buffer */
+  76:main.c        ****     i = 0u;
+  77:main.c        ****     while (0u != SPIS_SpiUartGetRxBufferSize())
+  78:main.c        ****     {
+  79:main.c        ****         tmpBuffer[i] = SPIS_SpiUartReadRxData();
+  80:main.c        ****         i = i + 1u;
+  81:main.c        ****     }
+  82:main.c        **** 
+  83:main.c        ****     cmd = tmpBuffer[1u];
+  84:main.c        **** 
+  85:main.c        ****     return (cmd);
+  86:main.c        **** }
+  87:main.c        **** 
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 3
+
+
+  88:main.c        **** static void SPIS_CleanupAfterRead(void)
+  89:main.c        **** {
+  90:main.c        ****     /* Wait for the end of the transfer */
+  91:main.c        **** 
+  92:main.c        ****     SPIS_SpiUartClearRxBuffer();
+  93:main.c        **** 
+  94:main.c        **** }
+  95:main.c        **** 
+  96:main.c        **** static uint8 ExecuteCommand(uint32 cmd, uint32 color)
+  97:main.c        **** {
+  98:main.c        ****     uint8 status;
+  99:main.c        **** 
+ 100:main.c        ****     //status = STS_CMD_DONE;
+ 101:main.c        **** 
+ 102:main.c        ****     /* Execute received command */
+ 103:main.c        ****     switch (cmd)
+ 104:main.c        ****     {
+ 105:main.c        ****        
+ 106:main.c        ****         case 16u:
+ 107:main.c        ****             setLED (522, 548, color);
+ 108:main.c        ****             break; //1x7
+ 109:main.c        ****             
+ 110:main.c        ****         case 17u:
+ 111:main.c        ****             setLED (441, 467, color);
+ 112:main.c        ****             break;
+ 113:main.c        **** 
+ 114:main.c        ****         case 18u:
+ 115:main.c        ****             setLED (414, 440, color);
+ 116:main.c        ****             break; //1x6
+ 117:main.c        ****         
+ 118:main.c        ****         case 19u:
+ 119:main.c        ****             setLED (332, 358, color);
+ 120:main.c        ****             break; //0x6
+ 121:main.c        ****             
+ 122:main.c        ****         case 20u:
+ 123:main.c        ****             setLED (305, 331, color);
+ 124:main.c        ****             break; //0x5
+ 125:main.c        ****             
+ 126:main.c        ****         case 21u:
+ 127:main.c        ****             setLED (222, 248, color);
+ 128:main.c        ****             break; //1x5
+ 129:main.c        ****             
+ 130:main.c        ****         case 22u:
+ 131:main.c        ****             setLED (193, 221, color);
+ 132:main.c        ****             break; // 1x4
+ 133:main.c        ****             
+ 134:main.c        ****         case 23u:
+ 135:main.c        ****             setLED (106, 134, color);
+ 136:main.c        ****             break; // 0x4
+ 137:main.c        ****             
+ 138:main.c        ****         case 24u:
+ 139:main.c        ****             setLED (496, 521, color);
+ 140:main.c        ****             break; // 0x3
+ 141:main.c        **** 
+ 142:main.c        ****         case 25u:
+ 143:main.c        ****             setLED (468, 495, color);
+ 144:main.c        ****             break; // 1x3
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 4
+
+
+ 145:main.c        ****             
+ 146:main.c        ****         case 26u:
+ 147:main.c        ****             setLED (387, 413, color);
+ 148:main.c        ****             break; // 1x2
+ 149:main.c        ****             
+ 150:main.c        ****         case 27u:
+ 151:main.c        ****             setLED (395, 386, color);
+ 152:main.c        ****             break; // 0x2
+ 153:main.c        ****             
+ 154:main.c        ****         case 28u:
+ 155:main.c        ****             setLED (277, 304, color);
+ 156:main.c        ****             break; //0x1
+ 157:main.c        ****         
+ 158:main.c        ****         case 29u:
+ 159:main.c        ****             setLED (249, 276, color);
+ 160:main.c        ****             break; // 1x1
+ 161:main.c        ****             
+ 162:main.c        ****         case 30u:
+ 163:main.c        ****             setLED (164, 192, color);
+ 164:main.c        ****             break; // 1x0
+ 165:main.c        ****             
+ 166:main.c        ****         case 31u:
+ 167:main.c        ****             setLED (135, 163, color);
+ 168:main.c        ****             break; // 0x0
+ 169:main.c        ****             
+ 170:main.c        ****         case 32u:
+ 171:main.c        ****             setLED (80, 105, color);
+ 172:main.c        ****             break;
+ 173:main.c        ****             
+ 174:main.c        ****         case 33u:
+ 175:main.c        ****             setLED (0, 27, color);
+ 176:main.c        ****             break;
+ 177:main.c        ****             
+ 178:main.c        ****         case 40u:
+ 179:main.c        ****             setLED (54, 79, color);
+ 180:main.c        ****             break;
+ 181:main.c        ****         case 41:
+ 182:main.c        ****             setLED (28, 53, color);
+ 183:main.c        ****             break;
+ 184:main.c        ****             
+ 185:main.c        ****         default:
+ 186:main.c        ****            //setBG (0, 550);
+ 187:main.c        ****             break;
+ 188:main.c        ****     }
+ 189:main.c        **** 
+ 190:main.c        ****     return (status);
+ 191:main.c        **** }
+ 192:main.c        **** 
+ 193:main.c        **** void setLED (uint32 firstLED, uint32 lastLED, uint32 color) {
+  28              		.loc 1 193 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 4, -16
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 5
+
+
+  36              		.cfi_offset 5, -12
+  37              		.cfi_offset 6, -8
+  38              		.cfi_offset 14, -4
+  39 0002 0400     		movs	r4, r0
+  40 0004 0D00     		movs	r5, r1
+  41 0006 1600     		movs	r6, r2
+ 194:main.c        ****     uint32 led;
+ 195:main.c        ****     
+ 196:main.c        ****     StripLights_Dim(2);
+  42              		.loc 1 196 0
+  43 0008 0220     		movs	r0, #2
+  44              	.LVL1:
+  45 000a FFF7FEFF 		bl	StripLights_Dim
+  46              	.LVL2:
+ 197:main.c        ****     
+ 198:main.c        ****     for(led = firstLED; led <= lastLED; led++) {
+  47              		.loc 1 198 0
+  48 000e 0CE0     		b	.L2
+  49              	.LVL3:
+  50              	.L4:
+ 199:main.c        ****         StripLights_Pixel(led, 0, color);
+  51              		.loc 1 199 0
+  52 0010 3200     		movs	r2, r6
+  53 0012 0021     		movs	r1, #0
+  54 0014 2000     		movs	r0, r4
+  55 0016 FFF7FEFF 		bl	StripLights_Pixel
+  56              	.LVL4:
+  57              	.L3:
+ 200:main.c        ****         while(StripLights_Ready() == 0);
+  58              		.loc 1 200 0 discriminator 1
+  59 001a FFF7FEFF 		bl	StripLights_Ready
+  60              	.LVL5:
+  61 001e 0028     		cmp	r0, #0
+  62 0020 FBD0     		beq	.L3
+ 201:main.c        ****         CyDelay(10);
+  63              		.loc 1 201 0 discriminator 2
+  64 0022 0A20     		movs	r0, #10
+  65 0024 FFF7FEFF 		bl	CyDelay
+  66              	.LVL6:
+ 198:main.c        ****         StripLights_Pixel(led, 0, color);
+  67              		.loc 1 198 0 discriminator 2
+  68 0028 0134     		adds	r4, r4, #1
+  69              	.LVL7:
+  70              	.L2:
+ 198:main.c        ****         StripLights_Pixel(led, 0, color);
+  71              		.loc 1 198 0 is_stmt 0 discriminator 1
+  72 002a AC42     		cmp	r4, r5
+  73 002c F0D9     		bls	.L4
+ 202:main.c        ****         
+ 203:main.c        ****     }
+ 204:main.c        ****     StripLights_Trigger(1);
+  74              		.loc 1 204 0 is_stmt 1
+  75 002e 0120     		movs	r0, #1
+  76 0030 FFF7FEFF 		bl	StripLights_Trigger
+  77              	.LVL8:
+ 205:main.c        ****     CyDelay(100);
+  78              		.loc 1 205 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 6
+
+
+  79 0034 6420     		movs	r0, #100
+  80 0036 FFF7FEFF 		bl	CyDelay
+  81              	.LVL9:
+ 206:main.c        **** }
+  82              		.loc 1 206 0
+  83              		@ sp needed
+  84              	.LVL10:
+  85              	.LVL11:
+  86              	.LVL12:
+  87 003a 70BD     		pop	{r4, r5, r6, pc}
+  88              		.cfi_endproc
+  89              	.LFE36:
+  90              		.size	setLED, .-setLED
+  91              		.section	.text.ExecuteCommand,"ax",%progbits
+  92              		.align	2
+  93              		.code	16
+  94              		.thumb_func
+  95              		.type	ExecuteCommand, %function
+  96              	ExecuteCommand:
+  97              	.LFB35:
+  97:main.c        ****     uint8 status;
+  98              		.loc 1 97 0
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              	.LVL13:
+ 103 0000 10B5     		push	{r4, lr}
+ 104              		.cfi_def_cfa_offset 8
+ 105              		.cfi_offset 4, -8
+ 106              		.cfi_offset 14, -4
+ 103:main.c        ****     {
+ 107              		.loc 1 103 0
+ 108 0002 1038     		subs	r0, r0, #16
+ 109              	.LVL14:
+ 110 0004 1928     		cmp	r0, #25
+ 111 0006 00D9     		bls	.LCB85
+ 112 0008 8DE0     		b	.L6	@long jump
+ 113              	.LCB85:
+ 114 000a 8000     		lsls	r0, r0, #2
+ 115              	.LVL15:
+ 116 000c 474B     		ldr	r3, .L28
+ 117 000e 1B58     		ldr	r3, [r3, r0]
+ 118 0010 9F46     		mov	pc, r3
+ 119              		.section	.rodata
+ 120              		.align	2
+ 121              	.L8:
+ 122 0000 12000000 		.word	.L7
+ 123 0004 20000000 		.word	.L9
+ 124 0008 30000000 		.word	.L10
+ 125 000c 40000000 		.word	.L11
+ 126 0010 50000000 		.word	.L12
+ 127 0014 60000000 		.word	.L13
+ 128 0018 6C000000 		.word	.L14
+ 129 001c 78000000 		.word	.L15
+ 130 0020 84000000 		.word	.L16
+ 131 0024 92000000 		.word	.L17
+ 132 0028 A2000000 		.word	.L18
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 7
+
+
+ 133 002c B2000000 		.word	.L19
+ 134 0030 C2000000 		.word	.L20
+ 135 0034 D2000000 		.word	.L21
+ 136 0038 E0000000 		.word	.L22
+ 137 003c EC000000 		.word	.L23
+ 138 0040 F8000000 		.word	.L24
+ 139 0044 04010000 		.word	.L25
+ 140 0048 26010000 		.word	.L6
+ 141 004c 26010000 		.word	.L6
+ 142 0050 26010000 		.word	.L6
+ 143 0054 26010000 		.word	.L6
+ 144 0058 26010000 		.word	.L6
+ 145 005c 26010000 		.word	.L6
+ 146 0060 10010000 		.word	.L26
+ 147 0064 1C010000 		.word	.L27
+ 148              		.section	.text.ExecuteCommand
+ 149              	.L7:
+ 107:main.c        ****             break; //1x7
+ 150              		.loc 1 107 0
+ 151 0012 0A00     		movs	r2, r1
+ 152 0014 8921     		movs	r1, #137
+ 153              	.LVL16:
+ 154 0016 8900     		lsls	r1, r1, #2
+ 155 0018 4548     		ldr	r0, .L28+4
+ 156 001a FFF7FEFF 		bl	setLED
+ 157              	.LVL17:
+ 108:main.c        ****             
+ 158              		.loc 1 108 0
+ 159 001e 82E0     		b	.L6
+ 160              	.LVL18:
+ 161              	.L9:
+ 111:main.c        ****             break;
+ 162              		.loc 1 111 0
+ 163 0020 0A00     		movs	r2, r1
+ 164 0022 D421     		movs	r1, #212
+ 165              	.LVL19:
+ 166 0024 FF31     		adds	r1, r1, #255
+ 167 0026 BA20     		movs	r0, #186
+ 168 0028 FF30     		adds	r0, r0, #255
+ 169 002a FFF7FEFF 		bl	setLED
+ 170              	.LVL20:
+ 112:main.c        **** 
+ 171              		.loc 1 112 0
+ 172 002e 7AE0     		b	.L6
+ 173              	.LVL21:
+ 174              	.L10:
+ 115:main.c        ****             break; //1x6
+ 175              		.loc 1 115 0
+ 176 0030 0A00     		movs	r2, r1
+ 177 0032 DC21     		movs	r1, #220
+ 178              	.LVL22:
+ 179 0034 4900     		lsls	r1, r1, #1
+ 180 0036 CF20     		movs	r0, #207
+ 181 0038 4000     		lsls	r0, r0, #1
+ 182 003a FFF7FEFF 		bl	setLED
+ 183              	.LVL23:
+ 116:main.c        ****         
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 8
+
+
+ 184              		.loc 1 116 0
+ 185 003e 72E0     		b	.L6
+ 186              	.LVL24:
+ 187              	.L11:
+ 119:main.c        ****             break; //0x6
+ 188              		.loc 1 119 0
+ 189 0040 0A00     		movs	r2, r1
+ 190 0042 B321     		movs	r1, #179
+ 191              	.LVL25:
+ 192 0044 4900     		lsls	r1, r1, #1
+ 193 0046 A620     		movs	r0, #166
+ 194 0048 4000     		lsls	r0, r0, #1
+ 195 004a FFF7FEFF 		bl	setLED
+ 196              	.LVL26:
+ 120:main.c        ****             
+ 197              		.loc 1 120 0
+ 198 004e 6AE0     		b	.L6
+ 199              	.LVL27:
+ 200              	.L12:
+ 123:main.c        ****             break; //0x5
+ 201              		.loc 1 123 0
+ 202 0050 0A00     		movs	r2, r1
+ 203 0052 4C21     		movs	r1, #76
+ 204              	.LVL28:
+ 205 0054 FF31     		adds	r1, r1, #255
+ 206 0056 3220     		movs	r0, #50
+ 207 0058 FF30     		adds	r0, r0, #255
+ 208 005a FFF7FEFF 		bl	setLED
+ 209              	.LVL29:
+ 124:main.c        ****             
+ 210              		.loc 1 124 0
+ 211 005e 62E0     		b	.L6
+ 212              	.LVL30:
+ 213              	.L13:
+ 127:main.c        ****             break; //1x5
+ 214              		.loc 1 127 0
+ 215 0060 0A00     		movs	r2, r1
+ 216 0062 F821     		movs	r1, #248
+ 217              	.LVL31:
+ 218 0064 DE20     		movs	r0, #222
+ 219 0066 FFF7FEFF 		bl	setLED
+ 220              	.LVL32:
+ 128:main.c        ****             
+ 221              		.loc 1 128 0
+ 222 006a 5CE0     		b	.L6
+ 223              	.LVL33:
+ 224              	.L14:
+ 131:main.c        ****             break; // 1x4
+ 225              		.loc 1 131 0
+ 226 006c 0A00     		movs	r2, r1
+ 227 006e DD21     		movs	r1, #221
+ 228              	.LVL34:
+ 229 0070 C120     		movs	r0, #193
+ 230 0072 FFF7FEFF 		bl	setLED
+ 231              	.LVL35:
+ 132:main.c        ****             
+ 232              		.loc 1 132 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 9
+
+
+ 233 0076 56E0     		b	.L6
+ 234              	.LVL36:
+ 235              	.L15:
+ 135:main.c        ****             break; // 0x4
+ 236              		.loc 1 135 0
+ 237 0078 0A00     		movs	r2, r1
+ 238 007a 8621     		movs	r1, #134
+ 239              	.LVL37:
+ 240 007c 6A20     		movs	r0, #106
+ 241 007e FFF7FEFF 		bl	setLED
+ 242              	.LVL38:
+ 136:main.c        ****             
+ 243              		.loc 1 136 0
+ 244 0082 50E0     		b	.L6
+ 245              	.LVL39:
+ 246              	.L16:
+ 139:main.c        ****             break; // 0x3
+ 247              		.loc 1 139 0
+ 248 0084 0A00     		movs	r2, r1
+ 249 0086 2B49     		ldr	r1, .L28+8
+ 250              	.LVL40:
+ 251 0088 F820     		movs	r0, #248
+ 252 008a 4000     		lsls	r0, r0, #1
+ 253 008c FFF7FEFF 		bl	setLED
+ 254              	.LVL41:
+ 140:main.c        **** 
+ 255              		.loc 1 140 0
+ 256 0090 49E0     		b	.L6
+ 257              	.LVL42:
+ 258              	.L17:
+ 143:main.c        ****             break; // 1x3
+ 259              		.loc 1 143 0
+ 260 0092 0A00     		movs	r2, r1
+ 261 0094 F021     		movs	r1, #240
+ 262              	.LVL43:
+ 263 0096 FF31     		adds	r1, r1, #255
+ 264 0098 EA20     		movs	r0, #234
+ 265 009a 4000     		lsls	r0, r0, #1
+ 266 009c FFF7FEFF 		bl	setLED
+ 267              	.LVL44:
+ 144:main.c        ****             
+ 268              		.loc 1 144 0
+ 269 00a0 41E0     		b	.L6
+ 270              	.LVL45:
+ 271              	.L18:
+ 147:main.c        ****             break; // 1x2
+ 272              		.loc 1 147 0
+ 273 00a2 0A00     		movs	r2, r1
+ 274 00a4 9E21     		movs	r1, #158
+ 275              	.LVL46:
+ 276 00a6 FF31     		adds	r1, r1, #255
+ 277 00a8 8420     		movs	r0, #132
+ 278 00aa FF30     		adds	r0, r0, #255
+ 279 00ac FFF7FEFF 		bl	setLED
+ 280              	.LVL47:
+ 148:main.c        ****             
+ 281              		.loc 1 148 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 10
+
+
+ 282 00b0 39E0     		b	.L6
+ 283              	.LVL48:
+ 284              	.L19:
+ 151:main.c        ****             break; // 0x2
+ 285              		.loc 1 151 0
+ 286 00b2 0A00     		movs	r2, r1
+ 287 00b4 C121     		movs	r1, #193
+ 288              	.LVL49:
+ 289 00b6 4900     		lsls	r1, r1, #1
+ 290 00b8 8C20     		movs	r0, #140
+ 291 00ba FF30     		adds	r0, r0, #255
+ 292 00bc FFF7FEFF 		bl	setLED
+ 293              	.LVL50:
+ 152:main.c        ****             
+ 294              		.loc 1 152 0
+ 295 00c0 31E0     		b	.L6
+ 296              	.LVL51:
+ 297              	.L20:
+ 155:main.c        ****             break; //0x1
+ 298              		.loc 1 155 0
+ 299 00c2 0A00     		movs	r2, r1
+ 300 00c4 9821     		movs	r1, #152
+ 301              	.LVL52:
+ 302 00c6 4900     		lsls	r1, r1, #1
+ 303 00c8 1620     		movs	r0, #22
+ 304 00ca FF30     		adds	r0, r0, #255
+ 305 00cc FFF7FEFF 		bl	setLED
+ 306              	.LVL53:
+ 156:main.c        ****         
+ 307              		.loc 1 156 0
+ 308 00d0 29E0     		b	.L6
+ 309              	.LVL54:
+ 310              	.L21:
+ 159:main.c        ****             break; // 1x1
+ 311              		.loc 1 159 0
+ 312 00d2 0A00     		movs	r2, r1
+ 313 00d4 8A21     		movs	r1, #138
+ 314              	.LVL55:
+ 315 00d6 4900     		lsls	r1, r1, #1
+ 316 00d8 F920     		movs	r0, #249
+ 317 00da FFF7FEFF 		bl	setLED
+ 318              	.LVL56:
+ 160:main.c        ****             
+ 319              		.loc 1 160 0
+ 320 00de 22E0     		b	.L6
+ 321              	.LVL57:
+ 322              	.L22:
+ 163:main.c        ****             break; // 1x0
+ 323              		.loc 1 163 0
+ 324 00e0 0A00     		movs	r2, r1
+ 325 00e2 C021     		movs	r1, #192
+ 326              	.LVL58:
+ 327 00e4 A420     		movs	r0, #164
+ 328 00e6 FFF7FEFF 		bl	setLED
+ 329              	.LVL59:
+ 164:main.c        ****             
+ 330              		.loc 1 164 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 11
+
+
+ 331 00ea 1CE0     		b	.L6
+ 332              	.LVL60:
+ 333              	.L23:
+ 167:main.c        ****             break; // 0x0
+ 334              		.loc 1 167 0
+ 335 00ec 0A00     		movs	r2, r1
+ 336 00ee A321     		movs	r1, #163
+ 337              	.LVL61:
+ 338 00f0 8720     		movs	r0, #135
+ 339 00f2 FFF7FEFF 		bl	setLED
+ 340              	.LVL62:
+ 168:main.c        ****             
+ 341              		.loc 1 168 0
+ 342 00f6 16E0     		b	.L6
+ 343              	.LVL63:
+ 344              	.L24:
+ 171:main.c        ****             break;
+ 345              		.loc 1 171 0
+ 346 00f8 0A00     		movs	r2, r1
+ 347 00fa 6921     		movs	r1, #105
+ 348              	.LVL64:
+ 349 00fc 5020     		movs	r0, #80
+ 350 00fe FFF7FEFF 		bl	setLED
+ 351              	.LVL65:
+ 172:main.c        ****             
+ 352              		.loc 1 172 0
+ 353 0102 10E0     		b	.L6
+ 354              	.LVL66:
+ 355              	.L25:
+ 175:main.c        ****             break;
+ 356              		.loc 1 175 0
+ 357 0104 0A00     		movs	r2, r1
+ 358 0106 1B21     		movs	r1, #27
+ 359              	.LVL67:
+ 360 0108 0020     		movs	r0, #0
+ 361 010a FFF7FEFF 		bl	setLED
+ 362              	.LVL68:
+ 176:main.c        ****             
+ 363              		.loc 1 176 0
+ 364 010e 0AE0     		b	.L6
+ 365              	.LVL69:
+ 366              	.L26:
+ 179:main.c        ****             break;
+ 367              		.loc 1 179 0
+ 368 0110 0A00     		movs	r2, r1
+ 369 0112 4F21     		movs	r1, #79
+ 370              	.LVL70:
+ 371 0114 3620     		movs	r0, #54
+ 372 0116 FFF7FEFF 		bl	setLED
+ 373              	.LVL71:
+ 180:main.c        ****         case 41:
+ 374              		.loc 1 180 0
+ 375 011a 04E0     		b	.L6
+ 376              	.LVL72:
+ 377              	.L27:
+ 182:main.c        ****             break;
+ 378              		.loc 1 182 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 12
+
+
+ 379 011c 0A00     		movs	r2, r1
+ 380 011e 3521     		movs	r1, #53
+ 381              	.LVL73:
+ 382 0120 1C20     		movs	r0, #28
+ 383 0122 FFF7FEFF 		bl	setLED
+ 384              	.LVL74:
+ 385              	.L6:
+ 191:main.c        **** 
+ 386              		.loc 1 191 0
+ 387 0126 0020     		movs	r0, #0
+ 388              		@ sp needed
+ 389 0128 10BD     		pop	{r4, pc}
+ 390              	.L29:
+ 391 012a C046     		.align	2
+ 392              	.L28:
+ 393 012c 00000000 		.word	.L8
+ 394 0130 0A020000 		.word	522
+ 395 0134 09020000 		.word	521
+ 396              		.cfi_endproc
+ 397              	.LFE35:
+ 398              		.size	ExecuteCommand, .-ExecuteCommand
+ 399              		.section	.text.setBG,"ax",%progbits
+ 400              		.align	2
+ 401              		.global	setBG
+ 402              		.code	16
+ 403              		.thumb_func
+ 404              		.type	setBG, %function
+ 405              	setBG:
+ 406              	.LFB37:
+ 207:main.c        **** 
+ 208:main.c        **** void setBG(uint32 firstLED, uint32 lastLED) {
+ 407              		.loc 1 208 0
+ 408              		.cfi_startproc
+ 409              		@ args = 0, pretend = 0, frame = 0
+ 410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 411              	.LVL75:
+ 412 0000 70B5     		push	{r4, r5, r6, lr}
+ 413              		.cfi_def_cfa_offset 16
+ 414              		.cfi_offset 4, -16
+ 415              		.cfi_offset 5, -12
+ 416              		.cfi_offset 6, -8
+ 417              		.cfi_offset 14, -4
+ 418 0002 0400     		movs	r4, r0
+ 419 0004 0D00     		movs	r5, r1
+ 209:main.c        **** uint32 led;
+ 210:main.c        ****     
+ 211:main.c        ****     StripLights_Dim(4);
+ 420              		.loc 1 211 0
+ 421 0006 0420     		movs	r0, #4
+ 422              	.LVL76:
+ 423 0008 FFF7FEFF 		bl	StripLights_Dim
+ 424              	.LVL77:
+ 212:main.c        ****     
+ 213:main.c        ****     for(led = firstLED; led <= lastLED; led++) {
+ 425              		.loc 1 213 0
+ 426 000c 0FE0     		b	.L31
+ 427              	.LVL78:
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 13
+
+
+ 428              	.L33:
+ 214:main.c        ****         StripLights_Pixel(led, 0, StripLights_OFF);
+ 429              		.loc 1 214 0
+ 430 000e 1820     		movs	r0, #24
+ 431 0010 FFF7FEFF 		bl	StripLights_getColor
+ 432              	.LVL79:
+ 433 0014 0200     		movs	r2, r0
+ 434 0016 0021     		movs	r1, #0
+ 435 0018 2000     		movs	r0, r4
+ 436 001a FFF7FEFF 		bl	StripLights_Pixel
+ 437              	.LVL80:
+ 438              	.L32:
+ 215:main.c        ****         while(StripLights_Ready() == 0);
+ 439              		.loc 1 215 0 discriminator 1
+ 440 001e FFF7FEFF 		bl	StripLights_Ready
+ 441              	.LVL81:
+ 442 0022 0028     		cmp	r0, #0
+ 443 0024 FBD0     		beq	.L32
+ 216:main.c        ****         CyDelay(10);
+ 444              		.loc 1 216 0 discriminator 2
+ 445 0026 0A20     		movs	r0, #10
+ 446 0028 FFF7FEFF 		bl	CyDelay
+ 447              	.LVL82:
+ 213:main.c        ****         StripLights_Pixel(led, 0, StripLights_OFF);
+ 448              		.loc 1 213 0 discriminator 2
+ 449 002c 0134     		adds	r4, r4, #1
+ 450              	.LVL83:
+ 451              	.L31:
+ 213:main.c        ****         StripLights_Pixel(led, 0, StripLights_OFF);
+ 452              		.loc 1 213 0 is_stmt 0 discriminator 1
+ 453 002e AC42     		cmp	r4, r5
+ 454 0030 EDD9     		bls	.L33
+ 217:main.c        ****         
+ 218:main.c        ****     }
+ 219:main.c        ****     StripLights_Trigger(1);
+ 455              		.loc 1 219 0 is_stmt 1
+ 456 0032 0120     		movs	r0, #1
+ 457 0034 FFF7FEFF 		bl	StripLights_Trigger
+ 458              	.LVL84:
+ 220:main.c        ****     CyDelay(100);
+ 459              		.loc 1 220 0
+ 460 0038 6420     		movs	r0, #100
+ 461 003a FFF7FEFF 		bl	CyDelay
+ 462              	.LVL85:
+ 221:main.c        **** }
+ 463              		.loc 1 221 0
+ 464              		@ sp needed
+ 465              	.LVL86:
+ 466              	.LVL87:
+ 467 003e 70BD     		pop	{r4, r5, r6, pc}
+ 468              		.cfi_endproc
+ 469              	.LFE37:
+ 470              		.size	setBG, .-setBG
+ 471              		.section	.text.main,"ax",%progbits
+ 472              		.align	2
+ 473              		.global	main
+ 474              		.code	16
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 14
+
+
+ 475              		.thumb_func
+ 476              		.type	main, %function
+ 477              	main:
+ 478              	.LFB32:
+  23:main.c        ****     uint32 cmd = 16;
+ 479              		.loc 1 23 0
+ 480              		.cfi_startproc
+ 481              		@ args = 0, pretend = 0, frame = 0
+ 482              		@ frame_needed = 0, uses_anonymous_args = 0
+ 483 0000 70B5     		push	{r4, r5, r6, lr}
+ 484              		.cfi_def_cfa_offset 16
+ 485              		.cfi_offset 4, -16
+ 486              		.cfi_offset 5, -12
+ 487              		.cfi_offset 6, -8
+ 488              		.cfi_offset 14, -4
+ 489              	.LVL88:
+  26:main.c        ****     StripLights_Start();
+ 490              		.loc 1 26 0
+ 491              		.syntax divided
+ 492              	@ 26 "main.c" 1
+ 493 0002 62B6     		CPSIE   i
+ 494              	@ 0 "" 2
+  27:main.c        ****     SPIS_Start();
+ 495              		.loc 1 27 0
+ 496              		.thumb
+ 497              		.syntax unified
+ 498 0004 FFF7FEFF 		bl	StripLights_Start
+ 499              	.LVL89:
+  28:main.c        **** 
+ 500              		.loc 1 28 0
+ 501 0008 FFF7FEFF 		bl	SPIS_Start
+ 502              	.LVL90:
+  32:main.c        ****     
+ 503              		.loc 1 32 0
+ 504 000c 0B49     		ldr	r1, .L41
+ 505 000e 0020     		movs	r0, #0
+ 506 0010 FFF7FEFF 		bl	setBG
+ 507              	.LVL91:
+  34:main.c        ****     
+ 508              		.loc 1 34 0
+ 509 0014 3725     		movs	r5, #55
+  24:main.c        ****     uint32 status;
+ 510              		.loc 1 24 0
+ 511 0016 1024     		movs	r4, #16
+ 512 0018 00E0     		b	.L35
+ 513              	.LVL92:
+ 514              	.L40:
+  53:main.c        ****         }
+ 515              		.loc 1 53 0
+ 516 001a 0A25     		movs	r5, #10
+ 517              	.LVL93:
+ 518              	.L35:
+  43:main.c        ****         
+ 519              		.loc 1 43 0
+ 520 001c 2800     		movs	r0, r5
+ 521 001e 1830     		adds	r0, r0, #24
+ 522 0020 FFF7FEFF 		bl	StripLights_getColor
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 15
+
+
+ 523              	.LVL94:
+ 524 0024 0100     		movs	r1, r0
+ 525 0026 2000     		movs	r0, r4
+ 526 0028 FFF7FEFF 		bl	ExecuteCommand
+ 527              	.LVL95:
+  46:main.c        ****         if(cmd > 42u) {
+ 528              		.loc 1 46 0
+ 529 002c 0134     		adds	r4, r4, #1
+ 530              	.LVL96:
+  47:main.c        ****             cmd = 16u;
+ 531              		.loc 1 47 0
+ 532 002e 2A2C     		cmp	r4, #42
+ 533 0030 00D9     		bls	.L36
+  48:main.c        ****         }
+ 534              		.loc 1 48 0
+ 535 0032 1024     		movs	r4, #16
+ 536              	.LVL97:
+ 537              	.L36:
+  51:main.c        ****         if(i >= 100) {
+ 538              		.loc 1 51 0
+ 539 0034 0135     		adds	r5, r5, #1
+ 540              	.LVL98:
+  52:main.c        ****             i = 10;
+ 541              		.loc 1 52 0
+ 542 0036 632D     		cmp	r5, #99
+ 543 0038 EFDC     		bgt	.L40
+ 544 003a EFE7     		b	.L35
+ 545              	.L42:
+ 546              		.align	2
+ 547              	.L41:
+ 548 003c 26020000 		.word	550
+ 549              		.cfi_endproc
+ 550              	.LFE32:
+ 551              		.size	main, .-main
+ 552              		.section	.text.rainbow,"ax",%progbits
+ 553              		.align	2
+ 554              		.global	rainbow
+ 555              		.code	16
+ 556              		.thumb_func
+ 557              		.type	rainbow, %function
+ 558              	rainbow:
+ 559              	.LFB38:
+ 222:main.c        **** 
+ 223:main.c        **** 
+ 224:main.c        **** void rainbow(uint32 startingColor, uint32 firstLED, uint32 lastLED) {
+ 560              		.loc 1 224 0
+ 561              		.cfi_startproc
+ 562              		@ args = 0, pretend = 0, frame = 0
+ 563              		@ frame_needed = 0, uses_anonymous_args = 0
+ 564              	.LVL99:
+ 565 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 566              		.cfi_def_cfa_offset 24
+ 567              		.cfi_offset 3, -24
+ 568              		.cfi_offset 4, -20
+ 569              		.cfi_offset 5, -16
+ 570              		.cfi_offset 6, -12
+ 571              		.cfi_offset 7, -8
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 16
+
+
+ 572              		.cfi_offset 14, -4
+ 573 0002 0D00     		movs	r5, r1
+ 574 0004 1700     		movs	r7, r2
+ 575              	.LBB2:
+ 225:main.c        ****     
+ 226:main.c        ****     for(int i = startingColor; i < 256; i++){
+ 576              		.loc 1 226 0
+ 577 0006 0600     		movs	r6, r0
+ 578              	.LVL100:
+ 579 0008 1AE0     		b	.L44
+ 580              	.LVL101:
+ 581              	.L49:
+ 582              	.LBB3:
+ 227:main.c        ****         for(int j = firstLED; j <= lastLED; j++) {
+ 583              		.loc 1 227 0
+ 584 000a 2C00     		movs	r4, r5
+ 585              	.LVL102:
+ 586 000c 10E0     		b	.L45
+ 587              	.L47:
+ 228:main.c        ****             StripLights_Pixel(j, 0, StripLights_getColor(i + StripLights_CWHEEL_SIZE));
+ 588              		.loc 1 228 0
+ 589 000e 3000     		movs	r0, r6
+ 590 0010 1830     		adds	r0, r0, #24
+ 591 0012 FFF7FEFF 		bl	StripLights_getColor
+ 592              	.LVL103:
+ 593 0016 0200     		movs	r2, r0
+ 594 0018 0021     		movs	r1, #0
+ 595 001a 2000     		movs	r0, r4
+ 596 001c FFF7FEFF 		bl	StripLights_Pixel
+ 597              	.LVL104:
+ 598              	.L46:
+ 229:main.c        ****             while(StripLights_Ready() == 0);
+ 599              		.loc 1 229 0 discriminator 1
+ 600 0020 FFF7FEFF 		bl	StripLights_Ready
+ 601              	.LVL105:
+ 602 0024 0028     		cmp	r0, #0
+ 603 0026 FBD0     		beq	.L46
+ 230:main.c        ****             StripLights_Trigger(1);
+ 604              		.loc 1 230 0 discriminator 2
+ 605 0028 0120     		movs	r0, #1
+ 606 002a FFF7FEFF 		bl	StripLights_Trigger
+ 607              	.LVL106:
+ 227:main.c        ****             StripLights_Pixel(j, 0, StripLights_getColor(i + StripLights_CWHEEL_SIZE));
+ 608              		.loc 1 227 0 discriminator 2
+ 609 002e 0134     		adds	r4, r4, #1
+ 610              	.LVL107:
+ 611              	.L45:
+ 227:main.c        ****             StripLights_Pixel(j, 0, StripLights_getColor(i + StripLights_CWHEEL_SIZE));
+ 612              		.loc 1 227 0 is_stmt 0 discriminator 1
+ 613 0030 BC42     		cmp	r4, r7
+ 614 0032 ECD9     		bls	.L47
+ 615              	.LBE3:
+ 231:main.c        ****             
+ 232:main.c        ****         }
+ 233:main.c        ****         if (i == 256) {
+ 616              		.loc 1 233 0 is_stmt 1
+ 617 0034 8023     		movs	r3, #128
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 17
+
+
+ 618 0036 5B00     		lsls	r3, r3, #1
+ 619 0038 9E42     		cmp	r6, r3
+ 620 003a 00D1     		bne	.L48
+ 234:main.c        ****             i=0;
+ 621              		.loc 1 234 0
+ 622 003c 0026     		movs	r6, #0
+ 623              	.LVL108:
+ 624              	.L48:
+ 226:main.c        ****         for(int j = firstLED; j <= lastLED; j++) {
+ 625              		.loc 1 226 0 discriminator 2
+ 626 003e 0136     		adds	r6, r6, #1
+ 627              	.LVL109:
+ 628              	.L44:
+ 226:main.c        ****         for(int j = firstLED; j <= lastLED; j++) {
+ 629              		.loc 1 226 0 is_stmt 0 discriminator 1
+ 630 0040 FF2E     		cmp	r6, #255
+ 631 0042 E2DD     		ble	.L49
+ 632              	.LBE2:
+ 235:main.c        ****         }
+ 236:main.c        ****     }
+ 237:main.c        **** }
+ 633              		.loc 1 237 0 is_stmt 1
+ 634              		@ sp needed
+ 635              	.LVL110:
+ 636              	.LVL111:
+ 637              	.LVL112:
+ 638 0044 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 639              		.cfi_endproc
+ 640              	.LFE38:
+ 641              		.size	rainbow, .-rainbow
+ 642 0046 C046     		.section	.text.rainbowCrawl,"ax",%progbits
+ 643              		.align	2
+ 644              		.global	rainbowCrawl
+ 645              		.code	16
+ 646              		.thumb_func
+ 647              		.type	rainbowCrawl, %function
+ 648              	rainbowCrawl:
+ 649              	.LFB39:
+ 238:main.c        **** 
+ 239:main.c        **** void rainbowCrawl(uint32 firstLED, uint32 lastLED) {
+ 650              		.loc 1 239 0
+ 651              		.cfi_startproc
+ 652              		@ args = 0, pretend = 0, frame = 0
+ 653              		@ frame_needed = 0, uses_anonymous_args = 0
+ 654              	.LVL113:
+ 655 0000 70B5     		push	{r4, r5, r6, lr}
+ 656              		.cfi_def_cfa_offset 16
+ 657              		.cfi_offset 4, -16
+ 658              		.cfi_offset 5, -12
+ 659              		.cfi_offset 6, -8
+ 660              		.cfi_offset 14, -4
+ 661 0002 0500     		movs	r5, r0
+ 662 0004 0E00     		movs	r6, r1
+ 663              	.LVL114:
+ 664              	.LBB4:
+ 240:main.c        ****     for(uint32 i = 0, j = firstLED; i < 27 && j < lastLED; i++, j++){
+ 665              		.loc 1 240 0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 18
+
+
+ 666 0006 0024     		movs	r4, #0
+ 667 0008 1CE0     		b	.L52
+ 668              	.LVL115:
+ 669              	.L56:
+ 241:main.c        ****             StripLights_Dim(2);
+ 670              		.loc 1 241 0
+ 671 000a 0220     		movs	r0, #2
+ 672 000c FFF7FEFF 		bl	StripLights_Dim
+ 673              	.LVL116:
+ 242:main.c        ****             StripLights_Pixel(j, 0, StripLights_getColor(i));
+ 674              		.loc 1 242 0
+ 675 0010 2000     		movs	r0, r4
+ 676 0012 FFF7FEFF 		bl	StripLights_getColor
+ 677              	.LVL117:
+ 678 0016 0200     		movs	r2, r0
+ 679 0018 0021     		movs	r1, #0
+ 680 001a 2800     		movs	r0, r5
+ 681 001c FFF7FEFF 		bl	StripLights_Pixel
+ 682              	.LVL118:
+ 683              	.L53:
+ 243:main.c        ****             while(StripLights_Ready() == 0);
+ 684              		.loc 1 243 0 discriminator 1
+ 685 0020 FFF7FEFF 		bl	StripLights_Ready
+ 686              	.LVL119:
+ 687 0024 0028     		cmp	r0, #0
+ 688 0026 FBD0     		beq	.L53
+ 244:main.c        ****             CyDelay(20);
+ 689              		.loc 1 244 0
+ 690 0028 1420     		movs	r0, #20
+ 691 002a FFF7FEFF 		bl	CyDelay
+ 692              	.LVL120:
+ 245:main.c        ****             if(i >= 26) {
+ 693              		.loc 1 245 0
+ 694 002e 192C     		cmp	r4, #25
+ 695 0030 00D9     		bls	.L54
+ 246:main.c        ****                 i = 0;
+ 696              		.loc 1 246 0
+ 697 0032 0024     		movs	r4, #0
+ 698              	.LVL121:
+ 699              	.L54:
+ 247:main.c        ****             }
+ 248:main.c        ****         StripLights_Trigger(1);
+ 700              		.loc 1 248 0 discriminator 2
+ 701 0034 0120     		movs	r0, #1
+ 702 0036 FFF7FEFF 		bl	StripLights_Trigger
+ 703              	.LVL122:
+ 249:main.c        ****         CyDelay(20);    
+ 704              		.loc 1 249 0 discriminator 2
+ 705 003a 1420     		movs	r0, #20
+ 706 003c FFF7FEFF 		bl	CyDelay
+ 707              	.LVL123:
+ 240:main.c        ****             StripLights_Dim(2);
+ 708              		.loc 1 240 0 discriminator 2
+ 709 0040 0134     		adds	r4, r4, #1
+ 710              	.LVL124:
+ 711 0042 0135     		adds	r5, r5, #1
+ 712              	.LVL125:
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 19
+
+
+ 713              	.L52:
+ 240:main.c        ****             StripLights_Dim(2);
+ 714              		.loc 1 240 0 is_stmt 0 discriminator 1
+ 715 0044 1A2C     		cmp	r4, #26
+ 716 0046 01D8     		bhi	.L51
+ 240:main.c        ****             StripLights_Dim(2);
+ 717              		.loc 1 240 0 discriminator 3
+ 718 0048 B542     		cmp	r5, r6
+ 719 004a DED3     		bcc	.L56
+ 720              	.L51:
+ 721              	.LBE4:
+ 250:main.c        ****     }
+ 251:main.c        ****     //CyDelay(100);
+ 252:main.c        **** 
+ 253:main.c        **** }
+ 722              		.loc 1 253 0 is_stmt 1
+ 723              		@ sp needed
+ 724              	.LVL126:
+ 725              	.LVL127:
+ 726              	.LVL128:
+ 727 004c 70BD     		pop	{r4, r5, r6, pc}
+ 728              		.cfi_endproc
+ 729              	.LFE39:
+ 730              		.size	rainbowCrawl, .-rainbowCrawl
+ 731              		.global	dummyBuffer
+ 732 004e C046     		.section	.rodata
+ 733              		.align	2
+ 734              		.type	dummyBuffer, %object
+ 735              		.size	dummyBuffer, 3
+ 736              	dummyBuffer:
+ 737 0068 FF       		.byte	-1
+ 738 0069 FF       		.byte	-1
+ 739 006a FF       		.byte	-1
+ 740              		.text
+ 741              	.Letext0:
+ 742              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 743              		.file 3 "Generated_Source\\PSoC4/StripLights.h"
+ 744              		.file 4 "Generated_Source\\PSoC4/CyLib.h"
+ 745              		.file 5 "Generated_Source\\PSoC4/SPIS.h"
+ 746              		.section	.debug_info,"",%progbits
+ 747              	.Ldebug_info0:
+ 748 0000 AC070000 		.4byte	0x7ac
+ 749 0004 0400     		.2byte	0x4
+ 750 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 751 000a 04       		.byte	0x4
+ 752 000b 01       		.uleb128 0x1
+ 753 000c 1D010000 		.4byte	.LASF33
+ 754 0010 0C       		.byte	0xc
+ 755 0011 E8010000 		.4byte	.LASF34
+ 756 0015 B4010000 		.4byte	.LASF35
+ 757 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 758 001d 00000000 		.4byte	0
+ 759 0021 00000000 		.4byte	.Ldebug_line0
+ 760 0025 02       		.uleb128 0x2
+ 761 0026 01       		.byte	0x1
+ 762 0027 06       		.byte	0x6
+ 763 0028 3B020000 		.4byte	.LASF0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 20
+
+
+ 764 002c 02       		.uleb128 0x2
+ 765 002d 01       		.byte	0x1
+ 766 002e 08       		.byte	0x8
+ 767 002f 7F000000 		.4byte	.LASF1
+ 768 0033 02       		.uleb128 0x2
+ 769 0034 02       		.byte	0x2
+ 770 0035 05       		.byte	0x5
+ 771 0036 06020000 		.4byte	.LASF2
+ 772 003a 02       		.uleb128 0x2
+ 773 003b 02       		.byte	0x2
+ 774 003c 07       		.byte	0x7
+ 775 003d 36000000 		.4byte	.LASF3
+ 776 0041 02       		.uleb128 0x2
+ 777 0042 04       		.byte	0x4
+ 778 0043 05       		.byte	0x5
+ 779 0044 16020000 		.4byte	.LASF4
+ 780 0048 02       		.uleb128 0x2
+ 781 0049 04       		.byte	0x4
+ 782 004a 07       		.byte	0x7
+ 783 004b 9C000000 		.4byte	.LASF5
+ 784 004f 02       		.uleb128 0x2
+ 785 0050 08       		.byte	0x8
+ 786 0051 05       		.byte	0x5
+ 787 0052 DA010000 		.4byte	.LASF6
+ 788 0056 02       		.uleb128 0x2
+ 789 0057 08       		.byte	0x8
+ 790 0058 07       		.byte	0x7
+ 791 0059 06010000 		.4byte	.LASF7
+ 792 005d 03       		.uleb128 0x3
+ 793 005e 04       		.byte	0x4
+ 794 005f 05       		.byte	0x5
+ 795 0060 696E7400 		.ascii	"int\000"
+ 796 0064 02       		.uleb128 0x2
+ 797 0065 04       		.byte	0x4
+ 798 0066 07       		.byte	0x7
+ 799 0067 F9000000 		.4byte	.LASF8
+ 800 006b 04       		.uleb128 0x4
+ 801 006c AE000000 		.4byte	.LASF9
+ 802 0070 02       		.byte	0x2
+ 803 0071 D201     		.2byte	0x1d2
+ 804 0073 2C000000 		.4byte	0x2c
+ 805 0077 04       		.uleb128 0x4
+ 806 0078 F2000000 		.4byte	.LASF10
+ 807 007c 02       		.byte	0x2
+ 808 007d D401     		.2byte	0x1d4
+ 809 007f 48000000 		.4byte	0x48
+ 810 0083 02       		.uleb128 0x2
+ 811 0084 04       		.byte	0x4
+ 812 0085 04       		.byte	0x4
+ 813 0086 71000000 		.4byte	.LASF11
+ 814 008a 02       		.uleb128 0x2
+ 815 008b 08       		.byte	0x8
+ 816 008c 04       		.byte	0x4
+ 817 008d CA000000 		.4byte	.LASF12
+ 818 0091 02       		.uleb128 0x2
+ 819 0092 01       		.byte	0x1
+ 820 0093 08       		.byte	0x8
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 21
+
+
+ 821 0094 EF010000 		.4byte	.LASF13
+ 822 0098 02       		.uleb128 0x2
+ 823 0099 08       		.byte	0x8
+ 824 009a 04       		.byte	0x4
+ 825 009b 2F020000 		.4byte	.LASF14
+ 826 009f 02       		.uleb128 0x2
+ 827 00a0 04       		.byte	0x4
+ 828 00a1 07       		.byte	0x7
+ 829 00a2 AB010000 		.4byte	.LASF15
+ 830 00a6 05       		.uleb128 0x5
+ 831 00a7 00000000 		.4byte	.LASF19
+ 832 00ab 01       		.byte	0x1
+ 833 00ac C1       		.byte	0xc1
+ 834 00ad 00000000 		.4byte	.LFB36
+ 835 00b1 3C000000 		.4byte	.LFE36-.LFB36
+ 836 00b5 01       		.uleb128 0x1
+ 837 00b6 9C       		.byte	0x9c
+ 838 00b7 69010000 		.4byte	0x169
+ 839 00bb 06       		.uleb128 0x6
+ 840 00bc E3000000 		.4byte	.LASF16
+ 841 00c0 01       		.byte	0x1
+ 842 00c1 C1       		.byte	0xc1
+ 843 00c2 77000000 		.4byte	0x77
+ 844 00c6 00000000 		.4byte	.LLST0
+ 845 00ca 06       		.uleb128 0x6
+ 846 00cb 77000000 		.4byte	.LASF17
+ 847 00cf 01       		.byte	0x1
+ 848 00d0 C1       		.byte	0xc1
+ 849 00d1 77000000 		.4byte	0x77
+ 850 00d5 2C000000 		.4byte	.LLST1
+ 851 00d9 06       		.uleb128 0x6
+ 852 00da EC000000 		.4byte	.LASF18
+ 853 00de 01       		.byte	0x1
+ 854 00df C1       		.byte	0xc1
+ 855 00e0 77000000 		.4byte	0x77
+ 856 00e4 58000000 		.4byte	.LLST2
+ 857 00e8 07       		.uleb128 0x7
+ 858 00e9 6C656400 		.ascii	"led\000"
+ 859 00ed 01       		.byte	0x1
+ 860 00ee C2       		.byte	0xc2
+ 861 00ef 77000000 		.4byte	0x77
+ 862 00f3 84000000 		.4byte	.LLST3
+ 863 00f7 08       		.uleb128 0x8
+ 864 00f8 0E000000 		.4byte	.LVL2
+ 865 00fc 57070000 		.4byte	0x757
+ 866 0100 0A010000 		.4byte	0x10a
+ 867 0104 09       		.uleb128 0x9
+ 868 0105 01       		.uleb128 0x1
+ 869 0106 50       		.byte	0x50
+ 870 0107 01       		.uleb128 0x1
+ 871 0108 32       		.byte	0x32
+ 872 0109 00       		.byte	0
+ 873 010a 08       		.uleb128 0x8
+ 874 010b 1A000000 		.4byte	.LVL4
+ 875 010f 62070000 		.4byte	0x762
+ 876 0113 29010000 		.4byte	0x129
+ 877 0117 09       		.uleb128 0x9
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 22
+
+
+ 878 0118 01       		.uleb128 0x1
+ 879 0119 50       		.byte	0x50
+ 880 011a 02       		.uleb128 0x2
+ 881 011b 74       		.byte	0x74
+ 882 011c 00       		.sleb128 0
+ 883 011d 09       		.uleb128 0x9
+ 884 011e 01       		.uleb128 0x1
+ 885 011f 51       		.byte	0x51
+ 886 0120 01       		.uleb128 0x1
+ 887 0121 30       		.byte	0x30
+ 888 0122 09       		.uleb128 0x9
+ 889 0123 01       		.uleb128 0x1
+ 890 0124 52       		.byte	0x52
+ 891 0125 02       		.uleb128 0x2
+ 892 0126 76       		.byte	0x76
+ 893 0127 00       		.sleb128 0
+ 894 0128 00       		.byte	0
+ 895 0129 0A       		.uleb128 0xa
+ 896 012a 1E000000 		.4byte	.LVL5
+ 897 012e 6D070000 		.4byte	0x76d
+ 898 0132 08       		.uleb128 0x8
+ 899 0133 28000000 		.4byte	.LVL6
+ 900 0137 78070000 		.4byte	0x778
+ 901 013b 45010000 		.4byte	0x145
+ 902 013f 09       		.uleb128 0x9
+ 903 0140 01       		.uleb128 0x1
+ 904 0141 50       		.byte	0x50
+ 905 0142 01       		.uleb128 0x1
+ 906 0143 3A       		.byte	0x3a
+ 907 0144 00       		.byte	0
+ 908 0145 08       		.uleb128 0x8
+ 909 0146 34000000 		.4byte	.LVL8
+ 910 014a 83070000 		.4byte	0x783
+ 911 014e 58010000 		.4byte	0x158
+ 912 0152 09       		.uleb128 0x9
+ 913 0153 01       		.uleb128 0x1
+ 914 0154 50       		.byte	0x50
+ 915 0155 01       		.uleb128 0x1
+ 916 0156 31       		.byte	0x31
+ 917 0157 00       		.byte	0
+ 918 0158 0B       		.uleb128 0xb
+ 919 0159 3A000000 		.4byte	.LVL9
+ 920 015d 78070000 		.4byte	0x778
+ 921 0161 09       		.uleb128 0x9
+ 922 0162 01       		.uleb128 0x1
+ 923 0163 50       		.byte	0x50
+ 924 0164 02       		.uleb128 0x2
+ 925 0165 08       		.byte	0x8
+ 926 0166 64       		.byte	0x64
+ 927 0167 00       		.byte	0
+ 928 0168 00       		.byte	0
+ 929 0169 0C       		.uleb128 0xc
+ 930 016a 8D000000 		.4byte	.LASF36
+ 931 016e 01       		.byte	0x1
+ 932 016f 60       		.byte	0x60
+ 933 0170 6B000000 		.4byte	0x6b
+ 934 0174 00000000 		.4byte	.LFB35
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 23
+
+
+ 935 0178 38010000 		.4byte	.LFE35-.LFB35
+ 936 017c 01       		.uleb128 0x1
+ 937 017d 9C       		.byte	0x9c
+ 938 017e 4E040000 		.4byte	0x44e
+ 939 0182 0D       		.uleb128 0xd
+ 940 0183 636D6400 		.ascii	"cmd\000"
+ 941 0187 01       		.byte	0x1
+ 942 0188 60       		.byte	0x60
+ 943 0189 77000000 		.4byte	0x77
+ 944 018d 97000000 		.4byte	.LLST4
+ 945 0191 06       		.uleb128 0x6
+ 946 0192 EC000000 		.4byte	.LASF18
+ 947 0196 01       		.byte	0x1
+ 948 0197 60       		.byte	0x60
+ 949 0198 77000000 		.4byte	0x77
+ 950 019c C5000000 		.4byte	.LLST5
+ 951 01a0 0E       		.uleb128 0xe
+ 952 01a1 55000000 		.4byte	.LASF21
+ 953 01a5 01       		.byte	0x1
+ 954 01a6 62       		.byte	0x62
+ 955 01a7 6B000000 		.4byte	0x6b
+ 956 01ab 08       		.uleb128 0x8
+ 957 01ac 1E000000 		.4byte	.LVL17
+ 958 01b0 A6000000 		.4byte	0xa6
+ 959 01b4 CE010000 		.4byte	0x1ce
+ 960 01b8 09       		.uleb128 0x9
+ 961 01b9 01       		.uleb128 0x1
+ 962 01ba 50       		.byte	0x50
+ 963 01bb 03       		.uleb128 0x3
+ 964 01bc 0A       		.byte	0xa
+ 965 01bd 0A02     		.2byte	0x20a
+ 966 01bf 09       		.uleb128 0x9
+ 967 01c0 01       		.uleb128 0x1
+ 968 01c1 51       		.byte	0x51
+ 969 01c2 03       		.uleb128 0x3
+ 970 01c3 0A       		.byte	0xa
+ 971 01c4 2402     		.2byte	0x224
+ 972 01c6 09       		.uleb128 0x9
+ 973 01c7 01       		.uleb128 0x1
+ 974 01c8 52       		.byte	0x52
+ 975 01c9 03       		.uleb128 0x3
+ 976 01ca F3       		.byte	0xf3
+ 977 01cb 01       		.uleb128 0x1
+ 978 01cc 51       		.byte	0x51
+ 979 01cd 00       		.byte	0
+ 980 01ce 08       		.uleb128 0x8
+ 981 01cf 2E000000 		.4byte	.LVL20
+ 982 01d3 A6000000 		.4byte	0xa6
+ 983 01d7 F1010000 		.4byte	0x1f1
+ 984 01db 09       		.uleb128 0x9
+ 985 01dc 01       		.uleb128 0x1
+ 986 01dd 50       		.byte	0x50
+ 987 01de 03       		.uleb128 0x3
+ 988 01df 0A       		.byte	0xa
+ 989 01e0 B901     		.2byte	0x1b9
+ 990 01e2 09       		.uleb128 0x9
+ 991 01e3 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 24
+
+
+ 992 01e4 51       		.byte	0x51
+ 993 01e5 03       		.uleb128 0x3
+ 994 01e6 0A       		.byte	0xa
+ 995 01e7 D301     		.2byte	0x1d3
+ 996 01e9 09       		.uleb128 0x9
+ 997 01ea 01       		.uleb128 0x1
+ 998 01eb 52       		.byte	0x52
+ 999 01ec 03       		.uleb128 0x3
+ 1000 01ed F3       		.byte	0xf3
+ 1001 01ee 01       		.uleb128 0x1
+ 1002 01ef 51       		.byte	0x51
+ 1003 01f0 00       		.byte	0
+ 1004 01f1 08       		.uleb128 0x8
+ 1005 01f2 3E000000 		.4byte	.LVL23
+ 1006 01f6 A6000000 		.4byte	0xa6
+ 1007 01fa 14020000 		.4byte	0x214
+ 1008 01fe 09       		.uleb128 0x9
+ 1009 01ff 01       		.uleb128 0x1
+ 1010 0200 50       		.byte	0x50
+ 1011 0201 03       		.uleb128 0x3
+ 1012 0202 0A       		.byte	0xa
+ 1013 0203 9E01     		.2byte	0x19e
+ 1014 0205 09       		.uleb128 0x9
+ 1015 0206 01       		.uleb128 0x1
+ 1016 0207 51       		.byte	0x51
+ 1017 0208 03       		.uleb128 0x3
+ 1018 0209 0A       		.byte	0xa
+ 1019 020a B801     		.2byte	0x1b8
+ 1020 020c 09       		.uleb128 0x9
+ 1021 020d 01       		.uleb128 0x1
+ 1022 020e 52       		.byte	0x52
+ 1023 020f 03       		.uleb128 0x3
+ 1024 0210 F3       		.byte	0xf3
+ 1025 0211 01       		.uleb128 0x1
+ 1026 0212 51       		.byte	0x51
+ 1027 0213 00       		.byte	0
+ 1028 0214 08       		.uleb128 0x8
+ 1029 0215 4E000000 		.4byte	.LVL26
+ 1030 0219 A6000000 		.4byte	0xa6
+ 1031 021d 37020000 		.4byte	0x237
+ 1032 0221 09       		.uleb128 0x9
+ 1033 0222 01       		.uleb128 0x1
+ 1034 0223 50       		.byte	0x50
+ 1035 0224 03       		.uleb128 0x3
+ 1036 0225 0A       		.byte	0xa
+ 1037 0226 4C01     		.2byte	0x14c
+ 1038 0228 09       		.uleb128 0x9
+ 1039 0229 01       		.uleb128 0x1
+ 1040 022a 51       		.byte	0x51
+ 1041 022b 03       		.uleb128 0x3
+ 1042 022c 0A       		.byte	0xa
+ 1043 022d 6601     		.2byte	0x166
+ 1044 022f 09       		.uleb128 0x9
+ 1045 0230 01       		.uleb128 0x1
+ 1046 0231 52       		.byte	0x52
+ 1047 0232 03       		.uleb128 0x3
+ 1048 0233 F3       		.byte	0xf3
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 25
+
+
+ 1049 0234 01       		.uleb128 0x1
+ 1050 0235 51       		.byte	0x51
+ 1051 0236 00       		.byte	0
+ 1052 0237 08       		.uleb128 0x8
+ 1053 0238 5E000000 		.4byte	.LVL29
+ 1054 023c A6000000 		.4byte	0xa6
+ 1055 0240 5A020000 		.4byte	0x25a
+ 1056 0244 09       		.uleb128 0x9
+ 1057 0245 01       		.uleb128 0x1
+ 1058 0246 50       		.byte	0x50
+ 1059 0247 03       		.uleb128 0x3
+ 1060 0248 0A       		.byte	0xa
+ 1061 0249 3101     		.2byte	0x131
+ 1062 024b 09       		.uleb128 0x9
+ 1063 024c 01       		.uleb128 0x1
+ 1064 024d 51       		.byte	0x51
+ 1065 024e 03       		.uleb128 0x3
+ 1066 024f 0A       		.byte	0xa
+ 1067 0250 4B01     		.2byte	0x14b
+ 1068 0252 09       		.uleb128 0x9
+ 1069 0253 01       		.uleb128 0x1
+ 1070 0254 52       		.byte	0x52
+ 1071 0255 03       		.uleb128 0x3
+ 1072 0256 F3       		.byte	0xf3
+ 1073 0257 01       		.uleb128 0x1
+ 1074 0258 51       		.byte	0x51
+ 1075 0259 00       		.byte	0
+ 1076 025a 08       		.uleb128 0x8
+ 1077 025b 6A000000 		.4byte	.LVL32
+ 1078 025f A6000000 		.4byte	0xa6
+ 1079 0263 7B020000 		.4byte	0x27b
+ 1080 0267 09       		.uleb128 0x9
+ 1081 0268 01       		.uleb128 0x1
+ 1082 0269 50       		.byte	0x50
+ 1083 026a 02       		.uleb128 0x2
+ 1084 026b 08       		.byte	0x8
+ 1085 026c DE       		.byte	0xde
+ 1086 026d 09       		.uleb128 0x9
+ 1087 026e 01       		.uleb128 0x1
+ 1088 026f 51       		.byte	0x51
+ 1089 0270 02       		.uleb128 0x2
+ 1090 0271 08       		.byte	0x8
+ 1091 0272 F8       		.byte	0xf8
+ 1092 0273 09       		.uleb128 0x9
+ 1093 0274 01       		.uleb128 0x1
+ 1094 0275 52       		.byte	0x52
+ 1095 0276 03       		.uleb128 0x3
+ 1096 0277 F3       		.byte	0xf3
+ 1097 0278 01       		.uleb128 0x1
+ 1098 0279 51       		.byte	0x51
+ 1099 027a 00       		.byte	0
+ 1100 027b 08       		.uleb128 0x8
+ 1101 027c 76000000 		.4byte	.LVL35
+ 1102 0280 A6000000 		.4byte	0xa6
+ 1103 0284 9C020000 		.4byte	0x29c
+ 1104 0288 09       		.uleb128 0x9
+ 1105 0289 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 26
+
+
+ 1106 028a 50       		.byte	0x50
+ 1107 028b 02       		.uleb128 0x2
+ 1108 028c 08       		.byte	0x8
+ 1109 028d C1       		.byte	0xc1
+ 1110 028e 09       		.uleb128 0x9
+ 1111 028f 01       		.uleb128 0x1
+ 1112 0290 51       		.byte	0x51
+ 1113 0291 02       		.uleb128 0x2
+ 1114 0292 08       		.byte	0x8
+ 1115 0293 DD       		.byte	0xdd
+ 1116 0294 09       		.uleb128 0x9
+ 1117 0295 01       		.uleb128 0x1
+ 1118 0296 52       		.byte	0x52
+ 1119 0297 03       		.uleb128 0x3
+ 1120 0298 F3       		.byte	0xf3
+ 1121 0299 01       		.uleb128 0x1
+ 1122 029a 51       		.byte	0x51
+ 1123 029b 00       		.byte	0
+ 1124 029c 08       		.uleb128 0x8
+ 1125 029d 82000000 		.4byte	.LVL38
+ 1126 02a1 A6000000 		.4byte	0xa6
+ 1127 02a5 BD020000 		.4byte	0x2bd
+ 1128 02a9 09       		.uleb128 0x9
+ 1129 02aa 01       		.uleb128 0x1
+ 1130 02ab 50       		.byte	0x50
+ 1131 02ac 02       		.uleb128 0x2
+ 1132 02ad 08       		.byte	0x8
+ 1133 02ae 6A       		.byte	0x6a
+ 1134 02af 09       		.uleb128 0x9
+ 1135 02b0 01       		.uleb128 0x1
+ 1136 02b1 51       		.byte	0x51
+ 1137 02b2 02       		.uleb128 0x2
+ 1138 02b3 08       		.byte	0x8
+ 1139 02b4 86       		.byte	0x86
+ 1140 02b5 09       		.uleb128 0x9
+ 1141 02b6 01       		.uleb128 0x1
+ 1142 02b7 52       		.byte	0x52
+ 1143 02b8 03       		.uleb128 0x3
+ 1144 02b9 F3       		.byte	0xf3
+ 1145 02ba 01       		.uleb128 0x1
+ 1146 02bb 51       		.byte	0x51
+ 1147 02bc 00       		.byte	0
+ 1148 02bd 08       		.uleb128 0x8
+ 1149 02be 90000000 		.4byte	.LVL41
+ 1150 02c2 A6000000 		.4byte	0xa6
+ 1151 02c6 E0020000 		.4byte	0x2e0
+ 1152 02ca 09       		.uleb128 0x9
+ 1153 02cb 01       		.uleb128 0x1
+ 1154 02cc 50       		.byte	0x50
+ 1155 02cd 03       		.uleb128 0x3
+ 1156 02ce 0A       		.byte	0xa
+ 1157 02cf F001     		.2byte	0x1f0
+ 1158 02d1 09       		.uleb128 0x9
+ 1159 02d2 01       		.uleb128 0x1
+ 1160 02d3 51       		.byte	0x51
+ 1161 02d4 03       		.uleb128 0x3
+ 1162 02d5 0A       		.byte	0xa
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 27
+
+
+ 1163 02d6 0902     		.2byte	0x209
+ 1164 02d8 09       		.uleb128 0x9
+ 1165 02d9 01       		.uleb128 0x1
+ 1166 02da 52       		.byte	0x52
+ 1167 02db 03       		.uleb128 0x3
+ 1168 02dc F3       		.byte	0xf3
+ 1169 02dd 01       		.uleb128 0x1
+ 1170 02de 51       		.byte	0x51
+ 1171 02df 00       		.byte	0
+ 1172 02e0 08       		.uleb128 0x8
+ 1173 02e1 A0000000 		.4byte	.LVL44
+ 1174 02e5 A6000000 		.4byte	0xa6
+ 1175 02e9 03030000 		.4byte	0x303
+ 1176 02ed 09       		.uleb128 0x9
+ 1177 02ee 01       		.uleb128 0x1
+ 1178 02ef 50       		.byte	0x50
+ 1179 02f0 03       		.uleb128 0x3
+ 1180 02f1 0A       		.byte	0xa
+ 1181 02f2 D401     		.2byte	0x1d4
+ 1182 02f4 09       		.uleb128 0x9
+ 1183 02f5 01       		.uleb128 0x1
+ 1184 02f6 51       		.byte	0x51
+ 1185 02f7 03       		.uleb128 0x3
+ 1186 02f8 0A       		.byte	0xa
+ 1187 02f9 EF01     		.2byte	0x1ef
+ 1188 02fb 09       		.uleb128 0x9
+ 1189 02fc 01       		.uleb128 0x1
+ 1190 02fd 52       		.byte	0x52
+ 1191 02fe 03       		.uleb128 0x3
+ 1192 02ff F3       		.byte	0xf3
+ 1193 0300 01       		.uleb128 0x1
+ 1194 0301 51       		.byte	0x51
+ 1195 0302 00       		.byte	0
+ 1196 0303 08       		.uleb128 0x8
+ 1197 0304 B0000000 		.4byte	.LVL47
+ 1198 0308 A6000000 		.4byte	0xa6
+ 1199 030c 26030000 		.4byte	0x326
+ 1200 0310 09       		.uleb128 0x9
+ 1201 0311 01       		.uleb128 0x1
+ 1202 0312 50       		.byte	0x50
+ 1203 0313 03       		.uleb128 0x3
+ 1204 0314 0A       		.byte	0xa
+ 1205 0315 8301     		.2byte	0x183
+ 1206 0317 09       		.uleb128 0x9
+ 1207 0318 01       		.uleb128 0x1
+ 1208 0319 51       		.byte	0x51
+ 1209 031a 03       		.uleb128 0x3
+ 1210 031b 0A       		.byte	0xa
+ 1211 031c 9D01     		.2byte	0x19d
+ 1212 031e 09       		.uleb128 0x9
+ 1213 031f 01       		.uleb128 0x1
+ 1214 0320 52       		.byte	0x52
+ 1215 0321 03       		.uleb128 0x3
+ 1216 0322 F3       		.byte	0xf3
+ 1217 0323 01       		.uleb128 0x1
+ 1218 0324 51       		.byte	0x51
+ 1219 0325 00       		.byte	0
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 28
+
+
+ 1220 0326 08       		.uleb128 0x8
+ 1221 0327 C0000000 		.4byte	.LVL50
+ 1222 032b A6000000 		.4byte	0xa6
+ 1223 032f 49030000 		.4byte	0x349
+ 1224 0333 09       		.uleb128 0x9
+ 1225 0334 01       		.uleb128 0x1
+ 1226 0335 50       		.byte	0x50
+ 1227 0336 03       		.uleb128 0x3
+ 1228 0337 0A       		.byte	0xa
+ 1229 0338 8B01     		.2byte	0x18b
+ 1230 033a 09       		.uleb128 0x9
+ 1231 033b 01       		.uleb128 0x1
+ 1232 033c 51       		.byte	0x51
+ 1233 033d 03       		.uleb128 0x3
+ 1234 033e 0A       		.byte	0xa
+ 1235 033f 8201     		.2byte	0x182
+ 1236 0341 09       		.uleb128 0x9
+ 1237 0342 01       		.uleb128 0x1
+ 1238 0343 52       		.byte	0x52
+ 1239 0344 03       		.uleb128 0x3
+ 1240 0345 F3       		.byte	0xf3
+ 1241 0346 01       		.uleb128 0x1
+ 1242 0347 51       		.byte	0x51
+ 1243 0348 00       		.byte	0
+ 1244 0349 08       		.uleb128 0x8
+ 1245 034a D0000000 		.4byte	.LVL53
+ 1246 034e A6000000 		.4byte	0xa6
+ 1247 0352 6C030000 		.4byte	0x36c
+ 1248 0356 09       		.uleb128 0x9
+ 1249 0357 01       		.uleb128 0x1
+ 1250 0358 50       		.byte	0x50
+ 1251 0359 03       		.uleb128 0x3
+ 1252 035a 0A       		.byte	0xa
+ 1253 035b 1501     		.2byte	0x115
+ 1254 035d 09       		.uleb128 0x9
+ 1255 035e 01       		.uleb128 0x1
+ 1256 035f 51       		.byte	0x51
+ 1257 0360 03       		.uleb128 0x3
+ 1258 0361 0A       		.byte	0xa
+ 1259 0362 3001     		.2byte	0x130
+ 1260 0364 09       		.uleb128 0x9
+ 1261 0365 01       		.uleb128 0x1
+ 1262 0366 52       		.byte	0x52
+ 1263 0367 03       		.uleb128 0x3
+ 1264 0368 F3       		.byte	0xf3
+ 1265 0369 01       		.uleb128 0x1
+ 1266 036a 51       		.byte	0x51
+ 1267 036b 00       		.byte	0
+ 1268 036c 08       		.uleb128 0x8
+ 1269 036d DE000000 		.4byte	.LVL56
+ 1270 0371 A6000000 		.4byte	0xa6
+ 1271 0375 8E030000 		.4byte	0x38e
+ 1272 0379 09       		.uleb128 0x9
+ 1273 037a 01       		.uleb128 0x1
+ 1274 037b 50       		.byte	0x50
+ 1275 037c 02       		.uleb128 0x2
+ 1276 037d 08       		.byte	0x8
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 29
+
+
+ 1277 037e F9       		.byte	0xf9
+ 1278 037f 09       		.uleb128 0x9
+ 1279 0380 01       		.uleb128 0x1
+ 1280 0381 51       		.byte	0x51
+ 1281 0382 03       		.uleb128 0x3
+ 1282 0383 0A       		.byte	0xa
+ 1283 0384 1401     		.2byte	0x114
+ 1284 0386 09       		.uleb128 0x9
+ 1285 0387 01       		.uleb128 0x1
+ 1286 0388 52       		.byte	0x52
+ 1287 0389 03       		.uleb128 0x3
+ 1288 038a F3       		.byte	0xf3
+ 1289 038b 01       		.uleb128 0x1
+ 1290 038c 51       		.byte	0x51
+ 1291 038d 00       		.byte	0
+ 1292 038e 08       		.uleb128 0x8
+ 1293 038f EA000000 		.4byte	.LVL59
+ 1294 0393 A6000000 		.4byte	0xa6
+ 1295 0397 AF030000 		.4byte	0x3af
+ 1296 039b 09       		.uleb128 0x9
+ 1297 039c 01       		.uleb128 0x1
+ 1298 039d 50       		.byte	0x50
+ 1299 039e 02       		.uleb128 0x2
+ 1300 039f 08       		.byte	0x8
+ 1301 03a0 A4       		.byte	0xa4
+ 1302 03a1 09       		.uleb128 0x9
+ 1303 03a2 01       		.uleb128 0x1
+ 1304 03a3 51       		.byte	0x51
+ 1305 03a4 02       		.uleb128 0x2
+ 1306 03a5 08       		.byte	0x8
+ 1307 03a6 C0       		.byte	0xc0
+ 1308 03a7 09       		.uleb128 0x9
+ 1309 03a8 01       		.uleb128 0x1
+ 1310 03a9 52       		.byte	0x52
+ 1311 03aa 03       		.uleb128 0x3
+ 1312 03ab F3       		.byte	0xf3
+ 1313 03ac 01       		.uleb128 0x1
+ 1314 03ad 51       		.byte	0x51
+ 1315 03ae 00       		.byte	0
+ 1316 03af 08       		.uleb128 0x8
+ 1317 03b0 F6000000 		.4byte	.LVL62
+ 1318 03b4 A6000000 		.4byte	0xa6
+ 1319 03b8 D0030000 		.4byte	0x3d0
+ 1320 03bc 09       		.uleb128 0x9
+ 1321 03bd 01       		.uleb128 0x1
+ 1322 03be 50       		.byte	0x50
+ 1323 03bf 02       		.uleb128 0x2
+ 1324 03c0 08       		.byte	0x8
+ 1325 03c1 87       		.byte	0x87
+ 1326 03c2 09       		.uleb128 0x9
+ 1327 03c3 01       		.uleb128 0x1
+ 1328 03c4 51       		.byte	0x51
+ 1329 03c5 02       		.uleb128 0x2
+ 1330 03c6 08       		.byte	0x8
+ 1331 03c7 A3       		.byte	0xa3
+ 1332 03c8 09       		.uleb128 0x9
+ 1333 03c9 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 30
+
+
+ 1334 03ca 52       		.byte	0x52
+ 1335 03cb 03       		.uleb128 0x3
+ 1336 03cc F3       		.byte	0xf3
+ 1337 03cd 01       		.uleb128 0x1
+ 1338 03ce 51       		.byte	0x51
+ 1339 03cf 00       		.byte	0
+ 1340 03d0 08       		.uleb128 0x8
+ 1341 03d1 02010000 		.4byte	.LVL65
+ 1342 03d5 A6000000 		.4byte	0xa6
+ 1343 03d9 F1030000 		.4byte	0x3f1
+ 1344 03dd 09       		.uleb128 0x9
+ 1345 03de 01       		.uleb128 0x1
+ 1346 03df 50       		.byte	0x50
+ 1347 03e0 02       		.uleb128 0x2
+ 1348 03e1 08       		.byte	0x8
+ 1349 03e2 50       		.byte	0x50
+ 1350 03e3 09       		.uleb128 0x9
+ 1351 03e4 01       		.uleb128 0x1
+ 1352 03e5 51       		.byte	0x51
+ 1353 03e6 02       		.uleb128 0x2
+ 1354 03e7 08       		.byte	0x8
+ 1355 03e8 69       		.byte	0x69
+ 1356 03e9 09       		.uleb128 0x9
+ 1357 03ea 01       		.uleb128 0x1
+ 1358 03eb 52       		.byte	0x52
+ 1359 03ec 03       		.uleb128 0x3
+ 1360 03ed F3       		.byte	0xf3
+ 1361 03ee 01       		.uleb128 0x1
+ 1362 03ef 51       		.byte	0x51
+ 1363 03f0 00       		.byte	0
+ 1364 03f1 08       		.uleb128 0x8
+ 1365 03f2 0E010000 		.4byte	.LVL68
+ 1366 03f6 A6000000 		.4byte	0xa6
+ 1367 03fa 10040000 		.4byte	0x410
+ 1368 03fe 09       		.uleb128 0x9
+ 1369 03ff 01       		.uleb128 0x1
+ 1370 0400 50       		.byte	0x50
+ 1371 0401 01       		.uleb128 0x1
+ 1372 0402 30       		.byte	0x30
+ 1373 0403 09       		.uleb128 0x9
+ 1374 0404 01       		.uleb128 0x1
+ 1375 0405 51       		.byte	0x51
+ 1376 0406 01       		.uleb128 0x1
+ 1377 0407 4B       		.byte	0x4b
+ 1378 0408 09       		.uleb128 0x9
+ 1379 0409 01       		.uleb128 0x1
+ 1380 040a 52       		.byte	0x52
+ 1381 040b 03       		.uleb128 0x3
+ 1382 040c F3       		.byte	0xf3
+ 1383 040d 01       		.uleb128 0x1
+ 1384 040e 51       		.byte	0x51
+ 1385 040f 00       		.byte	0
+ 1386 0410 08       		.uleb128 0x8
+ 1387 0411 1A010000 		.4byte	.LVL71
+ 1388 0415 A6000000 		.4byte	0xa6
+ 1389 0419 31040000 		.4byte	0x431
+ 1390 041d 09       		.uleb128 0x9
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 31
+
+
+ 1391 041e 01       		.uleb128 0x1
+ 1392 041f 50       		.byte	0x50
+ 1393 0420 02       		.uleb128 0x2
+ 1394 0421 08       		.byte	0x8
+ 1395 0422 36       		.byte	0x36
+ 1396 0423 09       		.uleb128 0x9
+ 1397 0424 01       		.uleb128 0x1
+ 1398 0425 51       		.byte	0x51
+ 1399 0426 02       		.uleb128 0x2
+ 1400 0427 08       		.byte	0x8
+ 1401 0428 4F       		.byte	0x4f
+ 1402 0429 09       		.uleb128 0x9
+ 1403 042a 01       		.uleb128 0x1
+ 1404 042b 52       		.byte	0x52
+ 1405 042c 03       		.uleb128 0x3
+ 1406 042d F3       		.byte	0xf3
+ 1407 042e 01       		.uleb128 0x1
+ 1408 042f 51       		.byte	0x51
+ 1409 0430 00       		.byte	0
+ 1410 0431 0B       		.uleb128 0xb
+ 1411 0432 26010000 		.4byte	.LVL74
+ 1412 0436 A6000000 		.4byte	0xa6
+ 1413 043a 09       		.uleb128 0x9
+ 1414 043b 01       		.uleb128 0x1
+ 1415 043c 50       		.byte	0x50
+ 1416 043d 01       		.uleb128 0x1
+ 1417 043e 4C       		.byte	0x4c
+ 1418 043f 09       		.uleb128 0x9
+ 1419 0440 01       		.uleb128 0x1
+ 1420 0441 51       		.byte	0x51
+ 1421 0442 02       		.uleb128 0x2
+ 1422 0443 08       		.byte	0x8
+ 1423 0444 35       		.byte	0x35
+ 1424 0445 09       		.uleb128 0x9
+ 1425 0446 01       		.uleb128 0x1
+ 1426 0447 52       		.byte	0x52
+ 1427 0448 03       		.uleb128 0x3
+ 1428 0449 F3       		.byte	0xf3
+ 1429 044a 01       		.uleb128 0x1
+ 1430 044b 51       		.byte	0x51
+ 1431 044c 00       		.byte	0
+ 1432 044d 00       		.byte	0
+ 1433 044e 05       		.uleb128 0x5
+ 1434 044f 10020000 		.4byte	.LASF20
+ 1435 0453 01       		.byte	0x1
+ 1436 0454 D0       		.byte	0xd0
+ 1437 0455 00000000 		.4byte	.LFB37
+ 1438 0459 40000000 		.4byte	.LFE37-.LFB37
+ 1439 045d 01       		.uleb128 0x1
+ 1440 045e 9C       		.byte	0x9c
+ 1441 045f 0F050000 		.4byte	0x50f
+ 1442 0463 06       		.uleb128 0x6
+ 1443 0464 E3000000 		.4byte	.LASF16
+ 1444 0468 01       		.byte	0x1
+ 1445 0469 D0       		.byte	0xd0
+ 1446 046a 77000000 		.4byte	0x77
+ 1447 046e 9D030000 		.4byte	.LLST6
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 32
+
+
+ 1448 0472 06       		.uleb128 0x6
+ 1449 0473 77000000 		.4byte	.LASF17
+ 1450 0477 01       		.byte	0x1
+ 1451 0478 D0       		.byte	0xd0
+ 1452 0479 77000000 		.4byte	0x77
+ 1453 047d C9030000 		.4byte	.LLST7
+ 1454 0481 07       		.uleb128 0x7
+ 1455 0482 6C656400 		.ascii	"led\000"
+ 1456 0486 01       		.byte	0x1
+ 1457 0487 D1       		.byte	0xd1
+ 1458 0488 77000000 		.4byte	0x77
+ 1459 048c F5030000 		.4byte	.LLST8
+ 1460 0490 08       		.uleb128 0x8
+ 1461 0491 0C000000 		.4byte	.LVL77
+ 1462 0495 57070000 		.4byte	0x757
+ 1463 0499 A3040000 		.4byte	0x4a3
+ 1464 049d 09       		.uleb128 0x9
+ 1465 049e 01       		.uleb128 0x1
+ 1466 049f 50       		.byte	0x50
+ 1467 04a0 01       		.uleb128 0x1
+ 1468 04a1 34       		.byte	0x34
+ 1469 04a2 00       		.byte	0
+ 1470 04a3 08       		.uleb128 0x8
+ 1471 04a4 14000000 		.4byte	.LVL79
+ 1472 04a8 8E070000 		.4byte	0x78e
+ 1473 04ac B6040000 		.4byte	0x4b6
+ 1474 04b0 09       		.uleb128 0x9
+ 1475 04b1 01       		.uleb128 0x1
+ 1476 04b2 50       		.byte	0x50
+ 1477 04b3 01       		.uleb128 0x1
+ 1478 04b4 48       		.byte	0x48
+ 1479 04b5 00       		.byte	0
+ 1480 04b6 08       		.uleb128 0x8
+ 1481 04b7 1E000000 		.4byte	.LVL80
+ 1482 04bb 62070000 		.4byte	0x762
+ 1483 04bf CF040000 		.4byte	0x4cf
+ 1484 04c3 09       		.uleb128 0x9
+ 1485 04c4 01       		.uleb128 0x1
+ 1486 04c5 50       		.byte	0x50
+ 1487 04c6 02       		.uleb128 0x2
+ 1488 04c7 74       		.byte	0x74
+ 1489 04c8 00       		.sleb128 0
+ 1490 04c9 09       		.uleb128 0x9
+ 1491 04ca 01       		.uleb128 0x1
+ 1492 04cb 51       		.byte	0x51
+ 1493 04cc 01       		.uleb128 0x1
+ 1494 04cd 30       		.byte	0x30
+ 1495 04ce 00       		.byte	0
+ 1496 04cf 0A       		.uleb128 0xa
+ 1497 04d0 22000000 		.4byte	.LVL81
+ 1498 04d4 6D070000 		.4byte	0x76d
+ 1499 04d8 08       		.uleb128 0x8
+ 1500 04d9 2C000000 		.4byte	.LVL82
+ 1501 04dd 78070000 		.4byte	0x778
+ 1502 04e1 EB040000 		.4byte	0x4eb
+ 1503 04e5 09       		.uleb128 0x9
+ 1504 04e6 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 33
+
+
+ 1505 04e7 50       		.byte	0x50
+ 1506 04e8 01       		.uleb128 0x1
+ 1507 04e9 3A       		.byte	0x3a
+ 1508 04ea 00       		.byte	0
+ 1509 04eb 08       		.uleb128 0x8
+ 1510 04ec 38000000 		.4byte	.LVL84
+ 1511 04f0 83070000 		.4byte	0x783
+ 1512 04f4 FE040000 		.4byte	0x4fe
+ 1513 04f8 09       		.uleb128 0x9
+ 1514 04f9 01       		.uleb128 0x1
+ 1515 04fa 50       		.byte	0x50
+ 1516 04fb 01       		.uleb128 0x1
+ 1517 04fc 31       		.byte	0x31
+ 1518 04fd 00       		.byte	0
+ 1519 04fe 0B       		.uleb128 0xb
+ 1520 04ff 3E000000 		.4byte	.LVL85
+ 1521 0503 78070000 		.4byte	0x778
+ 1522 0507 09       		.uleb128 0x9
+ 1523 0508 01       		.uleb128 0x1
+ 1524 0509 50       		.byte	0x50
+ 1525 050a 02       		.uleb128 0x2
+ 1526 050b 08       		.byte	0x8
+ 1527 050c 64       		.byte	0x64
+ 1528 050d 00       		.byte	0
+ 1529 050e 00       		.byte	0
+ 1530 050f 0F       		.uleb128 0xf
+ 1531 0510 DE000000 		.4byte	.LASF37
+ 1532 0514 01       		.byte	0x1
+ 1533 0515 16       		.byte	0x16
+ 1534 0516 5D000000 		.4byte	0x5d
+ 1535 051a 00000000 		.4byte	.LFB32
+ 1536 051e 40000000 		.4byte	.LFE32-.LFB32
+ 1537 0522 01       		.uleb128 0x1
+ 1538 0523 9C       		.byte	0x9c
+ 1539 0524 A0050000 		.4byte	0x5a0
+ 1540 0528 07       		.uleb128 0x7
+ 1541 0529 636D6400 		.ascii	"cmd\000"
+ 1542 052d 01       		.byte	0x1
+ 1543 052e 18       		.byte	0x18
+ 1544 052f 77000000 		.4byte	0x77
+ 1545 0533 08040000 		.4byte	.LLST9
+ 1546 0537 0E       		.uleb128 0xe
+ 1547 0538 55000000 		.4byte	.LASF21
+ 1548 053c 01       		.byte	0x1
+ 1549 053d 19       		.byte	0x19
+ 1550 053e 77000000 		.4byte	0x77
+ 1551 0542 07       		.uleb128 0x7
+ 1552 0543 6900     		.ascii	"i\000"
+ 1553 0545 01       		.byte	0x1
+ 1554 0546 22       		.byte	0x22
+ 1555 0547 5D000000 		.4byte	0x5d
+ 1556 054b 27040000 		.4byte	.LLST10
+ 1557 054f 0A       		.uleb128 0xa
+ 1558 0550 08000000 		.4byte	.LVL89
+ 1559 0554 99070000 		.4byte	0x799
+ 1560 0558 0A       		.uleb128 0xa
+ 1561 0559 0C000000 		.4byte	.LVL90
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 34
+
+
+ 1562 055d A4070000 		.4byte	0x7a4
+ 1563 0561 08       		.uleb128 0x8
+ 1564 0562 14000000 		.4byte	.LVL91
+ 1565 0566 4E040000 		.4byte	0x44e
+ 1566 056a 7B050000 		.4byte	0x57b
+ 1567 056e 09       		.uleb128 0x9
+ 1568 056f 01       		.uleb128 0x1
+ 1569 0570 50       		.byte	0x50
+ 1570 0571 01       		.uleb128 0x1
+ 1571 0572 30       		.byte	0x30
+ 1572 0573 09       		.uleb128 0x9
+ 1573 0574 01       		.uleb128 0x1
+ 1574 0575 51       		.byte	0x51
+ 1575 0576 03       		.uleb128 0x3
+ 1576 0577 0A       		.byte	0xa
+ 1577 0578 2602     		.2byte	0x226
+ 1578 057a 00       		.byte	0
+ 1579 057b 08       		.uleb128 0x8
+ 1580 057c 24000000 		.4byte	.LVL94
+ 1581 0580 8E070000 		.4byte	0x78e
+ 1582 0584 8F050000 		.4byte	0x58f
+ 1583 0588 09       		.uleb128 0x9
+ 1584 0589 01       		.uleb128 0x1
+ 1585 058a 50       		.byte	0x50
+ 1586 058b 02       		.uleb128 0x2
+ 1587 058c 75       		.byte	0x75
+ 1588 058d 18       		.sleb128 24
+ 1589 058e 00       		.byte	0
+ 1590 058f 0B       		.uleb128 0xb
+ 1591 0590 2C000000 		.4byte	.LVL95
+ 1592 0594 69010000 		.4byte	0x169
+ 1593 0598 09       		.uleb128 0x9
+ 1594 0599 01       		.uleb128 0x1
+ 1595 059a 50       		.byte	0x50
+ 1596 059b 02       		.uleb128 0x2
+ 1597 059c 74       		.byte	0x74
+ 1598 059d 00       		.sleb128 0
+ 1599 059e 00       		.byte	0
+ 1600 059f 00       		.byte	0
+ 1601 05a0 05       		.uleb128 0x5
+ 1602 05a1 C2000000 		.4byte	.LASF22
+ 1603 05a5 01       		.byte	0x1
+ 1604 05a6 E0       		.byte	0xe0
+ 1605 05a7 00000000 		.4byte	.LFB38
+ 1606 05ab 46000000 		.4byte	.LFE38-.LFB38
+ 1607 05af 01       		.uleb128 0x1
+ 1608 05b0 9C       		.byte	0x9c
+ 1609 05b1 56060000 		.4byte	0x656
+ 1610 05b5 06       		.uleb128 0x6
+ 1611 05b6 B4000000 		.4byte	.LASF23
+ 1612 05ba 01       		.byte	0x1
+ 1613 05bb E0       		.byte	0xe0
+ 1614 05bc 77000000 		.4byte	0x77
+ 1615 05c0 47040000 		.4byte	.LLST11
+ 1616 05c4 06       		.uleb128 0x6
+ 1617 05c5 E3000000 		.4byte	.LASF16
+ 1618 05c9 01       		.byte	0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 35
+
+
+ 1619 05ca E0       		.byte	0xe0
+ 1620 05cb 77000000 		.4byte	0x77
+ 1621 05cf 68040000 		.4byte	.LLST12
+ 1622 05d3 06       		.uleb128 0x6
+ 1623 05d4 77000000 		.4byte	.LASF17
+ 1624 05d8 01       		.byte	0x1
+ 1625 05d9 E0       		.byte	0xe0
+ 1626 05da 77000000 		.4byte	0x77
+ 1627 05de 94040000 		.4byte	.LLST13
+ 1628 05e2 10       		.uleb128 0x10
+ 1629 05e3 06000000 		.4byte	.LBB2
+ 1630 05e7 3E000000 		.4byte	.LBE2-.LBB2
+ 1631 05eb 07       		.uleb128 0x7
+ 1632 05ec 6900     		.ascii	"i\000"
+ 1633 05ee 01       		.byte	0x1
+ 1634 05ef E2       		.byte	0xe2
+ 1635 05f0 5D000000 		.4byte	0x5d
+ 1636 05f4 C0040000 		.4byte	.LLST14
+ 1637 05f8 10       		.uleb128 0x10
+ 1638 05f9 0A000000 		.4byte	.LBB3
+ 1639 05fd 2A000000 		.4byte	.LBE3-.LBB3
+ 1640 0601 07       		.uleb128 0x7
+ 1641 0602 6A00     		.ascii	"j\000"
+ 1642 0604 01       		.byte	0x1
+ 1643 0605 E3       		.byte	0xe3
+ 1644 0606 5D000000 		.4byte	0x5d
+ 1645 060a DE040000 		.4byte	.LLST15
+ 1646 060e 08       		.uleb128 0x8
+ 1647 060f 16000000 		.4byte	.LVL103
+ 1648 0613 8E070000 		.4byte	0x78e
+ 1649 0617 22060000 		.4byte	0x622
+ 1650 061b 09       		.uleb128 0x9
+ 1651 061c 01       		.uleb128 0x1
+ 1652 061d 50       		.byte	0x50
+ 1653 061e 02       		.uleb128 0x2
+ 1654 061f 76       		.byte	0x76
+ 1655 0620 18       		.sleb128 24
+ 1656 0621 00       		.byte	0
+ 1657 0622 08       		.uleb128 0x8
+ 1658 0623 20000000 		.4byte	.LVL104
+ 1659 0627 62070000 		.4byte	0x762
+ 1660 062b 3B060000 		.4byte	0x63b
+ 1661 062f 09       		.uleb128 0x9
+ 1662 0630 01       		.uleb128 0x1
+ 1663 0631 50       		.byte	0x50
+ 1664 0632 02       		.uleb128 0x2
+ 1665 0633 74       		.byte	0x74
+ 1666 0634 00       		.sleb128 0
+ 1667 0635 09       		.uleb128 0x9
+ 1668 0636 01       		.uleb128 0x1
+ 1669 0637 51       		.byte	0x51
+ 1670 0638 01       		.uleb128 0x1
+ 1671 0639 30       		.byte	0x30
+ 1672 063a 00       		.byte	0
+ 1673 063b 0A       		.uleb128 0xa
+ 1674 063c 24000000 		.4byte	.LVL105
+ 1675 0640 6D070000 		.4byte	0x76d
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 36
+
+
+ 1676 0644 0B       		.uleb128 0xb
+ 1677 0645 2E000000 		.4byte	.LVL106
+ 1678 0649 83070000 		.4byte	0x783
+ 1679 064d 09       		.uleb128 0x9
+ 1680 064e 01       		.uleb128 0x1
+ 1681 064f 50       		.byte	0x50
+ 1682 0650 01       		.uleb128 0x1
+ 1683 0651 31       		.byte	0x31
+ 1684 0652 00       		.byte	0
+ 1685 0653 00       		.byte	0
+ 1686 0654 00       		.byte	0
+ 1687 0655 00       		.byte	0
+ 1688 0656 05       		.uleb128 0x5
+ 1689 0657 D1000000 		.4byte	.LASF24
+ 1690 065b 01       		.byte	0x1
+ 1691 065c EF       		.byte	0xef
+ 1692 065d 00000000 		.4byte	.LFB39
+ 1693 0661 4E000000 		.4byte	.LFE39-.LFB39
+ 1694 0665 01       		.uleb128 0x1
+ 1695 0666 9C       		.byte	0x9c
+ 1696 0667 2C070000 		.4byte	0x72c
+ 1697 066b 06       		.uleb128 0x6
+ 1698 066c E3000000 		.4byte	.LASF16
+ 1699 0670 01       		.byte	0x1
+ 1700 0671 EF       		.byte	0xef
+ 1701 0672 77000000 		.4byte	0x77
+ 1702 0676 F1040000 		.4byte	.LLST16
+ 1703 067a 06       		.uleb128 0x6
+ 1704 067b 77000000 		.4byte	.LASF17
+ 1705 067f 01       		.byte	0x1
+ 1706 0680 EF       		.byte	0xef
+ 1707 0681 77000000 		.4byte	0x77
+ 1708 0685 12050000 		.4byte	.LLST17
+ 1709 0689 10       		.uleb128 0x10
+ 1710 068a 06000000 		.4byte	.LBB4
+ 1711 068e 46000000 		.4byte	.LBE4-.LBB4
+ 1712 0692 07       		.uleb128 0x7
+ 1713 0693 6900     		.ascii	"i\000"
+ 1714 0695 01       		.byte	0x1
+ 1715 0696 F0       		.byte	0xf0
+ 1716 0697 77000000 		.4byte	0x77
+ 1717 069b 3E050000 		.4byte	.LLST18
+ 1718 069f 07       		.uleb128 0x7
+ 1719 06a0 6A00     		.ascii	"j\000"
+ 1720 06a2 01       		.byte	0x1
+ 1721 06a3 F0       		.byte	0xf0
+ 1722 06a4 77000000 		.4byte	0x77
+ 1723 06a8 5D050000 		.4byte	.LLST19
+ 1724 06ac 08       		.uleb128 0x8
+ 1725 06ad 10000000 		.4byte	.LVL116
+ 1726 06b1 57070000 		.4byte	0x757
+ 1727 06b5 BF060000 		.4byte	0x6bf
+ 1728 06b9 09       		.uleb128 0x9
+ 1729 06ba 01       		.uleb128 0x1
+ 1730 06bb 50       		.byte	0x50
+ 1731 06bc 01       		.uleb128 0x1
+ 1732 06bd 32       		.byte	0x32
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 37
+
+
+ 1733 06be 00       		.byte	0
+ 1734 06bf 08       		.uleb128 0x8
+ 1735 06c0 16000000 		.4byte	.LVL117
+ 1736 06c4 8E070000 		.4byte	0x78e
+ 1737 06c8 D3060000 		.4byte	0x6d3
+ 1738 06cc 09       		.uleb128 0x9
+ 1739 06cd 01       		.uleb128 0x1
+ 1740 06ce 50       		.byte	0x50
+ 1741 06cf 02       		.uleb128 0x2
+ 1742 06d0 74       		.byte	0x74
+ 1743 06d1 00       		.sleb128 0
+ 1744 06d2 00       		.byte	0
+ 1745 06d3 08       		.uleb128 0x8
+ 1746 06d4 20000000 		.4byte	.LVL118
+ 1747 06d8 62070000 		.4byte	0x762
+ 1748 06dc EC060000 		.4byte	0x6ec
+ 1749 06e0 09       		.uleb128 0x9
+ 1750 06e1 01       		.uleb128 0x1
+ 1751 06e2 50       		.byte	0x50
+ 1752 06e3 02       		.uleb128 0x2
+ 1753 06e4 75       		.byte	0x75
+ 1754 06e5 00       		.sleb128 0
+ 1755 06e6 09       		.uleb128 0x9
+ 1756 06e7 01       		.uleb128 0x1
+ 1757 06e8 51       		.byte	0x51
+ 1758 06e9 01       		.uleb128 0x1
+ 1759 06ea 30       		.byte	0x30
+ 1760 06eb 00       		.byte	0
+ 1761 06ec 0A       		.uleb128 0xa
+ 1762 06ed 24000000 		.4byte	.LVL119
+ 1763 06f1 6D070000 		.4byte	0x76d
+ 1764 06f5 08       		.uleb128 0x8
+ 1765 06f6 2E000000 		.4byte	.LVL120
+ 1766 06fa 78070000 		.4byte	0x778
+ 1767 06fe 08070000 		.4byte	0x708
+ 1768 0702 09       		.uleb128 0x9
+ 1769 0703 01       		.uleb128 0x1
+ 1770 0704 50       		.byte	0x50
+ 1771 0705 01       		.uleb128 0x1
+ 1772 0706 44       		.byte	0x44
+ 1773 0707 00       		.byte	0
+ 1774 0708 08       		.uleb128 0x8
+ 1775 0709 3A000000 		.4byte	.LVL122
+ 1776 070d 83070000 		.4byte	0x783
+ 1777 0711 1B070000 		.4byte	0x71b
+ 1778 0715 09       		.uleb128 0x9
+ 1779 0716 01       		.uleb128 0x1
+ 1780 0717 50       		.byte	0x50
+ 1781 0718 01       		.uleb128 0x1
+ 1782 0719 31       		.byte	0x31
+ 1783 071a 00       		.byte	0
+ 1784 071b 0B       		.uleb128 0xb
+ 1785 071c 40000000 		.4byte	.LVL123
+ 1786 0720 78070000 		.4byte	0x778
+ 1787 0724 09       		.uleb128 0x9
+ 1788 0725 01       		.uleb128 0x1
+ 1789 0726 50       		.byte	0x50
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 38
+
+
+ 1790 0727 01       		.uleb128 0x1
+ 1791 0728 44       		.byte	0x44
+ 1792 0729 00       		.byte	0
+ 1793 072a 00       		.byte	0
+ 1794 072b 00       		.byte	0
+ 1795 072c 11       		.uleb128 0x11
+ 1796 072d 3C070000 		.4byte	0x73c
+ 1797 0731 3C070000 		.4byte	0x73c
+ 1798 0735 12       		.uleb128 0x12
+ 1799 0736 9F000000 		.4byte	0x9f
+ 1800 073a 02       		.byte	0x2
+ 1801 073b 00       		.byte	0
+ 1802 073c 13       		.uleb128 0x13
+ 1803 073d 6B000000 		.4byte	0x6b
+ 1804 0741 14       		.uleb128 0x14
+ 1805 0742 49000000 		.4byte	.LASF38
+ 1806 0746 01       		.byte	0x1
+ 1807 0747 12       		.byte	0x12
+ 1808 0748 52070000 		.4byte	0x752
+ 1809 074c 05       		.uleb128 0x5
+ 1810 074d 03       		.byte	0x3
+ 1811 074e 00000000 		.4byte	dummyBuffer
+ 1812 0752 13       		.uleb128 0x13
+ 1813 0753 2C070000 		.4byte	0x72c
+ 1814 0757 15       		.uleb128 0x15
+ 1815 0758 1F020000 		.4byte	.LASF25
+ 1816 075c 1F020000 		.4byte	.LASF25
+ 1817 0760 03       		.byte	0x3
+ 1818 0761 26       		.byte	0x26
+ 1819 0762 15       		.uleb128 0x15
+ 1820 0763 12000000 		.4byte	.LASF26
+ 1821 0767 12000000 		.4byte	.LASF26
+ 1822 076b 03       		.byte	0x3
+ 1823 076c 23       		.byte	0x23
+ 1824 076d 15       		.uleb128 0x15
+ 1825 076e F4010000 		.4byte	.LASF27
+ 1826 0772 F4010000 		.4byte	.LASF27
+ 1827 0776 03       		.byte	0x3
+ 1828 0777 1B       		.byte	0x1b
+ 1829 0778 15       		.uleb128 0x15
+ 1830 0779 5B020000 		.4byte	.LASF28
+ 1831 077d 5B020000 		.4byte	.LASF28
+ 1832 0781 04       		.byte	0x4
+ 1833 0782 D9       		.byte	0xd9
+ 1834 0783 15       		.uleb128 0x15
+ 1835 0784 47020000 		.4byte	.LASF29
+ 1836 0788 47020000 		.4byte	.LASF29
+ 1837 078c 03       		.byte	0x3
+ 1838 078d 1A       		.byte	0x1a
+ 1839 078e 15       		.uleb128 0x15
+ 1840 078f 5C000000 		.4byte	.LASF30
+ 1841 0793 5C000000 		.4byte	.LASF30
+ 1842 0797 03       		.byte	0x3
+ 1843 0798 27       		.byte	0x27
+ 1844 0799 15       		.uleb128 0x15
+ 1845 079a 24000000 		.4byte	.LASF31
+ 1846 079e 24000000 		.4byte	.LASF31
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 39
+
+
+ 1847 07a2 03       		.byte	0x3
+ 1848 07a3 15       		.byte	0x15
+ 1849 07a4 15       		.uleb128 0x15
+ 1850 07a5 07000000 		.4byte	.LASF32
+ 1851 07a9 07000000 		.4byte	.LASF32
+ 1852 07ad 05       		.byte	0x5
+ 1853 07ae 6E       		.byte	0x6e
+ 1854 07af 00       		.byte	0
+ 1855              		.section	.debug_abbrev,"",%progbits
+ 1856              	.Ldebug_abbrev0:
+ 1857 0000 01       		.uleb128 0x1
+ 1858 0001 11       		.uleb128 0x11
+ 1859 0002 01       		.byte	0x1
+ 1860 0003 25       		.uleb128 0x25
+ 1861 0004 0E       		.uleb128 0xe
+ 1862 0005 13       		.uleb128 0x13
+ 1863 0006 0B       		.uleb128 0xb
+ 1864 0007 03       		.uleb128 0x3
+ 1865 0008 0E       		.uleb128 0xe
+ 1866 0009 1B       		.uleb128 0x1b
+ 1867 000a 0E       		.uleb128 0xe
+ 1868 000b 55       		.uleb128 0x55
+ 1869 000c 17       		.uleb128 0x17
+ 1870 000d 11       		.uleb128 0x11
+ 1871 000e 01       		.uleb128 0x1
+ 1872 000f 10       		.uleb128 0x10
+ 1873 0010 17       		.uleb128 0x17
+ 1874 0011 00       		.byte	0
+ 1875 0012 00       		.byte	0
+ 1876 0013 02       		.uleb128 0x2
+ 1877 0014 24       		.uleb128 0x24
+ 1878 0015 00       		.byte	0
+ 1879 0016 0B       		.uleb128 0xb
+ 1880 0017 0B       		.uleb128 0xb
+ 1881 0018 3E       		.uleb128 0x3e
+ 1882 0019 0B       		.uleb128 0xb
+ 1883 001a 03       		.uleb128 0x3
+ 1884 001b 0E       		.uleb128 0xe
+ 1885 001c 00       		.byte	0
+ 1886 001d 00       		.byte	0
+ 1887 001e 03       		.uleb128 0x3
+ 1888 001f 24       		.uleb128 0x24
+ 1889 0020 00       		.byte	0
+ 1890 0021 0B       		.uleb128 0xb
+ 1891 0022 0B       		.uleb128 0xb
+ 1892 0023 3E       		.uleb128 0x3e
+ 1893 0024 0B       		.uleb128 0xb
+ 1894 0025 03       		.uleb128 0x3
+ 1895 0026 08       		.uleb128 0x8
+ 1896 0027 00       		.byte	0
+ 1897 0028 00       		.byte	0
+ 1898 0029 04       		.uleb128 0x4
+ 1899 002a 16       		.uleb128 0x16
+ 1900 002b 00       		.byte	0
+ 1901 002c 03       		.uleb128 0x3
+ 1902 002d 0E       		.uleb128 0xe
+ 1903 002e 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 40
+
+
+ 1904 002f 0B       		.uleb128 0xb
+ 1905 0030 3B       		.uleb128 0x3b
+ 1906 0031 05       		.uleb128 0x5
+ 1907 0032 49       		.uleb128 0x49
+ 1908 0033 13       		.uleb128 0x13
+ 1909 0034 00       		.byte	0
+ 1910 0035 00       		.byte	0
+ 1911 0036 05       		.uleb128 0x5
+ 1912 0037 2E       		.uleb128 0x2e
+ 1913 0038 01       		.byte	0x1
+ 1914 0039 3F       		.uleb128 0x3f
+ 1915 003a 19       		.uleb128 0x19
+ 1916 003b 03       		.uleb128 0x3
+ 1917 003c 0E       		.uleb128 0xe
+ 1918 003d 3A       		.uleb128 0x3a
+ 1919 003e 0B       		.uleb128 0xb
+ 1920 003f 3B       		.uleb128 0x3b
+ 1921 0040 0B       		.uleb128 0xb
+ 1922 0041 27       		.uleb128 0x27
+ 1923 0042 19       		.uleb128 0x19
+ 1924 0043 11       		.uleb128 0x11
+ 1925 0044 01       		.uleb128 0x1
+ 1926 0045 12       		.uleb128 0x12
+ 1927 0046 06       		.uleb128 0x6
+ 1928 0047 40       		.uleb128 0x40
+ 1929 0048 18       		.uleb128 0x18
+ 1930 0049 9742     		.uleb128 0x2117
+ 1931 004b 19       		.uleb128 0x19
+ 1932 004c 01       		.uleb128 0x1
+ 1933 004d 13       		.uleb128 0x13
+ 1934 004e 00       		.byte	0
+ 1935 004f 00       		.byte	0
+ 1936 0050 06       		.uleb128 0x6
+ 1937 0051 05       		.uleb128 0x5
+ 1938 0052 00       		.byte	0
+ 1939 0053 03       		.uleb128 0x3
+ 1940 0054 0E       		.uleb128 0xe
+ 1941 0055 3A       		.uleb128 0x3a
+ 1942 0056 0B       		.uleb128 0xb
+ 1943 0057 3B       		.uleb128 0x3b
+ 1944 0058 0B       		.uleb128 0xb
+ 1945 0059 49       		.uleb128 0x49
+ 1946 005a 13       		.uleb128 0x13
+ 1947 005b 02       		.uleb128 0x2
+ 1948 005c 17       		.uleb128 0x17
+ 1949 005d 00       		.byte	0
+ 1950 005e 00       		.byte	0
+ 1951 005f 07       		.uleb128 0x7
+ 1952 0060 34       		.uleb128 0x34
+ 1953 0061 00       		.byte	0
+ 1954 0062 03       		.uleb128 0x3
+ 1955 0063 08       		.uleb128 0x8
+ 1956 0064 3A       		.uleb128 0x3a
+ 1957 0065 0B       		.uleb128 0xb
+ 1958 0066 3B       		.uleb128 0x3b
+ 1959 0067 0B       		.uleb128 0xb
+ 1960 0068 49       		.uleb128 0x49
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 41
+
+
+ 1961 0069 13       		.uleb128 0x13
+ 1962 006a 02       		.uleb128 0x2
+ 1963 006b 17       		.uleb128 0x17
+ 1964 006c 00       		.byte	0
+ 1965 006d 00       		.byte	0
+ 1966 006e 08       		.uleb128 0x8
+ 1967 006f 898201   		.uleb128 0x4109
+ 1968 0072 01       		.byte	0x1
+ 1969 0073 11       		.uleb128 0x11
+ 1970 0074 01       		.uleb128 0x1
+ 1971 0075 31       		.uleb128 0x31
+ 1972 0076 13       		.uleb128 0x13
+ 1973 0077 01       		.uleb128 0x1
+ 1974 0078 13       		.uleb128 0x13
+ 1975 0079 00       		.byte	0
+ 1976 007a 00       		.byte	0
+ 1977 007b 09       		.uleb128 0x9
+ 1978 007c 8A8201   		.uleb128 0x410a
+ 1979 007f 00       		.byte	0
+ 1980 0080 02       		.uleb128 0x2
+ 1981 0081 18       		.uleb128 0x18
+ 1982 0082 9142     		.uleb128 0x2111
+ 1983 0084 18       		.uleb128 0x18
+ 1984 0085 00       		.byte	0
+ 1985 0086 00       		.byte	0
+ 1986 0087 0A       		.uleb128 0xa
+ 1987 0088 898201   		.uleb128 0x4109
+ 1988 008b 00       		.byte	0
+ 1989 008c 11       		.uleb128 0x11
+ 1990 008d 01       		.uleb128 0x1
+ 1991 008e 31       		.uleb128 0x31
+ 1992 008f 13       		.uleb128 0x13
+ 1993 0090 00       		.byte	0
+ 1994 0091 00       		.byte	0
+ 1995 0092 0B       		.uleb128 0xb
+ 1996 0093 898201   		.uleb128 0x4109
+ 1997 0096 01       		.byte	0x1
+ 1998 0097 11       		.uleb128 0x11
+ 1999 0098 01       		.uleb128 0x1
+ 2000 0099 31       		.uleb128 0x31
+ 2001 009a 13       		.uleb128 0x13
+ 2002 009b 00       		.byte	0
+ 2003 009c 00       		.byte	0
+ 2004 009d 0C       		.uleb128 0xc
+ 2005 009e 2E       		.uleb128 0x2e
+ 2006 009f 01       		.byte	0x1
+ 2007 00a0 03       		.uleb128 0x3
+ 2008 00a1 0E       		.uleb128 0xe
+ 2009 00a2 3A       		.uleb128 0x3a
+ 2010 00a3 0B       		.uleb128 0xb
+ 2011 00a4 3B       		.uleb128 0x3b
+ 2012 00a5 0B       		.uleb128 0xb
+ 2013 00a6 27       		.uleb128 0x27
+ 2014 00a7 19       		.uleb128 0x19
+ 2015 00a8 49       		.uleb128 0x49
+ 2016 00a9 13       		.uleb128 0x13
+ 2017 00aa 11       		.uleb128 0x11
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 42
+
+
+ 2018 00ab 01       		.uleb128 0x1
+ 2019 00ac 12       		.uleb128 0x12
+ 2020 00ad 06       		.uleb128 0x6
+ 2021 00ae 40       		.uleb128 0x40
+ 2022 00af 18       		.uleb128 0x18
+ 2023 00b0 9742     		.uleb128 0x2117
+ 2024 00b2 19       		.uleb128 0x19
+ 2025 00b3 01       		.uleb128 0x1
+ 2026 00b4 13       		.uleb128 0x13
+ 2027 00b5 00       		.byte	0
+ 2028 00b6 00       		.byte	0
+ 2029 00b7 0D       		.uleb128 0xd
+ 2030 00b8 05       		.uleb128 0x5
+ 2031 00b9 00       		.byte	0
+ 2032 00ba 03       		.uleb128 0x3
+ 2033 00bb 08       		.uleb128 0x8
+ 2034 00bc 3A       		.uleb128 0x3a
+ 2035 00bd 0B       		.uleb128 0xb
+ 2036 00be 3B       		.uleb128 0x3b
+ 2037 00bf 0B       		.uleb128 0xb
+ 2038 00c0 49       		.uleb128 0x49
+ 2039 00c1 13       		.uleb128 0x13
+ 2040 00c2 02       		.uleb128 0x2
+ 2041 00c3 17       		.uleb128 0x17
+ 2042 00c4 00       		.byte	0
+ 2043 00c5 00       		.byte	0
+ 2044 00c6 0E       		.uleb128 0xe
+ 2045 00c7 34       		.uleb128 0x34
+ 2046 00c8 00       		.byte	0
+ 2047 00c9 03       		.uleb128 0x3
+ 2048 00ca 0E       		.uleb128 0xe
+ 2049 00cb 3A       		.uleb128 0x3a
+ 2050 00cc 0B       		.uleb128 0xb
+ 2051 00cd 3B       		.uleb128 0x3b
+ 2052 00ce 0B       		.uleb128 0xb
+ 2053 00cf 49       		.uleb128 0x49
+ 2054 00d0 13       		.uleb128 0x13
+ 2055 00d1 00       		.byte	0
+ 2056 00d2 00       		.byte	0
+ 2057 00d3 0F       		.uleb128 0xf
+ 2058 00d4 2E       		.uleb128 0x2e
+ 2059 00d5 01       		.byte	0x1
+ 2060 00d6 3F       		.uleb128 0x3f
+ 2061 00d7 19       		.uleb128 0x19
+ 2062 00d8 03       		.uleb128 0x3
+ 2063 00d9 0E       		.uleb128 0xe
+ 2064 00da 3A       		.uleb128 0x3a
+ 2065 00db 0B       		.uleb128 0xb
+ 2066 00dc 3B       		.uleb128 0x3b
+ 2067 00dd 0B       		.uleb128 0xb
+ 2068 00de 27       		.uleb128 0x27
+ 2069 00df 19       		.uleb128 0x19
+ 2070 00e0 49       		.uleb128 0x49
+ 2071 00e1 13       		.uleb128 0x13
+ 2072 00e2 8701     		.uleb128 0x87
+ 2073 00e4 19       		.uleb128 0x19
+ 2074 00e5 11       		.uleb128 0x11
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 43
+
+
+ 2075 00e6 01       		.uleb128 0x1
+ 2076 00e7 12       		.uleb128 0x12
+ 2077 00e8 06       		.uleb128 0x6
+ 2078 00e9 40       		.uleb128 0x40
+ 2079 00ea 18       		.uleb128 0x18
+ 2080 00eb 9742     		.uleb128 0x2117
+ 2081 00ed 19       		.uleb128 0x19
+ 2082 00ee 01       		.uleb128 0x1
+ 2083 00ef 13       		.uleb128 0x13
+ 2084 00f0 00       		.byte	0
+ 2085 00f1 00       		.byte	0
+ 2086 00f2 10       		.uleb128 0x10
+ 2087 00f3 0B       		.uleb128 0xb
+ 2088 00f4 01       		.byte	0x1
+ 2089 00f5 11       		.uleb128 0x11
+ 2090 00f6 01       		.uleb128 0x1
+ 2091 00f7 12       		.uleb128 0x12
+ 2092 00f8 06       		.uleb128 0x6
+ 2093 00f9 00       		.byte	0
+ 2094 00fa 00       		.byte	0
+ 2095 00fb 11       		.uleb128 0x11
+ 2096 00fc 01       		.uleb128 0x1
+ 2097 00fd 01       		.byte	0x1
+ 2098 00fe 49       		.uleb128 0x49
+ 2099 00ff 13       		.uleb128 0x13
+ 2100 0100 01       		.uleb128 0x1
+ 2101 0101 13       		.uleb128 0x13
+ 2102 0102 00       		.byte	0
+ 2103 0103 00       		.byte	0
+ 2104 0104 12       		.uleb128 0x12
+ 2105 0105 21       		.uleb128 0x21
+ 2106 0106 00       		.byte	0
+ 2107 0107 49       		.uleb128 0x49
+ 2108 0108 13       		.uleb128 0x13
+ 2109 0109 2F       		.uleb128 0x2f
+ 2110 010a 0B       		.uleb128 0xb
+ 2111 010b 00       		.byte	0
+ 2112 010c 00       		.byte	0
+ 2113 010d 13       		.uleb128 0x13
+ 2114 010e 26       		.uleb128 0x26
+ 2115 010f 00       		.byte	0
+ 2116 0110 49       		.uleb128 0x49
+ 2117 0111 13       		.uleb128 0x13
+ 2118 0112 00       		.byte	0
+ 2119 0113 00       		.byte	0
+ 2120 0114 14       		.uleb128 0x14
+ 2121 0115 34       		.uleb128 0x34
+ 2122 0116 00       		.byte	0
+ 2123 0117 03       		.uleb128 0x3
+ 2124 0118 0E       		.uleb128 0xe
+ 2125 0119 3A       		.uleb128 0x3a
+ 2126 011a 0B       		.uleb128 0xb
+ 2127 011b 3B       		.uleb128 0x3b
+ 2128 011c 0B       		.uleb128 0xb
+ 2129 011d 49       		.uleb128 0x49
+ 2130 011e 13       		.uleb128 0x13
+ 2131 011f 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 44
+
+
+ 2132 0120 19       		.uleb128 0x19
+ 2133 0121 02       		.uleb128 0x2
+ 2134 0122 18       		.uleb128 0x18
+ 2135 0123 00       		.byte	0
+ 2136 0124 00       		.byte	0
+ 2137 0125 15       		.uleb128 0x15
+ 2138 0126 2E       		.uleb128 0x2e
+ 2139 0127 00       		.byte	0
+ 2140 0128 3F       		.uleb128 0x3f
+ 2141 0129 19       		.uleb128 0x19
+ 2142 012a 3C       		.uleb128 0x3c
+ 2143 012b 19       		.uleb128 0x19
+ 2144 012c 6E       		.uleb128 0x6e
+ 2145 012d 0E       		.uleb128 0xe
+ 2146 012e 03       		.uleb128 0x3
+ 2147 012f 0E       		.uleb128 0xe
+ 2148 0130 3A       		.uleb128 0x3a
+ 2149 0131 0B       		.uleb128 0xb
+ 2150 0132 3B       		.uleb128 0x3b
+ 2151 0133 0B       		.uleb128 0xb
+ 2152 0134 00       		.byte	0
+ 2153 0135 00       		.byte	0
+ 2154 0136 00       		.byte	0
+ 2155              		.section	.debug_loc,"",%progbits
+ 2156              	.Ldebug_loc0:
+ 2157              	.LLST0:
+ 2158 0000 00000000 		.4byte	.LVL0
+ 2159 0004 0A000000 		.4byte	.LVL1
+ 2160 0008 0100     		.2byte	0x1
+ 2161 000a 50       		.byte	0x50
+ 2162 000b 0A000000 		.4byte	.LVL1
+ 2163 000f 10000000 		.4byte	.LVL3
+ 2164 0013 0100     		.2byte	0x1
+ 2165 0015 54       		.byte	0x54
+ 2166 0016 10000000 		.4byte	.LVL3
+ 2167 001a 3C000000 		.4byte	.LFE36
+ 2168 001e 0400     		.2byte	0x4
+ 2169 0020 F3       		.byte	0xf3
+ 2170 0021 01       		.uleb128 0x1
+ 2171 0022 50       		.byte	0x50
+ 2172 0023 9F       		.byte	0x9f
+ 2173 0024 00000000 		.4byte	0
+ 2174 0028 00000000 		.4byte	0
+ 2175              	.LLST1:
+ 2176 002c 00000000 		.4byte	.LVL0
+ 2177 0030 0D000000 		.4byte	.LVL2-1
+ 2178 0034 0100     		.2byte	0x1
+ 2179 0036 51       		.byte	0x51
+ 2180 0037 0D000000 		.4byte	.LVL2-1
+ 2181 003b 3A000000 		.4byte	.LVL11
+ 2182 003f 0100     		.2byte	0x1
+ 2183 0041 55       		.byte	0x55
+ 2184 0042 3A000000 		.4byte	.LVL11
+ 2185 0046 3C000000 		.4byte	.LFE36
+ 2186 004a 0400     		.2byte	0x4
+ 2187 004c F3       		.byte	0xf3
+ 2188 004d 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 45
+
+
+ 2189 004e 51       		.byte	0x51
+ 2190 004f 9F       		.byte	0x9f
+ 2191 0050 00000000 		.4byte	0
+ 2192 0054 00000000 		.4byte	0
+ 2193              	.LLST2:
+ 2194 0058 00000000 		.4byte	.LVL0
+ 2195 005c 0D000000 		.4byte	.LVL2-1
+ 2196 0060 0100     		.2byte	0x1
+ 2197 0062 52       		.byte	0x52
+ 2198 0063 0D000000 		.4byte	.LVL2-1
+ 2199 0067 3A000000 		.4byte	.LVL12
+ 2200 006b 0100     		.2byte	0x1
+ 2201 006d 56       		.byte	0x56
+ 2202 006e 3A000000 		.4byte	.LVL12
+ 2203 0072 3C000000 		.4byte	.LFE36
+ 2204 0076 0400     		.2byte	0x4
+ 2205 0078 F3       		.byte	0xf3
+ 2206 0079 01       		.uleb128 0x1
+ 2207 007a 52       		.byte	0x52
+ 2208 007b 9F       		.byte	0x9f
+ 2209 007c 00000000 		.4byte	0
+ 2210 0080 00000000 		.4byte	0
+ 2211              	.LLST3:
+ 2212 0084 0E000000 		.4byte	.LVL2
+ 2213 0088 3A000000 		.4byte	.LVL10
+ 2214 008c 0100     		.2byte	0x1
+ 2215 008e 54       		.byte	0x54
+ 2216 008f 00000000 		.4byte	0
+ 2217 0093 00000000 		.4byte	0
+ 2218              	.LLST4:
+ 2219 0097 00000000 		.4byte	.LVL13
+ 2220 009b 04000000 		.4byte	.LVL14
+ 2221 009f 0100     		.2byte	0x1
+ 2222 00a1 50       		.byte	0x50
+ 2223 00a2 04000000 		.4byte	.LVL14
+ 2224 00a6 0C000000 		.4byte	.LVL15
+ 2225 00aa 0300     		.2byte	0x3
+ 2226 00ac 70       		.byte	0x70
+ 2227 00ad 10       		.sleb128 16
+ 2228 00ae 9F       		.byte	0x9f
+ 2229 00af 0C000000 		.4byte	.LVL15
+ 2230 00b3 38010000 		.4byte	.LFE35
+ 2231 00b7 0400     		.2byte	0x4
+ 2232 00b9 F3       		.byte	0xf3
+ 2233 00ba 01       		.uleb128 0x1
+ 2234 00bb 50       		.byte	0x50
+ 2235 00bc 9F       		.byte	0x9f
+ 2236 00bd 00000000 		.4byte	0
+ 2237 00c1 00000000 		.4byte	0
+ 2238              	.LLST5:
+ 2239 00c5 00000000 		.4byte	.LVL13
+ 2240 00c9 16000000 		.4byte	.LVL16
+ 2241 00cd 0100     		.2byte	0x1
+ 2242 00cf 51       		.byte	0x51
+ 2243 00d0 16000000 		.4byte	.LVL16
+ 2244 00d4 1D000000 		.4byte	.LVL17-1
+ 2245 00d8 0100     		.2byte	0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 46
+
+
+ 2246 00da 52       		.byte	0x52
+ 2247 00db 1D000000 		.4byte	.LVL17-1
+ 2248 00df 20000000 		.4byte	.LVL18
+ 2249 00e3 0400     		.2byte	0x4
+ 2250 00e5 F3       		.byte	0xf3
+ 2251 00e6 01       		.uleb128 0x1
+ 2252 00e7 51       		.byte	0x51
+ 2253 00e8 9F       		.byte	0x9f
+ 2254 00e9 20000000 		.4byte	.LVL18
+ 2255 00ed 24000000 		.4byte	.LVL19
+ 2256 00f1 0100     		.2byte	0x1
+ 2257 00f3 51       		.byte	0x51
+ 2258 00f4 24000000 		.4byte	.LVL19
+ 2259 00f8 2D000000 		.4byte	.LVL20-1
+ 2260 00fc 0100     		.2byte	0x1
+ 2261 00fe 52       		.byte	0x52
+ 2262 00ff 2D000000 		.4byte	.LVL20-1
+ 2263 0103 30000000 		.4byte	.LVL21
+ 2264 0107 0400     		.2byte	0x4
+ 2265 0109 F3       		.byte	0xf3
+ 2266 010a 01       		.uleb128 0x1
+ 2267 010b 51       		.byte	0x51
+ 2268 010c 9F       		.byte	0x9f
+ 2269 010d 30000000 		.4byte	.LVL21
+ 2270 0111 34000000 		.4byte	.LVL22
+ 2271 0115 0100     		.2byte	0x1
+ 2272 0117 51       		.byte	0x51
+ 2273 0118 34000000 		.4byte	.LVL22
+ 2274 011c 3D000000 		.4byte	.LVL23-1
+ 2275 0120 0100     		.2byte	0x1
+ 2276 0122 52       		.byte	0x52
+ 2277 0123 3D000000 		.4byte	.LVL23-1
+ 2278 0127 40000000 		.4byte	.LVL24
+ 2279 012b 0400     		.2byte	0x4
+ 2280 012d F3       		.byte	0xf3
+ 2281 012e 01       		.uleb128 0x1
+ 2282 012f 51       		.byte	0x51
+ 2283 0130 9F       		.byte	0x9f
+ 2284 0131 40000000 		.4byte	.LVL24
+ 2285 0135 44000000 		.4byte	.LVL25
+ 2286 0139 0100     		.2byte	0x1
+ 2287 013b 51       		.byte	0x51
+ 2288 013c 44000000 		.4byte	.LVL25
+ 2289 0140 4D000000 		.4byte	.LVL26-1
+ 2290 0144 0100     		.2byte	0x1
+ 2291 0146 52       		.byte	0x52
+ 2292 0147 4D000000 		.4byte	.LVL26-1
+ 2293 014b 50000000 		.4byte	.LVL27
+ 2294 014f 0400     		.2byte	0x4
+ 2295 0151 F3       		.byte	0xf3
+ 2296 0152 01       		.uleb128 0x1
+ 2297 0153 51       		.byte	0x51
+ 2298 0154 9F       		.byte	0x9f
+ 2299 0155 50000000 		.4byte	.LVL27
+ 2300 0159 54000000 		.4byte	.LVL28
+ 2301 015d 0100     		.2byte	0x1
+ 2302 015f 51       		.byte	0x51
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 47
+
+
+ 2303 0160 54000000 		.4byte	.LVL28
+ 2304 0164 5D000000 		.4byte	.LVL29-1
+ 2305 0168 0100     		.2byte	0x1
+ 2306 016a 52       		.byte	0x52
+ 2307 016b 5D000000 		.4byte	.LVL29-1
+ 2308 016f 60000000 		.4byte	.LVL30
+ 2309 0173 0400     		.2byte	0x4
+ 2310 0175 F3       		.byte	0xf3
+ 2311 0176 01       		.uleb128 0x1
+ 2312 0177 51       		.byte	0x51
+ 2313 0178 9F       		.byte	0x9f
+ 2314 0179 60000000 		.4byte	.LVL30
+ 2315 017d 64000000 		.4byte	.LVL31
+ 2316 0181 0100     		.2byte	0x1
+ 2317 0183 51       		.byte	0x51
+ 2318 0184 64000000 		.4byte	.LVL31
+ 2319 0188 69000000 		.4byte	.LVL32-1
+ 2320 018c 0100     		.2byte	0x1
+ 2321 018e 52       		.byte	0x52
+ 2322 018f 69000000 		.4byte	.LVL32-1
+ 2323 0193 6C000000 		.4byte	.LVL33
+ 2324 0197 0400     		.2byte	0x4
+ 2325 0199 F3       		.byte	0xf3
+ 2326 019a 01       		.uleb128 0x1
+ 2327 019b 51       		.byte	0x51
+ 2328 019c 9F       		.byte	0x9f
+ 2329 019d 6C000000 		.4byte	.LVL33
+ 2330 01a1 70000000 		.4byte	.LVL34
+ 2331 01a5 0100     		.2byte	0x1
+ 2332 01a7 51       		.byte	0x51
+ 2333 01a8 70000000 		.4byte	.LVL34
+ 2334 01ac 75000000 		.4byte	.LVL35-1
+ 2335 01b0 0100     		.2byte	0x1
+ 2336 01b2 52       		.byte	0x52
+ 2337 01b3 75000000 		.4byte	.LVL35-1
+ 2338 01b7 78000000 		.4byte	.LVL36
+ 2339 01bb 0400     		.2byte	0x4
+ 2340 01bd F3       		.byte	0xf3
+ 2341 01be 01       		.uleb128 0x1
+ 2342 01bf 51       		.byte	0x51
+ 2343 01c0 9F       		.byte	0x9f
+ 2344 01c1 78000000 		.4byte	.LVL36
+ 2345 01c5 7C000000 		.4byte	.LVL37
+ 2346 01c9 0100     		.2byte	0x1
+ 2347 01cb 51       		.byte	0x51
+ 2348 01cc 7C000000 		.4byte	.LVL37
+ 2349 01d0 81000000 		.4byte	.LVL38-1
+ 2350 01d4 0100     		.2byte	0x1
+ 2351 01d6 52       		.byte	0x52
+ 2352 01d7 81000000 		.4byte	.LVL38-1
+ 2353 01db 84000000 		.4byte	.LVL39
+ 2354 01df 0400     		.2byte	0x4
+ 2355 01e1 F3       		.byte	0xf3
+ 2356 01e2 01       		.uleb128 0x1
+ 2357 01e3 51       		.byte	0x51
+ 2358 01e4 9F       		.byte	0x9f
+ 2359 01e5 84000000 		.4byte	.LVL39
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 48
+
+
+ 2360 01e9 88000000 		.4byte	.LVL40
+ 2361 01ed 0100     		.2byte	0x1
+ 2362 01ef 51       		.byte	0x51
+ 2363 01f0 88000000 		.4byte	.LVL40
+ 2364 01f4 8F000000 		.4byte	.LVL41-1
+ 2365 01f8 0100     		.2byte	0x1
+ 2366 01fa 52       		.byte	0x52
+ 2367 01fb 8F000000 		.4byte	.LVL41-1
+ 2368 01ff 92000000 		.4byte	.LVL42
+ 2369 0203 0400     		.2byte	0x4
+ 2370 0205 F3       		.byte	0xf3
+ 2371 0206 01       		.uleb128 0x1
+ 2372 0207 51       		.byte	0x51
+ 2373 0208 9F       		.byte	0x9f
+ 2374 0209 92000000 		.4byte	.LVL42
+ 2375 020d 96000000 		.4byte	.LVL43
+ 2376 0211 0100     		.2byte	0x1
+ 2377 0213 51       		.byte	0x51
+ 2378 0214 96000000 		.4byte	.LVL43
+ 2379 0218 9F000000 		.4byte	.LVL44-1
+ 2380 021c 0100     		.2byte	0x1
+ 2381 021e 52       		.byte	0x52
+ 2382 021f 9F000000 		.4byte	.LVL44-1
+ 2383 0223 A2000000 		.4byte	.LVL45
+ 2384 0227 0400     		.2byte	0x4
+ 2385 0229 F3       		.byte	0xf3
+ 2386 022a 01       		.uleb128 0x1
+ 2387 022b 51       		.byte	0x51
+ 2388 022c 9F       		.byte	0x9f
+ 2389 022d A2000000 		.4byte	.LVL45
+ 2390 0231 A6000000 		.4byte	.LVL46
+ 2391 0235 0100     		.2byte	0x1
+ 2392 0237 51       		.byte	0x51
+ 2393 0238 A6000000 		.4byte	.LVL46
+ 2394 023c AF000000 		.4byte	.LVL47-1
+ 2395 0240 0100     		.2byte	0x1
+ 2396 0242 52       		.byte	0x52
+ 2397 0243 AF000000 		.4byte	.LVL47-1
+ 2398 0247 B2000000 		.4byte	.LVL48
+ 2399 024b 0400     		.2byte	0x4
+ 2400 024d F3       		.byte	0xf3
+ 2401 024e 01       		.uleb128 0x1
+ 2402 024f 51       		.byte	0x51
+ 2403 0250 9F       		.byte	0x9f
+ 2404 0251 B2000000 		.4byte	.LVL48
+ 2405 0255 B6000000 		.4byte	.LVL49
+ 2406 0259 0100     		.2byte	0x1
+ 2407 025b 51       		.byte	0x51
+ 2408 025c B6000000 		.4byte	.LVL49
+ 2409 0260 BF000000 		.4byte	.LVL50-1
+ 2410 0264 0100     		.2byte	0x1
+ 2411 0266 52       		.byte	0x52
+ 2412 0267 BF000000 		.4byte	.LVL50-1
+ 2413 026b C2000000 		.4byte	.LVL51
+ 2414 026f 0400     		.2byte	0x4
+ 2415 0271 F3       		.byte	0xf3
+ 2416 0272 01       		.uleb128 0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 49
+
+
+ 2417 0273 51       		.byte	0x51
+ 2418 0274 9F       		.byte	0x9f
+ 2419 0275 C2000000 		.4byte	.LVL51
+ 2420 0279 C6000000 		.4byte	.LVL52
+ 2421 027d 0100     		.2byte	0x1
+ 2422 027f 51       		.byte	0x51
+ 2423 0280 C6000000 		.4byte	.LVL52
+ 2424 0284 CF000000 		.4byte	.LVL53-1
+ 2425 0288 0100     		.2byte	0x1
+ 2426 028a 52       		.byte	0x52
+ 2427 028b CF000000 		.4byte	.LVL53-1
+ 2428 028f D2000000 		.4byte	.LVL54
+ 2429 0293 0400     		.2byte	0x4
+ 2430 0295 F3       		.byte	0xf3
+ 2431 0296 01       		.uleb128 0x1
+ 2432 0297 51       		.byte	0x51
+ 2433 0298 9F       		.byte	0x9f
+ 2434 0299 D2000000 		.4byte	.LVL54
+ 2435 029d D6000000 		.4byte	.LVL55
+ 2436 02a1 0100     		.2byte	0x1
+ 2437 02a3 51       		.byte	0x51
+ 2438 02a4 D6000000 		.4byte	.LVL55
+ 2439 02a8 DD000000 		.4byte	.LVL56-1
+ 2440 02ac 0100     		.2byte	0x1
+ 2441 02ae 52       		.byte	0x52
+ 2442 02af DD000000 		.4byte	.LVL56-1
+ 2443 02b3 E0000000 		.4byte	.LVL57
+ 2444 02b7 0400     		.2byte	0x4
+ 2445 02b9 F3       		.byte	0xf3
+ 2446 02ba 01       		.uleb128 0x1
+ 2447 02bb 51       		.byte	0x51
+ 2448 02bc 9F       		.byte	0x9f
+ 2449 02bd E0000000 		.4byte	.LVL57
+ 2450 02c1 E4000000 		.4byte	.LVL58
+ 2451 02c5 0100     		.2byte	0x1
+ 2452 02c7 51       		.byte	0x51
+ 2453 02c8 E4000000 		.4byte	.LVL58
+ 2454 02cc E9000000 		.4byte	.LVL59-1
+ 2455 02d0 0100     		.2byte	0x1
+ 2456 02d2 52       		.byte	0x52
+ 2457 02d3 E9000000 		.4byte	.LVL59-1
+ 2458 02d7 EC000000 		.4byte	.LVL60
+ 2459 02db 0400     		.2byte	0x4
+ 2460 02dd F3       		.byte	0xf3
+ 2461 02de 01       		.uleb128 0x1
+ 2462 02df 51       		.byte	0x51
+ 2463 02e0 9F       		.byte	0x9f
+ 2464 02e1 EC000000 		.4byte	.LVL60
+ 2465 02e5 F0000000 		.4byte	.LVL61
+ 2466 02e9 0100     		.2byte	0x1
+ 2467 02eb 51       		.byte	0x51
+ 2468 02ec F0000000 		.4byte	.LVL61
+ 2469 02f0 F5000000 		.4byte	.LVL62-1
+ 2470 02f4 0100     		.2byte	0x1
+ 2471 02f6 52       		.byte	0x52
+ 2472 02f7 F5000000 		.4byte	.LVL62-1
+ 2473 02fb F8000000 		.4byte	.LVL63
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 50
+
+
+ 2474 02ff 0400     		.2byte	0x4
+ 2475 0301 F3       		.byte	0xf3
+ 2476 0302 01       		.uleb128 0x1
+ 2477 0303 51       		.byte	0x51
+ 2478 0304 9F       		.byte	0x9f
+ 2479 0305 F8000000 		.4byte	.LVL63
+ 2480 0309 FC000000 		.4byte	.LVL64
+ 2481 030d 0100     		.2byte	0x1
+ 2482 030f 51       		.byte	0x51
+ 2483 0310 FC000000 		.4byte	.LVL64
+ 2484 0314 01010000 		.4byte	.LVL65-1
+ 2485 0318 0100     		.2byte	0x1
+ 2486 031a 52       		.byte	0x52
+ 2487 031b 01010000 		.4byte	.LVL65-1
+ 2488 031f 04010000 		.4byte	.LVL66
+ 2489 0323 0400     		.2byte	0x4
+ 2490 0325 F3       		.byte	0xf3
+ 2491 0326 01       		.uleb128 0x1
+ 2492 0327 51       		.byte	0x51
+ 2493 0328 9F       		.byte	0x9f
+ 2494 0329 04010000 		.4byte	.LVL66
+ 2495 032d 08010000 		.4byte	.LVL67
+ 2496 0331 0100     		.2byte	0x1
+ 2497 0333 51       		.byte	0x51
+ 2498 0334 08010000 		.4byte	.LVL67
+ 2499 0338 0D010000 		.4byte	.LVL68-1
+ 2500 033c 0100     		.2byte	0x1
+ 2501 033e 52       		.byte	0x52
+ 2502 033f 0D010000 		.4byte	.LVL68-1
+ 2503 0343 10010000 		.4byte	.LVL69
+ 2504 0347 0400     		.2byte	0x4
+ 2505 0349 F3       		.byte	0xf3
+ 2506 034a 01       		.uleb128 0x1
+ 2507 034b 51       		.byte	0x51
+ 2508 034c 9F       		.byte	0x9f
+ 2509 034d 10010000 		.4byte	.LVL69
+ 2510 0351 14010000 		.4byte	.LVL70
+ 2511 0355 0100     		.2byte	0x1
+ 2512 0357 51       		.byte	0x51
+ 2513 0358 14010000 		.4byte	.LVL70
+ 2514 035c 19010000 		.4byte	.LVL71-1
+ 2515 0360 0100     		.2byte	0x1
+ 2516 0362 52       		.byte	0x52
+ 2517 0363 19010000 		.4byte	.LVL71-1
+ 2518 0367 1C010000 		.4byte	.LVL72
+ 2519 036b 0400     		.2byte	0x4
+ 2520 036d F3       		.byte	0xf3
+ 2521 036e 01       		.uleb128 0x1
+ 2522 036f 51       		.byte	0x51
+ 2523 0370 9F       		.byte	0x9f
+ 2524 0371 1C010000 		.4byte	.LVL72
+ 2525 0375 20010000 		.4byte	.LVL73
+ 2526 0379 0100     		.2byte	0x1
+ 2527 037b 51       		.byte	0x51
+ 2528 037c 20010000 		.4byte	.LVL73
+ 2529 0380 25010000 		.4byte	.LVL74-1
+ 2530 0384 0100     		.2byte	0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 51
+
+
+ 2531 0386 52       		.byte	0x52
+ 2532 0387 25010000 		.4byte	.LVL74-1
+ 2533 038b 38010000 		.4byte	.LFE35
+ 2534 038f 0400     		.2byte	0x4
+ 2535 0391 F3       		.byte	0xf3
+ 2536 0392 01       		.uleb128 0x1
+ 2537 0393 51       		.byte	0x51
+ 2538 0394 9F       		.byte	0x9f
+ 2539 0395 00000000 		.4byte	0
+ 2540 0399 00000000 		.4byte	0
+ 2541              	.LLST6:
+ 2542 039d 00000000 		.4byte	.LVL75
+ 2543 03a1 08000000 		.4byte	.LVL76
+ 2544 03a5 0100     		.2byte	0x1
+ 2545 03a7 50       		.byte	0x50
+ 2546 03a8 08000000 		.4byte	.LVL76
+ 2547 03ac 0E000000 		.4byte	.LVL78
+ 2548 03b0 0100     		.2byte	0x1
+ 2549 03b2 54       		.byte	0x54
+ 2550 03b3 0E000000 		.4byte	.LVL78
+ 2551 03b7 40000000 		.4byte	.LFE37
+ 2552 03bb 0400     		.2byte	0x4
+ 2553 03bd F3       		.byte	0xf3
+ 2554 03be 01       		.uleb128 0x1
+ 2555 03bf 50       		.byte	0x50
+ 2556 03c0 9F       		.byte	0x9f
+ 2557 03c1 00000000 		.4byte	0
+ 2558 03c5 00000000 		.4byte	0
+ 2559              	.LLST7:
+ 2560 03c9 00000000 		.4byte	.LVL75
+ 2561 03cd 0B000000 		.4byte	.LVL77-1
+ 2562 03d1 0100     		.2byte	0x1
+ 2563 03d3 51       		.byte	0x51
+ 2564 03d4 0B000000 		.4byte	.LVL77-1
+ 2565 03d8 3E000000 		.4byte	.LVL87
+ 2566 03dc 0100     		.2byte	0x1
+ 2567 03de 55       		.byte	0x55
+ 2568 03df 3E000000 		.4byte	.LVL87
+ 2569 03e3 40000000 		.4byte	.LFE37
+ 2570 03e7 0400     		.2byte	0x4
+ 2571 03e9 F3       		.byte	0xf3
+ 2572 03ea 01       		.uleb128 0x1
+ 2573 03eb 51       		.byte	0x51
+ 2574 03ec 9F       		.byte	0x9f
+ 2575 03ed 00000000 		.4byte	0
+ 2576 03f1 00000000 		.4byte	0
+ 2577              	.LLST8:
+ 2578 03f5 0C000000 		.4byte	.LVL77
+ 2579 03f9 3E000000 		.4byte	.LVL86
+ 2580 03fd 0100     		.2byte	0x1
+ 2581 03ff 54       		.byte	0x54
+ 2582 0400 00000000 		.4byte	0
+ 2583 0404 00000000 		.4byte	0
+ 2584              	.LLST9:
+ 2585 0408 02000000 		.4byte	.LVL88
+ 2586 040c 1A000000 		.4byte	.LVL92
+ 2587 0410 0200     		.2byte	0x2
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 52
+
+
+ 2588 0412 40       		.byte	0x40
+ 2589 0413 9F       		.byte	0x9f
+ 2590 0414 1A000000 		.4byte	.LVL92
+ 2591 0418 40000000 		.4byte	.LFE32
+ 2592 041c 0100     		.2byte	0x1
+ 2593 041e 54       		.byte	0x54
+ 2594 041f 00000000 		.4byte	0
+ 2595 0423 00000000 		.4byte	0
+ 2596              	.LLST10:
+ 2597 0427 14000000 		.4byte	.LVL91
+ 2598 042b 1A000000 		.4byte	.LVL92
+ 2599 042f 0300     		.2byte	0x3
+ 2600 0431 08       		.byte	0x8
+ 2601 0432 37       		.byte	0x37
+ 2602 0433 9F       		.byte	0x9f
+ 2603 0434 1A000000 		.4byte	.LVL92
+ 2604 0438 40000000 		.4byte	.LFE32
+ 2605 043c 0100     		.2byte	0x1
+ 2606 043e 55       		.byte	0x55
+ 2607 043f 00000000 		.4byte	0
+ 2608 0443 00000000 		.4byte	0
+ 2609              	.LLST11:
+ 2610 0447 00000000 		.4byte	.LVL99
+ 2611 044b 0A000000 		.4byte	.LVL101
+ 2612 044f 0100     		.2byte	0x1
+ 2613 0451 50       		.byte	0x50
+ 2614 0452 0A000000 		.4byte	.LVL101
+ 2615 0456 46000000 		.4byte	.LFE38
+ 2616 045a 0400     		.2byte	0x4
+ 2617 045c F3       		.byte	0xf3
+ 2618 045d 01       		.uleb128 0x1
+ 2619 045e 50       		.byte	0x50
+ 2620 045f 9F       		.byte	0x9f
+ 2621 0460 00000000 		.4byte	0
+ 2622 0464 00000000 		.4byte	0
+ 2623              	.LLST12:
+ 2624 0468 00000000 		.4byte	.LVL99
+ 2625 046c 0A000000 		.4byte	.LVL101
+ 2626 0470 0100     		.2byte	0x1
+ 2627 0472 51       		.byte	0x51
+ 2628 0473 0A000000 		.4byte	.LVL101
+ 2629 0477 44000000 		.4byte	.LVL110
+ 2630 047b 0100     		.2byte	0x1
+ 2631 047d 55       		.byte	0x55
+ 2632 047e 44000000 		.4byte	.LVL110
+ 2633 0482 46000000 		.4byte	.LFE38
+ 2634 0486 0400     		.2byte	0x4
+ 2635 0488 F3       		.byte	0xf3
+ 2636 0489 01       		.uleb128 0x1
+ 2637 048a 51       		.byte	0x51
+ 2638 048b 9F       		.byte	0x9f
+ 2639 048c 00000000 		.4byte	0
+ 2640 0490 00000000 		.4byte	0
+ 2641              	.LLST13:
+ 2642 0494 00000000 		.4byte	.LVL99
+ 2643 0498 0A000000 		.4byte	.LVL101
+ 2644 049c 0100     		.2byte	0x1
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 53
+
+
+ 2645 049e 52       		.byte	0x52
+ 2646 049f 0A000000 		.4byte	.LVL101
+ 2647 04a3 44000000 		.4byte	.LVL112
+ 2648 04a7 0100     		.2byte	0x1
+ 2649 04a9 57       		.byte	0x57
+ 2650 04aa 44000000 		.4byte	.LVL112
+ 2651 04ae 46000000 		.4byte	.LFE38
+ 2652 04b2 0400     		.2byte	0x4
+ 2653 04b4 F3       		.byte	0xf3
+ 2654 04b5 01       		.uleb128 0x1
+ 2655 04b6 52       		.byte	0x52
+ 2656 04b7 9F       		.byte	0x9f
+ 2657 04b8 00000000 		.4byte	0
+ 2658 04bc 00000000 		.4byte	0
+ 2659              	.LLST14:
+ 2660 04c0 08000000 		.4byte	.LVL100
+ 2661 04c4 0A000000 		.4byte	.LVL101
+ 2662 04c8 0100     		.2byte	0x1
+ 2663 04ca 50       		.byte	0x50
+ 2664 04cb 0A000000 		.4byte	.LVL101
+ 2665 04cf 44000000 		.4byte	.LVL111
+ 2666 04d3 0100     		.2byte	0x1
+ 2667 04d5 56       		.byte	0x56
+ 2668 04d6 00000000 		.4byte	0
+ 2669 04da 00000000 		.4byte	0
+ 2670              	.LLST15:
+ 2671 04de 0C000000 		.4byte	.LVL102
+ 2672 04e2 40000000 		.4byte	.LVL109
+ 2673 04e6 0100     		.2byte	0x1
+ 2674 04e8 54       		.byte	0x54
+ 2675 04e9 00000000 		.4byte	0
+ 2676 04ed 00000000 		.4byte	0
+ 2677              	.LLST16:
+ 2678 04f1 00000000 		.4byte	.LVL113
+ 2679 04f5 0A000000 		.4byte	.LVL115
+ 2680 04f9 0100     		.2byte	0x1
+ 2681 04fb 50       		.byte	0x50
+ 2682 04fc 0A000000 		.4byte	.LVL115
+ 2683 0500 4E000000 		.4byte	.LFE39
+ 2684 0504 0400     		.2byte	0x4
+ 2685 0506 F3       		.byte	0xf3
+ 2686 0507 01       		.uleb128 0x1
+ 2687 0508 50       		.byte	0x50
+ 2688 0509 9F       		.byte	0x9f
+ 2689 050a 00000000 		.4byte	0
+ 2690 050e 00000000 		.4byte	0
+ 2691              	.LLST17:
+ 2692 0512 00000000 		.4byte	.LVL113
+ 2693 0516 0A000000 		.4byte	.LVL115
+ 2694 051a 0100     		.2byte	0x1
+ 2695 051c 51       		.byte	0x51
+ 2696 051d 0A000000 		.4byte	.LVL115
+ 2697 0521 4C000000 		.4byte	.LVL128
+ 2698 0525 0100     		.2byte	0x1
+ 2699 0527 56       		.byte	0x56
+ 2700 0528 4C000000 		.4byte	.LVL128
+ 2701 052c 4E000000 		.4byte	.LFE39
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 54
+
+
+ 2702 0530 0400     		.2byte	0x4
+ 2703 0532 F3       		.byte	0xf3
+ 2704 0533 01       		.uleb128 0x1
+ 2705 0534 51       		.byte	0x51
+ 2706 0535 9F       		.byte	0x9f
+ 2707 0536 00000000 		.4byte	0
+ 2708 053a 00000000 		.4byte	0
+ 2709              	.LLST18:
+ 2710 053e 06000000 		.4byte	.LVL114
+ 2711 0542 0A000000 		.4byte	.LVL115
+ 2712 0546 0200     		.2byte	0x2
+ 2713 0548 30       		.byte	0x30
+ 2714 0549 9F       		.byte	0x9f
+ 2715 054a 0A000000 		.4byte	.LVL115
+ 2716 054e 4C000000 		.4byte	.LVL126
+ 2717 0552 0100     		.2byte	0x1
+ 2718 0554 54       		.byte	0x54
+ 2719 0555 00000000 		.4byte	0
+ 2720 0559 00000000 		.4byte	0
+ 2721              	.LLST19:
+ 2722 055d 06000000 		.4byte	.LVL114
+ 2723 0561 0A000000 		.4byte	.LVL115
+ 2724 0565 0100     		.2byte	0x1
+ 2725 0567 50       		.byte	0x50
+ 2726 0568 0A000000 		.4byte	.LVL115
+ 2727 056c 4C000000 		.4byte	.LVL127
+ 2728 0570 0100     		.2byte	0x1
+ 2729 0572 55       		.byte	0x55
+ 2730 0573 00000000 		.4byte	0
+ 2731 0577 00000000 		.4byte	0
+ 2732              		.section	.debug_aranges,"",%progbits
+ 2733 0000 44000000 		.4byte	0x44
+ 2734 0004 0200     		.2byte	0x2
+ 2735 0006 00000000 		.4byte	.Ldebug_info0
+ 2736 000a 04       		.byte	0x4
+ 2737 000b 00       		.byte	0
+ 2738 000c 0000     		.2byte	0
+ 2739 000e 0000     		.2byte	0
+ 2740 0010 00000000 		.4byte	.LFB36
+ 2741 0014 3C000000 		.4byte	.LFE36-.LFB36
+ 2742 0018 00000000 		.4byte	.LFB35
+ 2743 001c 38010000 		.4byte	.LFE35-.LFB35
+ 2744 0020 00000000 		.4byte	.LFB37
+ 2745 0024 40000000 		.4byte	.LFE37-.LFB37
+ 2746 0028 00000000 		.4byte	.LFB32
+ 2747 002c 40000000 		.4byte	.LFE32-.LFB32
+ 2748 0030 00000000 		.4byte	.LFB38
+ 2749 0034 46000000 		.4byte	.LFE38-.LFB38
+ 2750 0038 00000000 		.4byte	.LFB39
+ 2751 003c 4E000000 		.4byte	.LFE39-.LFB39
+ 2752 0040 00000000 		.4byte	0
+ 2753 0044 00000000 		.4byte	0
+ 2754              		.section	.debug_ranges,"",%progbits
+ 2755              	.Ldebug_ranges0:
+ 2756 0000 00000000 		.4byte	.LFB36
+ 2757 0004 3C000000 		.4byte	.LFE36
+ 2758 0008 00000000 		.4byte	.LFB35
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 55
+
+
+ 2759 000c 38010000 		.4byte	.LFE35
+ 2760 0010 00000000 		.4byte	.LFB37
+ 2761 0014 40000000 		.4byte	.LFE37
+ 2762 0018 00000000 		.4byte	.LFB32
+ 2763 001c 40000000 		.4byte	.LFE32
+ 2764 0020 00000000 		.4byte	.LFB38
+ 2765 0024 46000000 		.4byte	.LFE38
+ 2766 0028 00000000 		.4byte	.LFB39
+ 2767 002c 4E000000 		.4byte	.LFE39
+ 2768 0030 00000000 		.4byte	0
+ 2769 0034 00000000 		.4byte	0
+ 2770              		.section	.debug_line,"",%progbits
+ 2771              	.Ldebug_line0:
+ 2772 0000 99010000 		.section	.debug_str,"MS",%progbits,1
+ 2772      02006700 
+ 2772      00000201 
+ 2772      FB0E0D00 
+ 2772      01010101 
+ 2773              	.LASF19:
+ 2774 0000 7365744C 		.ascii	"setLED\000"
+ 2774      454400
+ 2775              	.LASF32:
+ 2776 0007 53504953 		.ascii	"SPIS_Start\000"
+ 2776      5F537461 
+ 2776      727400
+ 2777              	.LASF26:
+ 2778 0012 53747269 		.ascii	"StripLights_Pixel\000"
+ 2778      704C6967 
+ 2778      6874735F 
+ 2778      50697865 
+ 2778      6C00
+ 2779              	.LASF31:
+ 2780 0024 53747269 		.ascii	"StripLights_Start\000"
+ 2780      704C6967 
+ 2780      6874735F 
+ 2780      53746172 
+ 2780      7400
+ 2781              	.LASF3:
+ 2782 0036 73686F72 		.ascii	"short unsigned int\000"
+ 2782      7420756E 
+ 2782      7369676E 
+ 2782      65642069 
+ 2782      6E7400
+ 2783              	.LASF38:
+ 2784 0049 64756D6D 		.ascii	"dummyBuffer\000"
+ 2784      79427566 
+ 2784      66657200 
+ 2785              	.LASF21:
+ 2786 0055 73746174 		.ascii	"status\000"
+ 2786      757300
+ 2787              	.LASF30:
+ 2788 005c 53747269 		.ascii	"StripLights_getColor\000"
+ 2788      704C6967 
+ 2788      6874735F 
+ 2788      67657443 
+ 2788      6F6C6F72 
+ 2789              	.LASF11:
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 56
+
+
+ 2790 0071 666C6F61 		.ascii	"float\000"
+ 2790      7400
+ 2791              	.LASF17:
+ 2792 0077 6C617374 		.ascii	"lastLED\000"
+ 2792      4C454400 
+ 2793              	.LASF1:
+ 2794 007f 756E7369 		.ascii	"unsigned char\000"
+ 2794      676E6564 
+ 2794      20636861 
+ 2794      7200
+ 2795              	.LASF36:
+ 2796 008d 45786563 		.ascii	"ExecuteCommand\000"
+ 2796      75746543 
+ 2796      6F6D6D61 
+ 2796      6E6400
+ 2797              	.LASF5:
+ 2798 009c 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2798      20756E73 
+ 2798      69676E65 
+ 2798      6420696E 
+ 2798      7400
+ 2799              	.LASF9:
+ 2800 00ae 75696E74 		.ascii	"uint8\000"
+ 2800      3800
+ 2801              	.LASF23:
+ 2802 00b4 73746172 		.ascii	"startingColor\000"
+ 2802      74696E67 
+ 2802      436F6C6F 
+ 2802      7200
+ 2803              	.LASF22:
+ 2804 00c2 7261696E 		.ascii	"rainbow\000"
+ 2804      626F7700 
+ 2805              	.LASF12:
+ 2806 00ca 646F7562 		.ascii	"double\000"
+ 2806      6C6500
+ 2807              	.LASF24:
+ 2808 00d1 7261696E 		.ascii	"rainbowCrawl\000"
+ 2808      626F7743 
+ 2808      7261776C 
+ 2808      00
+ 2809              	.LASF37:
+ 2810 00de 6D61696E 		.ascii	"main\000"
+ 2810      00
+ 2811              	.LASF16:
+ 2812 00e3 66697273 		.ascii	"firstLED\000"
+ 2812      744C4544 
+ 2812      00
+ 2813              	.LASF18:
+ 2814 00ec 636F6C6F 		.ascii	"color\000"
+ 2814      7200
+ 2815              	.LASF10:
+ 2816 00f2 75696E74 		.ascii	"uint32\000"
+ 2816      333200
+ 2817              	.LASF8:
+ 2818 00f9 756E7369 		.ascii	"unsigned int\000"
+ 2818      676E6564 
+ 2818      20696E74 
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 57
+
+
+ 2818      00
+ 2819              	.LASF7:
+ 2820 0106 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2820      206C6F6E 
+ 2820      6720756E 
+ 2820      7369676E 
+ 2820      65642069 
+ 2821              	.LASF33:
+ 2822 011d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2822      43313120 
+ 2822      352E342E 
+ 2822      31203230 
+ 2822      31363036 
+ 2823 0150 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 2823      20726576 
+ 2823      6973696F 
+ 2823      6E203233 
+ 2823      37373135 
+ 2824 0183 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2824      66756E63 
+ 2824      74696F6E 
+ 2824      2D736563 
+ 2824      74696F6E 
+ 2825              	.LASF15:
+ 2826 01ab 73697A65 		.ascii	"sizetype\000"
+ 2826      74797065 
+ 2826      00
+ 2827              	.LASF35:
+ 2828 01b4 433A5C55 		.ascii	"C:\\Users\\Keith\\Desktop\\PSOC_Mid.cydsn\000"
+ 2828      73657273 
+ 2828      5C4B6569 
+ 2828      74685C44 
+ 2828      65736B74 
+ 2829              	.LASF6:
+ 2830 01da 6C6F6E67 		.ascii	"long long int\000"
+ 2830      206C6F6E 
+ 2830      6720696E 
+ 2830      7400
+ 2831              	.LASF34:
+ 2832 01e8 6D61696E 		.ascii	"main.c\000"
+ 2832      2E6300
+ 2833              	.LASF13:
+ 2834 01ef 63686172 		.ascii	"char\000"
+ 2834      00
+ 2835              	.LASF27:
+ 2836 01f4 53747269 		.ascii	"StripLights_Ready\000"
+ 2836      704C6967 
+ 2836      6874735F 
+ 2836      52656164 
+ 2836      7900
+ 2837              	.LASF2:
+ 2838 0206 73686F72 		.ascii	"short int\000"
+ 2838      7420696E 
+ 2838      7400
+ 2839              	.LASF20:
+ 2840 0210 73657442 		.ascii	"setBG\000"
+ 2840      4700
+ARM GAS  C:\Users\Keith\AppData\Local\Temp\cc1DQM7j.s 			page 58
+
+
+ 2841              	.LASF4:
+ 2842 0216 6C6F6E67 		.ascii	"long int\000"
+ 2842      20696E74 
+ 2842      00
+ 2843              	.LASF25:
+ 2844 021f 53747269 		.ascii	"StripLights_Dim\000"
+ 2844      704C6967 
+ 2844      6874735F 
+ 2844      44696D00 
+ 2845              	.LASF14:
+ 2846 022f 6C6F6E67 		.ascii	"long double\000"
+ 2846      20646F75 
+ 2846      626C6500 
+ 2847              	.LASF0:
+ 2848 023b 7369676E 		.ascii	"signed char\000"
+ 2848      65642063 
+ 2848      68617200 
+ 2849              	.LASF29:
+ 2850 0247 53747269 		.ascii	"StripLights_Trigger\000"
+ 2850      704C6967 
+ 2850      6874735F 
+ 2850      54726967 
+ 2850      67657200 
+ 2851              	.LASF28:
+ 2852 025b 43794465 		.ascii	"CyDelay\000"
+ 2852      6C617900 
+ 2853              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

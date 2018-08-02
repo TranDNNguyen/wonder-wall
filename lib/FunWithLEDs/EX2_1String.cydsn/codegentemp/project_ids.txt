@@ -1,0 +1,10 @@
+C:\Users\Yu\Desktop\FunWithLEDs\EX1_Text Scroll.cydsn\EX1_Text Scroll.cyprj|0bcae519-d99d-485d-964e-03734ee990cf
+E:\App\PSoc\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|264437ed-bc92-44b5-9d85-8983832b2cbf
+C:\Users\Yu\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|4eb5f956-e437-485a-900b-7e2900ab24a8
+E:\App\PSoc\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|0e0809e9-fea1-4fea-b9d5-885ac73aa8cd
+E:\App\PSoc\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|bb7c3249-d4d2-4ab6-a10a-8d2476a175c8
+E:\App\PSoc\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|de859408-9bac-4168-bba1-3aa7a3abd62d
+C:\Users\Yu\Desktop\FunWithLEDs\WS281xLib.cylib\WS281xLib.cyprj|1de7ceb4-4c6d-4a43-af2d-bf5f15e48a3d
+E:\App\PSoc\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|b11a3748-d2f5-405f-80f4-190fb60e3f2c
+C:\Users\Yu\Desktop\FunWithLEDs\EX2_1String.cydsn\EX2_1String.cyprj|b83c3661-c5f9-4d60-9dd3-38964ca7b7a2
+C:\Users\Yu\Desktop\FunWithLEDs\EX3_Ring1.cydsn\EX3_Ring1.cyprj|fae91710-7f2f-4a4a-a4dd-88ee2acb9cb7
